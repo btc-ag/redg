@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>RedG</title>
+
+    <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/roboto.css">
+    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div class="navigation">
+    <div class="navigation-left">
+        <div class="navigation-menu"><i class="material-icons">menu</i> RedG</div>
+    </div>
+    <div class="navigation-left-big" id="desktop-logo">
+        <img src="img/redg-logo5.svg">
+        <span>RedG</span>
+    </div>
+    <div class="navigation-right">
+        <a href="documentation/">Documentation</a>
+        <a href="visualizer/">Visualizer</a>
+        <a href="https://github.com/btc-ag/redg">GitHub</a>
+    </div>
+</div>
+
+<section class="db-watermark">
+    <div class="container">
+        <div class="hero" id="hero">
+            <div class="logo">
+                <img src="img/redg-logo5.svg">
+            </div>
+            <div class="text">
+                <p class="header">Red<span class="G">G</span></p>
+                <p class="subheader">Ridiculously Easy Data Generation</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="odd">
+    <div class="container">
+
+        <p class="pitch">
+            RedG makes modelling database test data for unit tests incredibly simple.<br>
+            It reduces modelling to the theoretically reachable minimum.
+        </p>
+        <code class="block language-java">RedG redG = new RedG();
+GCustomer c = redG.addCustomer().firstName("Joe");
+redG.addCreditCard(c).cardNumber(1234_5678_8765_4321);
+redG.insertDataIntoDatabase(jdbcConnection);</code>
+
+        <div class="action-buttons">
+            <a class="button primary" href="documentation/getting_started/">Get Started</a>
+            <a class="button" href="https://github.com/btc-ag/redg">Visit GitHub Repository</a>
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="points">
+            <div class="point">
+                <h2>Focus <span class="sub-header-spacer"></span><span class="sub-header">on the important stuff</span></h2>
+                <p class="description">
+                    Only model what you really need, RedG takes care of the rest.
+                    No need to specify any attributes that you are not interested in, even if they are technically mandatory!
+                    RedG provides default values and generates dummy entities for you.
+                </p>
+            </div>
+
+            <div class="point">
+                <h2>Compile-Time <span class="sub-header-spacer"></span><span
+                        class="sub-header">is when errors should occur</span></h2>
+                <p class="description">
+                    RedG leverages the power of the Java compiler to check for type safety and data integrity.
+                    Errors occur while writing test data, not at run-time.
+                    No more super long round trips for fixing these kinds of errors in your test data!
+                </p>
+            </div>
+
+            <div class="point">
+                <h2>It's Java <span class="sub-header-spacer"></span><span class="sub-header"> with all its power</span></h2>
+                <p class="description">
+                    You write your code in Java. So why not write your test data in Java?
+                    With RedG you enjoy all the power of the Java language:
+                    Loops, conditions, random values, fantastic IDE support...
+                </p>
+            </div>
+
+            <div class="point">
+                <h2>Customizable <span class="sub-header-spacer"></span><span class="sub-header"> to your very needs</span></h2>
+                <p class="description">
+                    Every project has its own requirements, code style and conventions. We understand that and made every part of
+                    RedG as customizable as
+                    possible while keeping it easy to use. It'll fit perfectly into your project as well!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="odd">
+    <div class="container">
+        <h2>How it works</h2>
+
+        <h3>1. RedG generates Java classes</h3>
+        <div class="single-idea">
+            <img src="img/how-it-works-source-db.svg" height="250">
+            <div class="arrow">&darr;</div>
+            <img src="img/how-it-works-generated-code.svg" height="250">
+        </div>
+        <p>
+            RedG generates a Java API that matches your database schema. You get an <strong>easy-to-use fluent API</strong> that
+            is
+            type-safe and references other entities via object references instead of the foreign key values.
+        </p>
+
+        <h3>2. RedG provides default values</h3>
+        <div class="single-idea">
+            <code class="language-java block">RedG redG = new RedG();
+
+GCustomer c = redG.addCustomer()
+    .lastName("Smith");
+redG.addCreditCard(c)
+    .cardNumber(1234_5678_8765_4321);
+
+redG.insertDataIntoDatabase(jdbcConnection);</code>
+            <div class="arrow">&darr;</div>
+            <div>
+                <table>
+                    <tr>
+                        <th colspan="2">CUSTOMER</th>
+                    </tr>
+                    <tr>
+                        <th>ID</th>
+                        <td class="highlight">123</td>
+                    </tr>
+                    <tr>
+                        <th>LAST_NAME</th>
+                        <td>'Smith'</td>
+                    </tr>
+                    <tr>
+                        <th>FIRST_NAME</th>
+                        <td class="highlight">'-'</td>
+                    </tr>
+                    <tr>
+                        <th>DATE_OF_BIRTH</th>
+                        <td class="highlight">1970-01-01T00.00.00Z</td>
+                    </tr>
+                    <tr>
+                        <th>ADDRESS_ID</th>
+                        <td class="highlight">NULL</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th colspan="2">CREDIT_CARD</th>
+                    </tr>
+                    <tr>
+                        <th>CARD_NUMBER</th>
+                        <td>1234567887654321</td>
+                    </tr>
+                    <tr>
+                        <th>CVC</th>
+                        <td class="highlight">0</td>
+                    </tr>
+                    <tr>
+                        <th>CARD_HOLDER</th>
+                        <td class="highlight">'-'</td>
+                    </tr>
+                    <tr>
+                        <th>ISSUING_BANK_ID</th>
+                        <td class="highlight">NULL</td>
+                    </tr>
+                    <tr>
+                        <th>CUSTOMER_ID</th>
+                        <td class="highlight">123</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <p>
+            All the values that are marked red are non-nullable fields. You do not need to specify values for those,
+            if you omit them <strong>RedG generates default values</strong>.
+            As you can see, the foreign key to the credit card is automatically inserted by RedG based on the object reference.
+        </p>
+
+        <h3>3. RedG generates dummy entities</h3>
+        <div class="single-idea">
+            <code class="language-java block">RedG redG = new RedG();
+
+redG.addCustomer(redG.dummyBank(), redG.getDummyAddress())
+    .lastName("Smith");
+
+redG.insertDataIntoDatabase(jdbcConnection);</code>
+            <div class="arrow">&darr;</div>
+            <img src="img/how-it-works-dummies.png">
+        </div>
+        <p>
+            If your schema has many mandatory foreign keys but your test case does not require them, RedG can <strong>generate
+            complete dummy entities</strong>.
+            Note that dummies are transitively generated. In this case, the dummy factory reuses existing dummies,
+            but you can provide your own implementation.
+        </p>
+
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h1>Features</h1>
+        <div class="feature-list">
+            <div class="feature-item">
+                <span>Dummy data generation</span>
+                <p>Only specify the data you really need. RedG generated default values for columns and can create complete dummy
+                    entities
+                    for use in foreign key
+                    relations. And everything is highly customizable, so it can fit even the most complex requirements.</p>
+            </div>
+            <div class="feature-item">
+                <span>Visualizer</span>
+                <p>Need to debug your test data set? Simply visualize the current state of your data with the RedG Visualizer.
+                    Enable the
+                    visualization support
+                    for the generated code, call <code class="language-java">redG.getVisualization()</code>, paste the JSON into
+                    the
+                    visualizer and see your
+                    complete data with all dependencies, the default values RedG generated and more.</p>
+            </div>
+            <div class="feature-item">
+                <span>Data extractor</span>
+                <p>Migration never was that easy. Simply extract all the data from an existing database and get the matching RedG
+                    code.
+                    Afterwards you can start
+                    to reduce your data to the needed minimum and let RedG do the rest.</p>
+            </div>
+            <div class="feature-item">
+                <span>JPA support</span>
+                <p>When generating the code for your database schema RedG can read the name and type information from a JPA
+                    metamodel.
+                    This makes configuration
+                    far easier when using JPA in your project.</p>
+            </div>
+            <div class="feature-item">
+                <span>Maven Integration</span>
+                <p>The RedG Code Generator can be integrated into your project via a Maven plugin. If you are not using Maven you
+                    can use
+                    an easy API as
+                    a powerful and flexible alternative.</p>
+            </div>
+            <div class="feature-item">
+                <span>Use other data</span>
+                <p>Need to use another framework to get data into your database? Want to reference entities that are already
+                    present in
+                    your database from within
+                    RedG? No problem.</p>
+            </div>
+            <div class="feature-item">
+                <span>SQL or JDBC</span>
+                <p>You have the freedom of choice. Either let RedG generate SQL statements or let it insert the data directly via
+                    JDBC.</p>
+            </div>
+            <div class="feature-item">
+                <span>Supported databases</span>
+                <p>Works with Oracle, H2, MySQL, Postgres and many more...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Interested?</h2>
+        Fine!
+        <div class="action-buttons">
+            <!--<a class="button" href="#">Why RedG?</a>-->
+            <a class="button primary" href="documentation/getting_started/">Get Started</a>
+        </div>
+    </div>
+</section>
+
+<div class="footer-wrapper">
+    <div class="footer container">
+        <div>
+            <p>RedG is developed by</p>
+            <a href="https://www.btc-ag.com/en/index.htm"><img src="img/btc-logo.png" class="btc-logo"></a>
+        </div>
+        <div>
+            <p>Available under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a></p>
+            <p><a href="about/#imprint">Impressum</a> | <a href="about/#privacy-policy">Privacy Policy</a></p>
+            <p>Copyright &copy; 2017 BTC Business Technology Consulting AG</p>
+        </div>
+    </div>
+</div>
+<div id="mobile-navigation-block"></div>
+<div id="mobile-navigation">
+    <div class="navigation-menu"><i class="material-icons">arrow_back</i> RedG</div>
+    <a href="documentation/">Documentation</a>
+    <a href="visualizer/">Visualizer</a>
+    <a href="https://github.com/btc-ag/redg">GitHub</a>
+</div>
+
+<script src="js/prism.js" defer></script>
+<script src="js/navigation.js" defer></script>
+
+</body>
+</html>

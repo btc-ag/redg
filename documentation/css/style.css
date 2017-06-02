@@ -1,0 +1,29 @@
+a.md-source-file {
+    /* This fixes .md-content-inner last-child no bottom margin */
+    margin-bottom: 1em !important;
+}
+
+/* 48px logo instead of 24 px */
+a.md-logo.md-header-nav__button {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+a.md-logo.md-header-nav__button > img {
+    width: 48px;
+    height: 48px;
+}
+
+/* for image captions */
+span.image-caption {
+    text-align: center;
+    font-size: 0.8em;
+    width: 100%;
+    display: block;
+}
+
+.md-main img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
