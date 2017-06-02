@@ -23,6 +23,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>RedG Runtime</name>
+    <description>The RedG runtime library needed to use the generated entity classes.</description>
+    <url>https://btc-ag.github.io/redg</url>
+
     <artifactId>redg-runtime</artifactId>
 
     <dependencies>

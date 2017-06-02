@@ -25,6 +25,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>RedG Models</name>
+    <description>Model classes shared among the RedG artifacts.</description>
+    <url>https://btc-ag.github.io/redg</url>
+
     <artifactId>redg-models</artifactId>
 
 

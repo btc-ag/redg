@@ -31,8 +31,8 @@
         <module>redg-extractor</module>
     </modules>
 
-    <name>Ridiculously easy data Generation</name>
-    <description>Generate test date for your database with ease and pure java</description>
+    <name>RedG - Ridiculously easy data Generation</name>
+    <description>Generate test data for your database with ease and pure java</description>
     <url>https://btc-ag.github.io/redg</url>
 
     <organization>

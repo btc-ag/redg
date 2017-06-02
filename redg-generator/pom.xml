@@ -24,6 +24,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>RedG Generator</name>
+    <description>Generates the Java entity classes used to specify the test data.</description>
+    <url>https://btc-ag.github.io/redg</url>
+
     <artifactId>redg-generator</artifactId>
 
     <dependencies>
