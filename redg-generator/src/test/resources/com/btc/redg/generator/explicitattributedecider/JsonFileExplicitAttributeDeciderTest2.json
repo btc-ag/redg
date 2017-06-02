@@ -1,0 +1,5 @@
+{
+  "TABLENAM.*": {
+    "relations": [["FOR.*KEY1", "PART2"]]
+  }
+}

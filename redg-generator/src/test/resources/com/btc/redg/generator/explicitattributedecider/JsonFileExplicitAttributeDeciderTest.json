@@ -1,0 +1,6 @@
+{
+  "TABLENAM.*": {
+    "attributes": ["EXP.*IT"],
+    "relations": [["FOR.*KEY1", "PART2"]]
+  }
+}

@@ -1,0 +1,10 @@
+<typeMappings>
+    <tableTypeMappings>
+        <table tableName="MY_TABLE">
+            <column columnName="MY_FLAG" javaType="java.lang.Boolean"/>
+        </table>
+    </tableTypeMappings>
+    <defaultTypeMappings>
+        <typeMapping sqlType="DECIMAL(1)" javaType="java.lang.Boolean"/>
+    </defaultTypeMappings>
+</typeMappings>

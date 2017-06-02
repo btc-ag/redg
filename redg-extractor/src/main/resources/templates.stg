@@ -1,0 +1,25 @@
+
+codeClass(package, className, redGClass, entities) ::= <<
+
+import <package>.*;
+import com.btc.redg.runtime.AbstractRedG;
+
+public class <className> {
+
+    public AbstractRedG createDataSet() {
+
+        <redGClass> redG = new <redGClass>();
+
+        <entities:entityCreator()>
+        return redG;
+    }
+}
+>>
+
+entityCreator(entity) ::= <<
+<entity.tableModel.className> <entity.variableName> = redG.add<entity.tableModel.name>(<entity.notNullRefs:{it|<it.variableName>};separator=", ">)
+    <entity.values.keys:{k|.<k>(<entity.values.(k)>)};separator="\n"><if(!entity.nullableRefs.keys)>;<endif>
+    <entity.nullableRefs.keys:{k|.<k>(<entity.nullableRefs.(k).variableName>)};separator="\n"><if(entity.nullableRefs.keys)>;<endif>
+
+
+>>
