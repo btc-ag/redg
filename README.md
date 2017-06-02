@@ -2,6 +2,10 @@
 
 This is the code repository for the RedG project.
 
+## Maven
+
+All RedG artifacts can be found in [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.btc-ag.redg%22) with the groupId `com.btc-ag.redg`.
+
 ## Documentation
 
 You can find the documentation [here](https://btc-ag.github.io/redg)
