@@ -321,6 +321,7 @@
     </distributionManagement>
 
     <scm>
+        <url>https://github.com/btc-ag/redg/</url>
         <connection>scm:git:https://github.com/btc-ag/redg.git</connection>
         <developerConnection>scm:git:https://github.com/btc-ag/redg.git</developerConnection>
         <tag>HEAD</tag>
