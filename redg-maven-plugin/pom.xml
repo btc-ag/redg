@@ -23,6 +23,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>RedG Maven Plugin</name>
+    <description>The RedG Maven plugin for easy integration of the RedG Generator into a project.</description>
+    <url>https://btc-ag.github.io/redg</url>
+
     <artifactId>redg-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 

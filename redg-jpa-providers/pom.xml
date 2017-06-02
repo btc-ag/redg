@@ -23,6 +23,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>RedG JPA Provider</name>
+    <description>Name and data type providers for RedG that extract the data from a JPA metamodel.</description>
+    <url>https://btc-ag.github.io/redg</url>
+
     <artifactId>redg-jpa-providers</artifactId>
 
     <dependencies>

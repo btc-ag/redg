@@ -25,6 +25,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>RedG Extractor</name>
+    <description>Extract data from an existing database and convert it into RedG code.</description>
+    <url>https://btc-ag.github.io/redg</url>
+
     <artifactId>redg-extractor</artifactId>
     <dependencies>
         <dependency>
