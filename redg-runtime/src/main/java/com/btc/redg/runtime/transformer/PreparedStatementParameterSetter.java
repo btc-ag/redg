@@ -16,11 +16,11 @@
 
 package com.btc.redg.runtime.transformer;
 
+import com.btc.redg.runtime.AttributeMetaInfo;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import com.btc.redg.runtime.AttributeMetaInfo;
 
 /**
  * Interface used to transform java objects before adding them to the prepared statement. Should be used to "reverse" custom data type mapping.
@@ -32,11 +32,12 @@ public interface PreparedStatementParameterSetter {
      * Use this method to customize how RedG sets parameters on a prepared statement. The information about the attribute/column
      * is stored in attributeMetaInfo.
      *
-     * @param statement     The statement to set the parameter on
+     * @param statement         The statement to set the parameter on
      * @param parameterIndex    The parameter index
-     * @param object     The object to transform
-     * @param attributeMetaInfo    Meta information about the attribute
-     * @param connection The JDBC connection. Can be used to create objects like {@link java.sql.Clob} or {@link java.sql.Blob}
+     * @param object            The object to transform
+     * @param attributeMetaInfo Meta information about the attribute
+     * @param connection        The JDBC connection. Can be used to create objects like {@link java.sql.Clob} or {@link java.sql.Blob}
+     * @throws SQLException Gets thrown if some SQL error occurred
      */
     void setParameter(PreparedStatement statement, int parameterIndex, Object object, AttributeMetaInfo attributeMetaInfo, final Connection connection) throws SQLException;
 }

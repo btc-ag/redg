@@ -25,7 +25,6 @@ public interface RedGEntity {
 
     /**
      * Returns a valid SQL insert statement that can be used to persist this entity in the database.
-     * TODO: Rename to getSQLString(), as ExistingX classes return SELECT statements
      * @return A valid SQL statement
      */
     String getSQLString();
@@ -54,6 +53,7 @@ public interface RedGEntity {
 
     /**
      * Returns a list of all other {@link RedGEntity}s this entity depends on (has foreign keys to).
+     * @return A {@link List} of {@link RedGEntity}s this entity depends on
      */
     List<RedGEntity> getDependencies();
 }

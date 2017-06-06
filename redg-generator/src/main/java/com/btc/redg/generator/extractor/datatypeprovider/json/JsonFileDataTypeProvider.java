@@ -28,9 +28,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import schemacrawler.schema.Column;
 
 /**
- * A data type provider that reads the types from a json file.
  * <p>
+ * A data type provider that reads the types from a json file.
+ * </p><p>
  * The format for the file is:
+ * </p>
  * <p><blockquote><pre>
  * {
  *     "SCHEMA.TABLE": {
@@ -40,7 +42,7 @@ import schemacrawler.schema.Column;
  *     },
  *     ...
  * }
- * </pre></blockquote>
+ * </pre></blockquote></p>
  */
 public class JsonFileDataTypeProvider implements DataTypeProvider {
 
@@ -48,6 +50,14 @@ public class JsonFileDataTypeProvider implements DataTypeProvider {
 
     private final DataTypeProvider fallbackProvider;
 
+    /**
+     * Creates a {@link DataTypeProvider} that uses a JSON file as its data source. If no data type can be read from the JSON, the type is queried from the
+     * {@code fallbackProvider}.
+     *
+     * @param jsonFile The JSON file that specifies the wanted data types. May not be {@code null}. See class documentation for format.
+     * @param fallbackProvider The provider to be queried if no type can be found in the JSON file. May not be {@code null}
+     * @throws IOException Gets thrown when the JSON file could not be read or parsed
+     */
     public JsonFileDataTypeProvider(File jsonFile, DataTypeProvider fallbackProvider) throws IOException {
         this.fallbackProvider = fallbackProvider;
         Objects.requireNonNull(jsonFile);

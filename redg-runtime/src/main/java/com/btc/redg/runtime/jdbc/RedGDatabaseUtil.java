@@ -16,6 +16,15 @@
 
 package com.btc.redg.runtime.jdbc;
 
+import com.btc.redg.runtime.AttributeMetaInfo;
+import com.btc.redg.runtime.ExistingEntryMissingException;
+import com.btc.redg.runtime.InsertionFailedException;
+import com.btc.redg.runtime.RedGEntity;
+import com.btc.redg.runtime.transformer.DefaultPreparedStatementParameterSetter;
+import com.btc.redg.runtime.transformer.PreparedStatementParameterSetter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,21 +37,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.btc.redg.runtime.AttributeMetaInfo;
-import com.btc.redg.runtime.ExistingEntryMissingException;
-import com.btc.redg.runtime.InsertionFailedException;
-import com.btc.redg.runtime.RedGEntity;
-import com.btc.redg.runtime.transformer.DefaultPreparedStatementParameterSetter;
-import com.btc.redg.runtime.transformer.PreparedStatementParameterSetter;
-
 public class RedGDatabaseUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedGDatabaseUtil.class);
 
     /**
+     * @param connection The JDBC connection
+     * @param gObjects   The entities to insert
      * @see RedGDatabaseUtil#insertDataIntoDatabase(List, Connection, PreparedStatementParameterSetter)
      */
     public static void insertDataIntoDatabase(List<? extends RedGEntity> gObjects, final Connection connection) {
@@ -57,13 +58,15 @@ public class RedGDatabaseUtil {
      * If a entity that is marked as "existing" (via redG.existingX()) is not found, an error will be logged and an {@link ExistingEntryMissingException} will
      * be thrown.
      *
-     * @param connection The database connection
+     * @param connection                       The database connection
+     * @param gObjects                         The entities that should be inserted into the database
+     * @param preparedStatementParameterSetter The prepared statement parameter setter that should be used to set the values on the prepared statements
      * @throws ExistingEntryMissingException When an entry defined as "existing" (via redG.existingX()) cannot be found in the database
      * @throws InsertionFailedException      When problems with the prepared statement occur. This is often the result of a faulty data type mapping or
      *                                       {@link PreparedStatementParameterSetter}
      */
     public static void insertDataIntoDatabase(List<? extends RedGEntity> gObjects, final Connection connection,
-            PreparedStatementParameterSetter preparedStatementParameterSetter) {
+                                              PreparedStatementParameterSetter preparedStatementParameterSetter) {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {

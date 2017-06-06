@@ -32,15 +32,16 @@ import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.ForeignKeyColumnReference;
 
 /**
- * An {@link ExplicitAttributeDecider} reading explicit attribute information from a JSON file.
  * <p>
+ * An {@link ExplicitAttributeDecider} reading explicit attribute information from a JSON file.
+ * </p><p>
  * The format for the file is:
- * <p><blockquote><pre>
+ * </p><p><blockquote><pre>
  * {
  *     "TABLENAME": [EXPLICITCOLUMNNAME1, EXPLICITCOLUMNNAME2, ...],
  *     ...
  * }
- * </pre></blockquote>
+ * </pre></blockquote></p>
  */
 public class JsonFileExplicitAttributeDecider implements ExplicitAttributeDecider {
 
@@ -56,7 +57,6 @@ public class JsonFileExplicitAttributeDecider implements ExplicitAttributeDecide
         };
         explicitDataByTableRegex = mapper.readValue(reader, typeRef);
     }
-
 
     @Override
     public boolean isExplicitAttribute(Column column) {

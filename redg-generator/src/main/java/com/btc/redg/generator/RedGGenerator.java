@@ -57,20 +57,22 @@ public class RedGGenerator {
      * <p>Afterwards the {@link MetadataExtractor} gets called and extracts the relevant data into a list of {@link TableModel}s.
      * <p>The third step generates the code and writes it into the source files at the specified location.
      *
-     * @param connection                The established JDBC connection that will be used as the data source for the analysis
-     * @param schemaRule                The rule used for inclusion/exclusion of database schemas. Use {@code null} or {@link IncludeAll} for no filtering.
-     * @param tableRule                 The rule used for inclusion/Exclusion of database tables. Use {@code null} or {@link IncludeAll} for no filtering.
-     * @param targetPackage             The java package for the generated code. May not be default package. If {@code null},
-     *                                  defaults to {@link TableExtractor#DEFAULT_TARGET_PACKAGE}
-     * @param classPrefix               The prefix for the generated java class names
-     * @param targetDirectory           The directory to put the generated source files. The package directory structure will be generated automatically
-     * @param dataTypeProvider          The data type provider for customization of the SQL type to java type mapping. If {@code null},
-     *                                  a {@link com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider} will be used.
-     * @param nameProvider              The {@link NameProvider} used to determine the names in the generated code
-     * @param convenienceSetterProvider A provider that determines convenience setters
-     * @param explicitAttributeDecider  The {@link ExplicitAttributeDecider} that will be used to determine whether a attribute / foreign key should be treated
-     *                                  as explicitly required
-     * @param shouldCloseConnection     Indicates whether the JDBC connection should be closed after the database analysis
+     * @param connection                 The established JDBC connection that will be used as the data source for the analysis
+     * @param schemaRule                 The rule used for inclusion/exclusion of database schemas. Use {@code null} or {@link IncludeAll} for no filtering.
+     * @param tableRule                  The rule used for inclusion/Exclusion of database tables. Use {@code null} or {@link IncludeAll} for no filtering.
+     * @param targetPackage              The java package for the generated code. May not be default package. If {@code null},
+     *                                   defaults to {@link TableExtractor#DEFAULT_TARGET_PACKAGE}
+     * @param classPrefix                The prefix for the generated java class names
+     * @param targetDirectory            The directory to put the generated source files. The package directory structure will be generated automatically
+     * @param dataTypeProvider           The data type provider for customization of the SQL type to java type mapping. If {@code null},
+     *                                   a {@link com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider} will be used.
+     * @param nameProvider               The {@link NameProvider} used to determine the names in the generated code
+     * @param convenienceSetterProvider  A provider that determines convenience setters
+     * @param explicitAttributeDecider   The {@link ExplicitAttributeDecider} that will be used to determine whether a attribute / foreign key should be treated
+     *                                   as explicitly required
+     * @param enableVisualizationSupport If {@code true}, the RedG visualization features will be enabled for the generated code. This will result in a small
+     *                                   performance hit and slightly more memory usage if activated.
+     * @param shouldCloseConnection      Indicates whether the JDBC connection should be closed after the database analysis
      */
     public static void generateCode(final Connection connection,
                                     final InclusionRule schemaRule,

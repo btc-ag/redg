@@ -27,10 +27,11 @@ import com.thoughtworks.xstream.XStream;
 import schemacrawler.schema.Column;
 
 /**
- * A data type provider that reads the types from a json file.
  * <p>
+ * A data type provider that reads the types from a json file.
+ * </p><p>
  * The format for the file is:
- * <p><blockquote><pre>
+ * </p><p><blockquote><pre>
  * &lt;typeMappings&gt;
  *     &lt;tableTypeMappings&gt;
  *         &lt;table name="AUCTION"&gt;
@@ -42,7 +43,7 @@ import schemacrawler.schema.Column;
  *         &lt;type sql="DECIMAL(1)"&gt;java.lang.Boolean&lt;/type&gt;
  *     &lt;/defaultTypeMappings&gt;
  * &lt;/typeMappings&gt;
- * </pre></blockquote>
+ * </pre></blockquote></p>
  */
 public class XmlFileDataTypeProvider implements DataTypeProvider {
     private TypeMappings typeMappings;

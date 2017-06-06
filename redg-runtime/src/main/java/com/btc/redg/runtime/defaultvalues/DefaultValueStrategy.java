@@ -25,6 +25,7 @@ public interface DefaultValueStrategy {
      * Generates and returns a default value for a column in a table.
      *
      * @param columnModel The complete column model of the column that needs a default value
+     * @param type        the required class
      * @param <T>         The type of the field that needs a default value
      * @return The default value for the field. {@code null} is allowed if {@code notNull == false}. This is not checked anywhere
      */

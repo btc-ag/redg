@@ -22,12 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import schemacrawler.schema.Catalog;
 import schemacrawler.schema.RoutineType;
-import schemacrawler.schemacrawler.IncludeAll;
-import schemacrawler.schemacrawler.InclusionRule;
-import schemacrawler.schemacrawler.SchemaCrawlerException;
-import schemacrawler.schemacrawler.SchemaCrawlerOptions;
-import schemacrawler.schemacrawler.SchemaInfoLevel;
-import schemacrawler.schemacrawler.SchemaInfoLevelBuilder;
+import schemacrawler.schemacrawler.*;
 import schemacrawler.utility.SchemaCrawlerUtility;
 
 import java.io.BufferedReader;
@@ -40,16 +35,16 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
+ * <p>
  * A class that provided useful methods for connecting to a extractor, executing SQL scripts and analyzing the extractor.
- *
+ * </p><p>
  * The normal workflow would be to connect to the extractor, execute a few scripts and then run the analysis.
- *
+ * </p>
  * <p><blockquote><pre>
  * Connection conn = DatabaseManager.connectToDatabase(...);
  * DatabaseManager.executePreparationScripts(conn, scripts);
  * Database db = DatabaseManager.crawlDatabase(conn, schemaRule, tableRule);
- * </pre></blockquote>
- *
+ * </pre></blockquote></p>
  */
 public class DatabaseManager {
 
@@ -100,6 +95,8 @@ public class DatabaseManager {
      *
      * @param connection The JDBC connection to use for script execution
      * @param sqlScripts The array containing all sql files that should be executed
+     * @throws IOException  Gets thrown when a file IO fails
+     * @throws SQLException Gets thrown when the a part of the SQL could not be executed
      */
     public static void executePreparationScripts(final Connection connection, final File[] sqlScripts) throws IOException, SQLException {
         LOG.info("Executing provided SQL scripts...");
@@ -116,7 +113,7 @@ public class DatabaseManager {
                 scriptRunner.runScript(new BufferedReader(new FileReader(sqlScript)));
                 LOG.info("Script finished successfully.");
             } catch (IOException e) {
-                if (e.getCause() instanceof  SQLException) {
+                if (e.getCause() instanceof SQLException) {
                     LOG.error("SQL execution failed", e);
                     throw (SQLException) e.getCause();
                 }
@@ -133,7 +130,11 @@ public class DatabaseManager {
      * Starts the schema crawler and lets it crawl the given JDBC connection.
      *
      * @param connection The JDBC connection
+     * @param schemaRule The {@link InclusionRule} to be passed to SchemaCrawler that specifies which schemas should be analyzed
+     * @param tableRule  The {@link InclusionRule} to be passed to SchemaCrawler that specifies which tables should be analyzed. If a table is included by the
+     *                   {@code tableRule} but excluded by the {@code schemaRule} it will not be analyzed.
      * @return The populated {@link Catalog} object containing the metadata for the extractor
+     * @throws SchemaCrawlerException Gets thrown when the database could not be crawled successfully
      */
     public static Catalog crawlDatabase(final Connection connection, final InclusionRule schemaRule, final InclusionRule tableRule) throws SchemaCrawlerException {
         final SchemaCrawlerOptions options = new SchemaCrawlerOptions();

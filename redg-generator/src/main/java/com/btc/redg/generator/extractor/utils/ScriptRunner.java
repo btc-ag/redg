@@ -27,20 +27,16 @@ package com.btc.redg.generator.extractor.utils;
  */
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Tool to run extractor scripts
@@ -70,6 +66,10 @@ public class ScriptRunner {
 
     /**
      * Default constructor
+     *
+     * @param connection  the JDBC connection
+     * @param autoCommit  whether auto commit should be turned on or not
+     * @param stopOnError whether to stop execution when encountering an error or not
      */
     public ScriptRunner(Connection connection, boolean autoCommit,
                         boolean stopOnError) {
@@ -105,6 +105,8 @@ public class ScriptRunner {
      * Runs an SQL script (read in using the Reader parameter)
      *
      * @param reader - the source of the script
+     * @throws IOException  Gets thrown when reading the script fails
+     * @throws SQLException Gets thrown when the SQL execution fails
      */
     public void runScript(Reader reader) throws IOException, SQLException {
         try {
@@ -128,10 +130,10 @@ public class ScriptRunner {
      * Runs an SQL script (read in using the Reader parameter) using the
      * connection passed in
      *
-     * @param conn - the connection to use for the script
+     * @param conn   - the connection to use for the script
      * @param reader - the source of the script
      * @throws SQLException if any SQL errors occur
-     * @throws IOException if there is an error reading from the Reader
+     * @throws IOException  if there is an error reading from the Reader
      */
     private void runScript(Connection conn, Reader reader) throws IOException,
             SQLException {

@@ -58,8 +58,15 @@ public class TableExtractor {
     /**
      * Creates a new table extractor with the specified class prefix and the specified target package.
      *
-     * @param classPrefix   The prefix to put before class names. Only a-zA-Z, starting with a capital letter
-     * @param targetPackage The target package. Usage of default package is forbidden.
+     * @param classPrefix               The prefix to put before class names. Only a-zA-Z, starting with a capital letter
+     * @param targetPackage             The target package. Usage of default package is forbidden.
+     * @param dataTypeProvider          The {@link DataTypeProvider} to read the data types from. If {@code null} defaults to {@link DefaultDataTypeProvider}.
+     * @param explicitAttributeDecider  The {@link ExplicitAttributeDecider} that decides whether an attribute or foreign key is "explicit" or not. If
+     *                                  {@code null} defaults to {@link DefaultExplicitAttributeDecider}.
+     * @param nameProvider              The {@link NameProvider} that provides the class, field and method names for the generated code. If {@code null}
+     *                                  defaults to {@link DefaultNameProvider}.
+     * @param convenienceSetterProvider The {@link ConvenienceSetterProvider} that returns information about wanted convenience setters. If {@code null}
+     *                                  defaults to {@link DefaultConvenienceSetterProvider}.
      */
     public TableExtractor(final String classPrefix, final String targetPackage, DataTypeProvider dataTypeProvider,
                           final NameProvider nameProvider, ExplicitAttributeDecider explicitAttributeDecider,
@@ -211,8 +218,8 @@ public class TableExtractor {
      * </pre></blockquote>
      * This information should be read as "A has a relation to B and C via the table ABC" and so on
      *
-     * @param table
-     * @return
+     * @param table The table to analyze
+     * @return The information about the join table. See method description for format details.
      */
     public static Map<String, Map<Table, List<String>>> analyzeJoinTable(Table table) {
         final Map<String, Map<Table, List<String>>> result = new HashMap<>();

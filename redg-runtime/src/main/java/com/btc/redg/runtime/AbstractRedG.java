@@ -179,7 +179,7 @@ public abstract class AbstractRedG {
      * @param filter A predicate that gets called for every entity that has the requested type. Should return {@code true} only for the entity that should be
      *               found
      * @param <T>    The entity type
-     * @return
+     * @return The found entity. If no entity is found an {@link IllegalArgumentException} gets thrown.
      */
     public <T extends RedGEntity> T findSingleEntity(final Class<T> type, final Predicate<T> filter) {
         return this.entities.stream()

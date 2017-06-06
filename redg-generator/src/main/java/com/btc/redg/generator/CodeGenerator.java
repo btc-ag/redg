@@ -59,7 +59,7 @@ public class CodeGenerator {
      * </ul>
      * There is no check build in, code generation will fail if these templates do not exist.
      *
-     * @param templateResource
+     * @param templateResource the resource to use. Has to be a .stg template group file
      */
     public CodeGenerator(final String templateResource) {
         try {
@@ -74,6 +74,16 @@ public class CodeGenerator {
         }
     }
 
+    /**
+     * Generates the code for the passed {@link TableModel}s and writes the output into the passed folder. Each {@link TableModel} results
+     * in two files (one for the main entity, one for the existing entity reference) and a "main" manager class is generated as well,
+     * which contains all the instantiation and management methods.
+     *
+     * @param tables                     The {@link TableModel}s that code should be generated for.
+     * @param targetWithPkgFolders       The path pointing to the location the .java files should be places at.
+     * @param enableVisualizationSupport If {@code true}, the RedG visualization features will be enabled for the generated code. This will result in a small
+     *                                   performance hit and slightly more memory usage if activated.
+     */
     public void generate(List<TableModel> tables, Path targetWithPkgFolders, final boolean enableVisualizationSupport) {
         LOG.info("Starting code generation...");
         LOG.info("Generation code for tables...");
@@ -122,7 +132,9 @@ public class CodeGenerator {
      * columns will be a reference to the generated class/object for that table and need to be passed via the constructor to ensure that foreign key constraints
      * are met and inserts will be in the right order. Proper {@code null}-checks will be generated.
      *
-     * @param table The extracted table model to generate code for
+     * @param table                      The extracted table model to generate code for
+     * @param enableVisualizationSupport If {@code true}, the RedG visualization features will be enabled for the generated code. This will result in a small
+     *                                   performance hit and slightly more memory usage if activated.
      * @return The generated source code
      */
     public String generateCodeForTable(final TableModel table, final boolean enableVisualizationSupport) {
@@ -178,7 +190,9 @@ public class CodeGenerator {
      * For each passed table a appropriate creation method will be generated that will return the new object and internally add it to the list of objects that
      * will be used to generate the insert strings
      *
-     * @param tables All tables that should get a creation method in the main class
+     * @param tables                     All tables that should get a creation method in the main class
+     * @param enableVisualizationSupport If {@code true}, the RedG visualization features will be enabled for the generated code. This will result in a small
+     *                                   performance hit and slightly more memory usage if activated.
      * @return The generated source code
      */
     public String generateMainClass(final Collection<TableModel> tables, final boolean enableVisualizationSupport) {
