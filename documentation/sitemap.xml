@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>/getting_started/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +20,7 @@
     
     <url>
      <loc>/specifying_test_data/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -29,25 +29,25 @@
         
     <url>
      <loc>/features/dummy_data/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/features/visualization/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/features/data_extractor/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/features/jpa_metamodel/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -57,7 +57,7 @@
         
     <url>
      <loc>/integration/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -94,7 +94,7 @@
     
     <url>
      <loc>/compatibility/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -102,7 +102,7 @@
     
     <url>
      <loc>/about/license/</loc>
-     <lastmod>2017-06-02</lastmod>
+     <lastmod>2017-06-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
