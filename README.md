@@ -14,7 +14,7 @@ You can find the documentation [here](https://btc-ag.github.io/redg)
 
 Main author: Ole Wehrmeyer ([@olewehrmeyer](https://github.com/olewehrmeyer))
 
-Idea & improvements: Yann Massard ([@yamass](https://github.com/yamass))
+Inventor & Co-Author: Yann Massard ([@yamass](https://github.com/yamass))
 
 ## License
 
