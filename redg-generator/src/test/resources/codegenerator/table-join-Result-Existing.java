@@ -95,7 +95,7 @@ public class ExistingGDemoUser extends GDemoUser {
     public String getSQLString() {
         return String.format("SELECT COUNT(*) FROM DEMO_USER WHERE " +
                         "ID = %s",
-                this.redG.getSQLValuesFormatter().formatValue(super.id(),
+                this.redG.getSqlValuesFormatter().formatValue(super.id(),
                         "DECIMAL", "\"RT-CG-JT\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "ID")
         );

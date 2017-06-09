@@ -48,10 +48,10 @@ public class GDemoUser implements RedGEntity {
 
 
         try {
-            this.id = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.math.BigDecimal.class);
-            this.username = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.String.class);
-            this.firstName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.String.class);
-            this.lastName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.String.class);
+            this.id = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("ID"), java.math.BigDecimal.class);
+            this.username = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("USERNAME"), java.lang.String.class);
+            this.firstName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("FIRST_NAME"), java.lang.String.class);
+            this.lastName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("LAST_NAME"), java.lang.String.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
@@ -531,28 +531,28 @@ public class GDemoUser implements RedGEntity {
                         "%s, %s" +
                         ", " +
                         "%s, %s, %s, %s)",
-                this.redG.getSQLValuesFormatter().formatValue(this.bankAcc.bic(),
+                this.redG.getSqlValuesFormatter().formatValue(this.bankAcc.bic(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "ACC_BIC"),
-                this.redG.getSQLValuesFormatter().formatValue(this.bankAcc.iban(),
+                this.redG.getSqlValuesFormatter().formatValue(this.bankAcc.iban(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "ACC_IBAN"),
-                this.redG.getSQLValuesFormatter().formatValue((this.company != null) ? this.company.name() : null,
+                this.redG.getSqlValuesFormatter().formatValue((this.company != null) ? this.company.name() : null,
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "WORKS_AT_NAME"),
-                this.redG.getSQLValuesFormatter().formatValue((this.company != null) ? this.company.countryCode() : null,
+                this.redG.getSqlValuesFormatter().formatValue((this.company != null) ? this.company.countryCode() : null,
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "WORKS_AT_CC"),
-                this.redG.getSQLValuesFormatter().formatValue(this.id(),
+                this.redG.getSqlValuesFormatter().formatValue(this.id(),
                         "DECIMAL", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "ID"),
-                this.redG.getSQLValuesFormatter().formatValue(this.username(),
+                this.redG.getSqlValuesFormatter().formatValue(this.username(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "USERNAME"),
-                this.redG.getSQLValuesFormatter().formatValue(this.firstName(),
+                this.redG.getSqlValuesFormatter().formatValue(this.firstName(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "FIRST_NAME"),
-                this.redG.getSQLValuesFormatter().formatValue(this.lastName(),
+                this.redG.getSqlValuesFormatter().formatValue(this.lastName(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
                         "DEMO_USER", "LAST_NAME")
         );

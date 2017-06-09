@@ -42,14 +42,14 @@ public class GDatesTable implements RedGEntity {
     GDatesTable(AbstractRedG redG) {
         this.redG = redG;
         try {
-            this.aDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.sql.Date.class);
-            this.aTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.sql.Time.class);
-            this.aTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.sql.Timestamp.class);
-            this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.Object.class);
-            this.bDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.sql.Date.class);
-            this.bTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.sql.Time.class);
-            this.bTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.sql.Timestamp.class);
-            this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.Object.class);
+            this.aDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_DATE"), java.sql.Date.class);
+            this.aTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIME"), java.sql.Time.class);
+            this.aTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP"), java.sql.Timestamp.class);
+            this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP_WTZ"), java.lang.Object.class);
+            this.bDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_DATE"), java.sql.Date.class);
+            this.bTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIME"), java.sql.Time.class);
+            this.bTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP"), java.sql.Timestamp.class);
+            this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP_WTZ"), java.lang.Object.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
@@ -837,28 +837,28 @@ public class GDatesTable implements RedGEntity {
                         "" +
                         "" +
                         "%s, %s, %s, %s, %s, %s, %s, %s)",
-                this.redG.getSQLValuesFormatter().formatValue(this.aDate(),
+                this.redG.getSqlValuesFormatter().formatValue(this.aDate(),
                         "DATE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "A_DATE"),
-                this.redG.getSQLValuesFormatter().formatValue(this.aTime(),
+                this.redG.getSqlValuesFormatter().formatValue(this.aTime(),
                         "TIME", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "A_TIME"),
-                this.redG.getSQLValuesFormatter().formatValue(this.aTimestamp(),
+                this.redG.getSqlValuesFormatter().formatValue(this.aTimestamp(),
                         "TIMESTAMP", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "A_TIMESTAMP"),
-                this.redG.getSQLValuesFormatter().formatValue(this.aTimestampWtz(),
+                this.redG.getSqlValuesFormatter().formatValue(this.aTimestampWtz(),
                         "TIMESTAMP WITH TIME ZONE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "A_TIMESTAMP_WTZ"),
-                this.redG.getSQLValuesFormatter().formatValue(this.bDate(),
+                this.redG.getSqlValuesFormatter().formatValue(this.bDate(),
                         "DATE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "B_DATE"),
-                this.redG.getSQLValuesFormatter().formatValue(this.bTime(),
+                this.redG.getSqlValuesFormatter().formatValue(this.bTime(),
                         "TIME", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "B_TIME"),
-                this.redG.getSQLValuesFormatter().formatValue(this.bTimestamp(),
+                this.redG.getSqlValuesFormatter().formatValue(this.bTimestamp(),
                         "TIMESTAMP", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "B_TIMESTAMP"),
-                this.redG.getSQLValuesFormatter().formatValue(this.bTimestampWtz(),
+                this.redG.getSqlValuesFormatter().formatValue(this.bTimestampWtz(),
                         "TIMESTAMP WITH TIME ZONE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE",
                         "DATES_TABLE", "B_TIMESTAMP_WTZ")
         );

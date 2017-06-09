@@ -270,7 +270,7 @@ public class <table.className> implements RedGEntity {
         <if(enableVisualizationSupport)><table.explicitAttributes:{it | this.modifiedFields.add("<it.name>");};separator="/n"><endif>
         <table.notNullForeignKeys:setWithNullCheck()>
         try {
-            <table.nonExplicitAttributes:{it | this.<it.name> = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), <it.javaTypeName>.class);<\n>}>
+            <table.nonExplicitAttributes:{it | this.<it.name> = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<it.dbName>"), <it.javaTypeName>.class);<\n>}>
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
         }
@@ -283,7 +283,7 @@ public class <table.className> implements RedGEntity {
         try {
             this(
                     redG,
-                    <table.explicitAttributes:{it | redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), <it.javaTypeName>.class)}; separator=",\n"><if(table.notNullForeignKeys)>,<endif>
+                    <table.explicitAttributes:{it | redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<it.dbName>"), <it.javaTypeName>.class)}; separator=",\n"><if(table.notNullForeignKeys)>,<endif>
                     <table.notNullForeignKeys:{it | <it.name>};separator=",\n">
             );
         } catch (Exception e) {
@@ -592,13 +592,13 @@ foreignKeyInsertStmtPlaceholder(foreignKey) ::= <<
 >>
 
 foreignKeyInsertValues(foreignKey) ::= <<
-<foreignKey.references.keys:{k|this.redG.getSQLValuesFormatter().formatValue(this.<foreignKey.name>.<foreignKey.references.(k).name>(),
+<foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue(this.<foreignKey.name>.<foreignKey.references.(k).name>(),
         "<foreignKey.references.(k).sqlType>", "<foreignKey.references.(k).dbFullTableName>",
         "<foreignKey.references.(k).dbTableName>", "<foreignKey.references.(k).dbName>")};separator=",\n">
 >>
 
 foreignKeyInsertValuesNullable(foreignKey) ::= <<
-<foreignKey.references.keys:{k|this.redG.getSQLValuesFormatter().formatValue((this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).name>() : null,
+<foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue((this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).name>() : null,
         "<foreignKey.references.(k).sqlType>", "<foreignKey.references.(k).dbFullTableName>",
         "<foreignKey.references.(k).dbTableName>", "<foreignKey.references.(k).dbName>")};separator=",\n">
 >>
@@ -620,7 +620,7 @@ new AttributeMetaInfo("<column.dbName>", "<column.dbTableName>", "<column.dbFull
 >>
 
 columnInsertValues(column) ::= <<
-this.redG.getSQLValuesFormatter().formatValue(this.<column.name>(),
+this.redG.getSqlValuesFormatter().formatValue(this.<column.name>(),
         "<column.sqlType>", "<column.dbFullTableName>",
         "<column.dbTableName>", "<column.dbName>")
 >>
@@ -823,7 +823,7 @@ public <ref.localType> <ref.localName>() {
 >>
 
 overrideColumnInsertValues(column) ::= <<
-this.redG.getSQLValuesFormatter().formatValue(super.<column.name>(),
+this.redG.getSqlValuesFormatter().formatValue(super.<column.name>(),
         "<column.sqlType>", "<column.dbFullTableName>",
         "<column.dbTableName>", "<column.dbName>")
 >>

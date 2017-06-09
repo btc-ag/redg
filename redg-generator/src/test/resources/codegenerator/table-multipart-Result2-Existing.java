@@ -63,10 +63,10 @@ public class ExistingGDemoCompany extends GDemoCompany {
     public String getSQLString() {
         return String.format("SELECT COUNT(*) FROM DEMO_COMPANY WHERE " +
                         "COUNTRY_CODE = %s AND NAME = %s",
-                this.redG.getSQLValuesFormatter().formatValue(super.countryCode(),
+                this.redG.getSqlValuesFormatter().formatValue(super.countryCode(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY",
                         "DEMO_COMPANY", "COUNTRY_CODE"),
-                this.redG.getSQLValuesFormatter().formatValue(super.name(),
+                this.redG.getSqlValuesFormatter().formatValue(super.name(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY",
                         "DEMO_COMPANY", "NAME")
         );

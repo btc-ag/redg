@@ -42,8 +42,8 @@ public class GDemoCompany implements RedGEntity {
     GDemoCompany(AbstractRedG redG) {
         this.redG = redG;
         try {
-            this.countryCode = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.String.class);
-            this.name = redG.getDefaultValueStrategy().getDefaultValue(getTableModel(), java.lang.String.class);
+            this.countryCode = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("COUNTRY_CODE"), java.lang.String.class);
+            this.name = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("NAME"), java.lang.String.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
@@ -255,10 +255,10 @@ public class GDemoCompany implements RedGEntity {
                         "" +
                         "" +
                         "%s, %s)",
-                this.redG.getSQLValuesFormatter().formatValue(this.countryCode(),
+                this.redG.getSqlValuesFormatter().formatValue(this.countryCode(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY",
                         "DEMO_COMPANY", "COUNTRY_CODE"),
-                this.redG.getSQLValuesFormatter().formatValue(this.name(),
+                this.redG.getSqlValuesFormatter().formatValue(this.name(),
                         "VARCHAR", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY",
                         "DEMO_COMPANY", "NAME")
         );
