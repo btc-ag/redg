@@ -44,7 +44,7 @@ import java.util.Arrays;
  * Connection conn = DatabaseManager.connectToDatabase(...);
  * DatabaseManager.executePreparationScripts(conn, scripts);
  * Database db = DatabaseManager.crawlDatabase(conn, schemaRule, tableRule);
- * </pre></blockquote></p>
+ * </pre></blockquote>
  */
 public class DatabaseManager {
 

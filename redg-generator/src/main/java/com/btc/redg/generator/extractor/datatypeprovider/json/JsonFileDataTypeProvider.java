@@ -42,7 +42,7 @@ import schemacrawler.schema.Column;
  *     },
  *     ...
  * }
- * </pre></blockquote></p>
+ * </pre></blockquote>
  */
 public class JsonFileDataTypeProvider implements DataTypeProvider {
 

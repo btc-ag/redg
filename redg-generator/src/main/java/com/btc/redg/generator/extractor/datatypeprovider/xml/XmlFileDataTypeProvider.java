@@ -43,7 +43,7 @@ import schemacrawler.schema.Column;
  *         &lt;type sql="DECIMAL(1)"&gt;java.lang.Boolean&lt;/type&gt;
  *     &lt;/defaultTypeMappings&gt;
  * &lt;/typeMappings&gt;
- * </pre></blockquote></p>
+ * </pre></blockquote>
  */
 public class XmlFileDataTypeProvider implements DataTypeProvider {
     private TypeMappings typeMappings;

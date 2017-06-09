@@ -41,7 +41,7 @@ import schemacrawler.schema.ForeignKeyColumnReference;
  *     "TABLENAME": [EXPLICITCOLUMNNAME1, EXPLICITCOLUMNNAME2, ...],
  *     ...
  * }
- * </pre></blockquote></p>
+ * </pre></blockquote>
  */
 public class JsonFileExplicitAttributeDecider implements ExplicitAttributeDecider {
 
