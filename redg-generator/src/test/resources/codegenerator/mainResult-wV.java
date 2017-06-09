@@ -180,65 +180,7 @@ public class RedG extends AbstractRedG {
     private List<RedGEntity> dummyEntities = new ArrayList<>();
 
     public String getVisualizationJson() {
-        final RedGVisualization visualization = new RedGVisualization();
-
-        final Map<RedGEntity, UUID> uuidMap = new HashMap<>();
-        this.getEntities().forEach(entity -> {
-            final UUID uuid = UUID.randomUUID();
-            uuidMap.put(entity, uuid);
-        });
-        for (RedGEntity entity : this.getEntities()) {
-            try {
-                final UUID uuid = uuidMap.get(entity);
-                final RedGVisualizationObject object = new RedGVisualizationObject();
-                object.setId(uuid.toString());
-
-                final Method getTableModel = entity.getClass().getMethod("getTableModel");
-                final TableModel tableModel = (TableModel) getTableModel.invoke(null);
-
-                object.setType(tableModel.getName());
-                object.setSqlName(tableModel.getSqlName());
-                object.setExistingEntity(entity.getClass().getSimpleName().startsWith("Existing"));
-                object.setDummy(this.dummyEntities.contains(entity));
-
-                final Method getModifiedFields = entity.getClass().getMethod("getModifiedFields");
-                final Set<String> modifiedFields = (Set<String>) getModifiedFields.invoke(entity);
-
-                for (final ColumnModel column : tableModel.getColumns()) {
-                    final Method getter = entity.getClass().getMethod(column.getName());
-                    final Object value = getter.invoke(entity);
-                    final RedGVisualizationField field = new RedGVisualizationField(column.getName(), column.getDbName(), value.toString());
-                    if (modifiedFields.contains(column.getName())) {
-                        object.getExplicitFields().add(field);
-                    } else {
-                        object.getImplicitFields().add(field);
-                    }
-                }
-                for (final ForeignKeyModel fkModel : tableModel.getForeignKeys()) {
-                    Method getter = entity.getClass().getMethod(fkModel.getName());
-                    RedGEntity refEntity = (RedGEntity) getter.invoke(entity);
-                    String sqlNames = fkModel.getReferences().values().stream()
-                            .map(ForeignKeyColumnModel::getDbName)
-                            .collect(Collectors.joining(", "));
-                    RedGVisualizationRelation relation = new RedGVisualizationRelation(
-                            uuid.toString(),
-                            uuidMap.get(refEntity).toString(),
-                            fkModel.getName(),
-                            sqlNames
-                    );
-                    visualization.getRelationships().add(relation);
-                }
-                visualization.getObjects().add(object);
-            } catch (Exception e) {
-                throw new RuntimeException("Could not process entity", e);
-            }
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(visualization);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Could not generate JSON", e);
-        }
+        return VisualizationUtil.getVisualizationJson(this.getEntities(), this.dummyEntities);
     }
 
     @Override
