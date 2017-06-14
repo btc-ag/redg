@@ -123,7 +123,7 @@ public class DefaultDefaultValueStrategy implements DefaultValueStrategy {
             return NumberProvider.convertNumber(new BigDecimal(counter), type);
         }
         if (java.util.Date.class.isAssignableFrom(type) || TemporalAccessor.class.isAssignableFrom(type)) {
-            return AbstractDateProvider.convertDate(new Date(counter), type);
+            return AbstractDateProvider.convertDate(new java.util.Date(counter), type);
         }
         if (boolean.class.equals(type) || Boolean.class.equals(type)) {
             if (counter > 1)
