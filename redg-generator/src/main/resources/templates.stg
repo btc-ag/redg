@@ -212,7 +212,7 @@ public class <table.className> implements RedGEntity {
         <if(enableVisualizationSupport)><table.explicitAttributes:{it | this.modifiedFields.add("<it.name>");};separator="/n"><endif>
         <table.notNullForeignKeys:setWithNullCheck()>
         try {
-            <table.nonExplicitAttributes:{it | this.<it.name> = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<it.dbName>"), <it.javaTypeName>.class);<\n>}>
+            <table.nonExplicitAttributes:{it | this.<it.name> = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<escape.(it.dbName)>"), <it.javaTypeName>.class);<\n>}>
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
         }
@@ -225,7 +225,7 @@ public class <table.className> implements RedGEntity {
         try {
             this(
                     redG,
-                    <table.explicitAttributes:{it | redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<it.dbName>"), <it.javaTypeName>.class)}; separator=",\n"><if(table.notNullForeignKeys)>,<endif>
+                    <table.explicitAttributes:{it | redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<escape.(it.dbName)>"), <it.javaTypeName>.class)}; separator=",\n"><if(table.notNullForeignKeys)>,<endif>
                     <table.notNullForeignKeys:{it | <it.name>};separator=",\n">
             );
         } catch (Exception e) {
@@ -252,12 +252,12 @@ public class <table.className> implements RedGEntity {
     <joinTableSimplifier(table.joinTableSimplifierData)>
 
     public String getSQLString() {
-        return String.format("INSERT INTO <table.sqlFullName> (" +
+        return String.format("INSERT INTO <escape.(table.sqlFullName)> (" +
                         "<table.notNullForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                         <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
                         "<table.nullableForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                         <if(colAndForeignKeys)>", " +<endif>
-                        "<table.columns:{c|<c.dbName>};separator=", ">" +
+                        "<table.columns:{c|<escape.(c.dbName)>};separator=", ">" +
                         ") VALUES (" +
                         "<table.notNullForeignKeys:foreignKeyInsertPlaceholder();separator=", ">" +
                         <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
@@ -271,12 +271,12 @@ public class <table.className> implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO <table.sqlFullName> (" +
+        return "INSERT INTO <escape.(table.sqlFullName)> (" +
                 "<table.notNullForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                 <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
                 "<table.nullableForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                 <if(colAndForeignKeys)>", " +<endif>
-                "<table.columns:{c|<c.dbName>};separator=", ">" +
+                "<table.columns:{c|<escape.(c.dbName)>};separator=", ">" +
                 ") VALUES (" +
                 "<table.notNullForeignKeys:foreignKeyInsertStmtPlaceholder();separator=", ">" +
                 <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
@@ -535,14 +535,14 @@ foreignKeyInsertStmtPlaceholder(foreignKey) ::= <<
 
 foreignKeyInsertValues(foreignKey) ::= <<
 <foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue(this.<foreignKey.name>.<foreignKey.references.(k).name>(),
-        "<foreignKey.references.(k).sqlType>", "<foreignKey.references.(k).dbFullTableName>",
-        "<foreignKey.references.(k).dbTableName>", "<foreignKey.references.(k).dbName>")};separator=",\n">
+        "<foreignKey.references.(k).sqlType>", "<escape.(foreignKey.references.(k).dbFullTableName)>",
+        "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbName)>")};separator=",\n">
 >>
 
 foreignKeyInsertValuesNullable(foreignKey) ::= <<
 <foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue((this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).name>() : null,
-        "<foreignKey.references.(k).sqlType>", "<foreignKey.references.(k).dbFullTableName>",
-        "<foreignKey.references.(k).dbTableName>", "<foreignKey.references.(k).dbName>")};separator=",\n">
+        "<foreignKey.references.(k).sqlType>", "<escape.(foreignKey.references.(k).dbFullTableName)>",
+        "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbName)>")};separator=",\n">
 >>
 
 foreignKeyInsertStmtValues(foreignKey) ::= <<
@@ -554,17 +554,17 @@ foreignKeyInsertStmtValuesNullable(foreignKey) ::= <<
 >>
 
 foreignKeyInsertValueMetaInfos(foreignKey, notNull) ::= <<
-<foreignKey.references.keys:{k|new AttributeMetaInfo("<foreignKey.references.(k).dbName>", "<foreignKey.references.(k).dbTableName>", "<foreignKey.references.(k).dbFullTableName>", "<foreignKey.references.(k).sqlType>", <foreignKey.references.(k).sqlTypeInt>, <foreignKey.references.(k).localType>.class, <notNull>)};separator=",\n">
+<foreignKey.references.keys:{k|new AttributeMetaInfo("<escape.(foreignKey.references.(k).dbName)>", "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbFullTableName)>", "<foreignKey.references.(k).sqlType>", <foreignKey.references.(k).sqlTypeInt>, <foreignKey.references.(k).localType>.class, <notNull>)};separator=",\n">
 >>
 
 columnInsertValueMetaInfo(column) ::= <<
-new AttributeMetaInfo("<column.dbName>", "<column.dbTableName>", "<column.dbFullTableName>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
+new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbFullTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
 >>
 
 columnInsertValues(column) ::= <<
 this.redG.getSqlValuesFormatter().formatValue(this.<column.name>(),
-        "<column.sqlType>", "<column.dbFullTableName>",
-        "<column.dbTableName>", "<column.dbName>")
+        "<column.sqlType>", "<escape.(column.dbFullTableName)>",
+        "<escape.(column.dbTableName)>", "<escape.(column.dbName)>")
 >>
 
 extraGetters(fKey) ::= <<
@@ -665,7 +665,7 @@ public class Existing<table.className> extends <table.className> {
     public String getSQLString() {
     <if (table.primaryKeyColumns)>
         return String.format("SELECT COUNT(*) FROM <table.sqlName> WHERE " +
-                        "<table.primaryKeyColumns:{it|<it.dbName> = %s};separator=" AND ">",
+                        "<table.primaryKeyColumns:{it|<escape.(it.dbName)> = %s};separator=" AND ">",
                 <table.primaryKeyColumns:overrideColumnInsertValues();separator=",\n">
         );
     <else>
@@ -677,9 +677,9 @@ public class Existing<table.className> extends <table.className> {
     public String getPreparedStatementString() {
     <if (table.primaryKeyColumns)>
         return "SELECT COUNT(*) FROM <table.sqlName> WHERE " +
-                <table.primaryKeyColumns:{it|"<it.dbName> = ?};separator=" AND \" +\n">";
+                <table.primaryKeyColumns:{it|"<escape.(it.dbName)> = ?};separator=" AND \" +\n">";
     <else>
-        return "Your table has no primary key(s), referincing existing entities is not possible!";
+        return "Your table has no primary key(s), referencing existing entities is not possible!";
     <endif>
     }
 
@@ -766,8 +766,8 @@ public <ref.localType> <ref.localName>() {
 
 overrideColumnInsertValues(column) ::= <<
 this.redG.getSqlValuesFormatter().formatValue(super.<column.name>(),
-        "<column.sqlType>", "<column.dbFullTableName>",
-        "<column.dbTableName>", "<column.dbName>")
+        "<column.sqlType>", "<escape.(column.dbFullTableName)>",
+        "<escape.(column.dbTableName)>", "<escape.(column.dbName)>")
 >>
 
 

@@ -30,7 +30,7 @@ import com.btc.redg.models.*;
  *     </tr>
  *     <tr>
  *         <td>Full table name</td>
- *         <td>\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY</td>
+ *         <td>"RT-CG-MPFK".PUBLIC.DEMO_COMPANY</td>
  *     </tr>
  * </table>
  */
@@ -70,7 +70,7 @@ public class GDemoCompany implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MPFK".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -114,7 +114,7 @@ public class GDemoCompany implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MPFK".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -156,7 +156,7 @@ public class GDemoCompany implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MPFK".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -200,7 +200,7 @@ public class GDemoCompany implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MPFK".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -289,7 +289,7 @@ public class GDemoCompany implements RedGEntity {
         };
     }
 
-    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWy6onnZkJ7mxgIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAB0AAxHRGVtb0NvbXBhbnlzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAAncEAAAAAnNyAB9jb20uYnRjLnJlZGcubW9kZWxzLkNvbHVtbk1vZGVs80gFbHVt+PcCAAxaABFleHBsaWNpdEF0dHJpYnV0ZVoAB25vdE51bGxaABBwYXJ0T2ZQcmltYXJ5S2V5SQAKc3FsVHlwZUludFoABnVuaXF1ZUwAEmNvbnZlbmllbmNlU2V0dGVyc3EAfgACTAAPZGJGdWxsVGFibGVOYW1lcQB+AAFMAAZkYk5hbWVxAH4AAUwAC2RiVGFibGVOYW1lcQB+AAFMAAxqYXZhVHlwZU5hbWVxAH4AAUwABG5hbWVxAH4AAUwAB3NxbFR5cGVxAH4AAXhwAAEBAAAADAFzcgAfamF2YS51dGlsLkNvbGxlY3Rpb25zJEVtcHR5TGlzdHq4F7Q8p57eAgAAeHB0ACJcIlJULUNHLU1QRktcIi5QVUJMSUMuREVNT19DT01QQU5ZdAAMQ09VTlRSWV9DT0RFdAAMREVNT19DT01QQU5ZdAAQamF2YS5sYW5nLlN0cmluZ3QAC2NvdW50cnlDb2RldAAHVkFSQ0hBUnNxAH4ACAABAQAAAAwBcQB+AAt0ACJcIlJULUNHLU1QRktcIi5QVUJMSUMuREVNT19DT01QQU5ZdAAETkFNRXEAfgAOcQB+AA90AARuYW1lcQB+ABF4c3EAfgAGAAAAAHcEAAAAAHhzcQB+AAYAAAABdwQAAAABc3IAK2NvbS5idGMucmVkZy5tb2RlbHMuSW5jb21pbmdGb3JlaWduS2V5TW9kZWyDhCRS58Dm1AIABVoAB25vdE51bGxMAA1hdHRyaWJ1dGVOYW1lcQB+AAFMABhyZWZlcmVuY2luZ0F0dHJpYnV0ZU5hbWVxAH4AAUwAFXJlZmVyZW5jaW5nRW50aXR5TmFtZXEAfgABTAAXcmVmZXJlbmNpbmdKYXZhVHlwZU5hbWVxAH4AAXhwAHQAE2RlbW9Vc2Vyc0ZvckNvbXBhbnl0AAdjb21wYW55dAAIRGVtb1VzZXJ0AAlHRGVtb1VzZXJ4c3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAAAHcIAAAAEAAAAAB4dAALRGVtb0NvbXBhbnl0ABZjb20uYnRjLnJlZGcuZ2VuZXJhdGVkdAAiXCJSVC1DRy1NUEZLXCIuUFVCTElDLkRFTU9fQ09NUEFOWXEAfgAO";
+    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWy6onnZkJ7mxgIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAB0AAxHRGVtb0NvbXBhbnlzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAAncEAAAAAnNyAB9jb20uYnRjLnJlZGcubW9kZWxzLkNvbHVtbk1vZGVs80gFbHVt+PcCAAxaABFleHBsaWNpdEF0dHJpYnV0ZVoAB25vdE51bGxaABBwYXJ0T2ZQcmltYXJ5S2V5SQAKc3FsVHlwZUludFoABnVuaXF1ZUwAEmNvbnZlbmllbmNlU2V0dGVyc3EAfgACTAAPZGJGdWxsVGFibGVOYW1lcQB+AAFMAAZkYk5hbWVxAH4AAUwAC2RiVGFibGVOYW1lcQB+AAFMAAxqYXZhVHlwZU5hbWVxAH4AAUwABG5hbWVxAH4AAUwAB3NxbFR5cGVxAH4AAXhwAAEBAAAADAFzcgAfamF2YS51dGlsLkNvbGxlY3Rpb25zJEVtcHR5TGlzdHq4F7Q8p57eAgAAeHB0ACAiUlQtQ0ctTVBGSyIuUFVCTElDLkRFTU9fQ09NUEFOWXQADENPVU5UUllfQ09ERXQADERFTU9fQ09NUEFOWXQAEGphdmEubGFuZy5TdHJpbmd0AAtjb3VudHJ5Q29kZXQAB1ZBUkNIQVJzcQB+AAgAAQEAAAAMAXEAfgALdAAgIlJULUNHLU1QRksiLlBVQkxJQy5ERU1PX0NPTVBBTll0AAROQU1FcQB+AA5xAH4AD3QABG5hbWVxAH4AEXhzcQB+AAYAAAAAdwQAAAAAeHNxAH4ABgAAAAF3BAAAAAFzcgArY29tLmJ0Yy5yZWRnLm1vZGVscy5JbmNvbWluZ0ZvcmVpZ25LZXlNb2RlbIOEJFLnwObUAgAFWgAHbm90TnVsbEwADWF0dHJpYnV0ZU5hbWVxAH4AAUwAGHJlZmVyZW5jaW5nQXR0cmlidXRlTmFtZXEAfgABTAAVcmVmZXJlbmNpbmdFbnRpdHlOYW1lcQB+AAFMABdyZWZlcmVuY2luZ0phdmFUeXBlTmFtZXEAfgABeHAAdAATZGVtb1VzZXJzRm9yQ29tcGFueXQAB2NvbXBhbnl0AAhEZW1vVXNlcnQACUdEZW1vVXNlcnhzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHh0AAtEZW1vQ29tcGFueXQAFmNvbS5idGMucmVkZy5nZW5lcmF0ZWR0ACAiUlQtQ0ctTVBGSyIuUFVCTElDLkRFTU9fQ09NUEFOWXEAfgAO";
     private static TableModel tableModel;
 
     public static String getSerializedTableModel() {

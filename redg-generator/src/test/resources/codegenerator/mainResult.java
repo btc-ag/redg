@@ -39,7 +39,7 @@ public class RedG extends AbstractRedG {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MAIN\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      * </table>
      */
@@ -62,7 +62,7 @@ public class RedG extends AbstractRedG {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MAIN\".PUBLIC.DEMO_USER</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_USER</td>
      *     </tr>
      * </table>
      */
@@ -87,7 +87,7 @@ public class RedG extends AbstractRedG {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MAIN\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      * </table>
      */
@@ -111,7 +111,7 @@ public class RedG extends AbstractRedG {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MAIN\".PUBLIC.DEMO_USER</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_USER</td>
      *     </tr>
      * </table>
      */
@@ -136,7 +136,7 @@ public class RedG extends AbstractRedG {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MAIN\".PUBLIC.DEMO_COMPANY</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_COMPANY</td>
      *     </tr>
      * </table>
      */
@@ -158,7 +158,7 @@ public class RedG extends AbstractRedG {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>\"RT-CG-MAIN\".PUBLIC.DEMO_USER</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_USER</td>
      *     </tr>
      * </table>
      */

@@ -68,7 +68,6 @@ public class MetadataExtractor {
             LOG.debug("Extracting model for table {}", table.getFullName());
             result.add(tableExtractor.extractTableModel(table));
         }
-        //TODO: post-process join tables
         LOG.debug("Post-processing the join tables...");
         processJoinTables(result, joinTableMetadata);
         LOG.debug("Post-processing done.");
@@ -115,7 +114,7 @@ public class MetadataExtractor {
 
     private static TableModel getModelBySQLName(final List<TableModel> set, final String name) {
         return set.stream()
-                .filter(tm -> tm.getSqlFullName().equals(NameUtils.escapeQuotationMarks(name)))
+                .filter(tm -> tm.getSqlFullName().equals(name))
                 .findFirst()
                 .orElse(null);
     }

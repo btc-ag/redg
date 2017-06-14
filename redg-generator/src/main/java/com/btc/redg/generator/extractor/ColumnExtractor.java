@@ -59,9 +59,9 @@ public class ColumnExtractor {
         LOG.debug("Extracting model for column {}", column.getName());
         ColumnModel model = new ColumnModel();
         model.setName(this.nameProvider.getMethodNameForColumn(column));
-        model.setDbName(NameUtils.escapeQuotationMarks(column.getName()));
-        model.setDbTableName(NameUtils.escapeQuotationMarks(column.getParent().getName()));
-        model.setDbFullTableName(NameUtils.escapeQuotationMarks(column.getParent().getFullName()));
+        model.setDbName(column.getName());
+        model.setDbTableName(column.getParent().getName());
+        model.setDbFullTableName(column.getParent().getFullName());
 
         model.setSqlType(column.getColumnDataType().getName());
         model.setSqlTypeInt(column.getColumnDataType().getJavaSqlType().getJavaSqlType());

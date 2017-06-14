@@ -39,6 +39,13 @@ public class NameUtils {
         return new String(letters);
     }
 
+    /**
+     * Escapes double quotation marks in a string, so that it can be used in Java source code as a String literal.
+     *
+     * @param s The string to escape
+     * @return The escaped string
+     * @deprecated Should not be used anymore, see issue #8. Use escape-Map in template instead
+     */
     public static String escapeQuotationMarks(final String s) {
         return s.replace("\"", "\\\"");
     }

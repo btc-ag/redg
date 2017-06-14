@@ -128,8 +128,8 @@ public class TableExtractor {
         final TableModel model = new TableModel();
         model.setClassName(this.classPrefix + this.nameProvider.getClassNameForTable(table));
         model.setName(this.nameProvider.getClassNameForTable(table));
-        model.setSqlFullName(NameUtils.escapeQuotationMarks(table.getFullName()));
-        model.setSqlName(NameUtils.escapeQuotationMarks(table.getName()));
+        model.setSqlFullName(table.getFullName());
+        model.setSqlName(table.getName());
 
         model.setPackageName(this.targetPackage);
 
