@@ -177,27 +177,7 @@ public class RedG extends AbstractRedG {
     }
 
 
-    private List<RedGEntity> dummyEntities = new ArrayList<>();
-
     public String getVisualizationJson() {
-        return VisualizationUtil.getVisualizationJson(this.getEntities(), this.dummyEntities);
-    }
-
-    @Override
-    public void setDummyFactory(final DummyFactory dummyFactory) {
-        super.setDummyFactory(dummyFactory);
-        this.getDummyFactory().addDummyPostProcessor(this::processDummy);
-    }
-
-    public RedG() {
-        super();
-        this.getDummyFactory().addDummyPostProcessor(this::processDummy);
-    }
-
-    private <T extends RedGEntity> T processDummy(T entity) {
-        if(!this.dummyEntities.contains(entity)) {
-            this.dummyEntities.add(entity);
-        }
-        return entity;
+        return VisualizationUtil.getVisualizationJson(this.getEntities(), this.getDummyFactory()::isDummy);
     }
 }

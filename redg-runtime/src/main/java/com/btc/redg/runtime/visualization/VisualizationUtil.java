@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  */
 public class VisualizationUtil {
 
-    public static String getVisualizationJson(List<RedGEntity> entities, List<RedGEntity> dummyEntities) {
+    public static String getVisualizationJson(List<RedGEntity> entities, Predicate<RedGEntity> dummyTester) {
         final RedGVisualization visualization = new RedGVisualization();
 
         final Map<RedGEntity, UUID> uuidMap = new HashMap<>();
@@ -53,7 +54,7 @@ public class VisualizationUtil {
                 object.setType(tableModel.getName());
                 object.setSqlName(tableModel.getSqlName());
                 object.setExistingEntity(entity.getClass().getSimpleName().startsWith("Existing"));
-                object.setDummy(dummyEntities.contains(entity));
+                object.setDummy(dummyTester.test(entity));
 
                 final Method getModifiedFields = entity.getClass().getMethod("getModifiedFields");
                 final Set<String> modifiedFields = (Set<String>) getModifiedFields.invoke(entity);
