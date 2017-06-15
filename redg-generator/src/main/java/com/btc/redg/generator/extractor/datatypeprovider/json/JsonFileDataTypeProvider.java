@@ -16,16 +16,14 @@
 
 package com.btc.redg.generator.extractor.datatypeprovider.json;
 
+import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import schemacrawler.schema.Column;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
-
-import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import schemacrawler.schema.Column;
 
 /**
  * <p>
@@ -35,18 +33,24 @@ import schemacrawler.schema.Column;
  * </p>
  * <p><blockquote><pre>
  * {
- *     "SCHEMA.TABLE": {
- *         "COLUMN" : "full.class.Name",
- *         "OTHER_COLUMN" : "possibly.other.Class",
+ *     "tableMappings": {
+ *         "SCHEMA.TABLE": {
+ *             "COLUMN" : "full.class.Name",
+ *             "OTHER_COLUMN" : "possibly.other.Class",
+ *             ...
+ *         },
  *         ...
  *     },
- *     ...
+ *     "defaultMappings": {
+ *         "DECIMAL": "java.lang.YourFavoriteNumberType"
+ *     }
+ * <p>
  * }
  * </pre></blockquote>
  */
 public class JsonFileDataTypeProvider implements DataTypeProvider {
 
-    private final HashMap<String, HashMap<String, String>> mappings;
+    private final TypeMappings typeMappings;
 
     private final DataTypeProvider fallbackProvider;
 
@@ -54,7 +58,7 @@ public class JsonFileDataTypeProvider implements DataTypeProvider {
      * Creates a {@link DataTypeProvider} that uses a JSON file as its data source. If no data type can be read from the JSON, the type is queried from the
      * {@code fallbackProvider}.
      *
-     * @param jsonFile The JSON file that specifies the wanted data types. May not be {@code null}. See class documentation for format.
+     * @param jsonFile         The JSON file that specifies the wanted data types. May not be {@code null}. See class documentation for format.
      * @param fallbackProvider The provider to be queried if no type can be found in the JSON file. May not be {@code null}
      * @throws IOException Gets thrown when the JSON file could not be read or parsed
      */
@@ -62,18 +66,25 @@ public class JsonFileDataTypeProvider implements DataTypeProvider {
         this.fallbackProvider = fallbackProvider;
         Objects.requireNonNull(jsonFile);
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<HashMap<String, HashMap<String, String>>> typeRef = new TypeReference<HashMap<String, HashMap<String, String>>>() {
-        };
-        mappings = mapper.readValue(jsonFile, typeRef);
+        typeMappings = mapper.readValue(jsonFile, TypeMappings.class);
     }
 
     @Override
     public String getCanonicalDataTypeName(final Column column) {
-        HashMap<String, String> tableMap = mappings.get(column.getParent().getFullName());
-        if (tableMap != null) {
-            String className = tableMap.get(column.getName());
-            if (className != null) {
-                return className;
+        if (typeMappings.getTableMappings() != null) {
+            final HashMap<String, String> tableMap = typeMappings.getTableMappings().get(column.getParent().getFullName());
+            if (tableMap != null) {
+                final String className = tableMap.get(column.getName());
+                if (className != null) {
+                    return className;
+                }
+            }
+        }
+        final HashMap<String, String> defaultMappings = typeMappings.getDefaultTypeMappings();
+        if (defaultMappings != null) {
+            final String defaultType = defaultMappings.get(column.getColumnDataType().getName());
+            if (defaultType != null) {
+                return defaultType;
             }
         }
         return fallbackProvider.getCanonicalDataTypeName(column);
