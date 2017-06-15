@@ -30,11 +30,11 @@ import org.junit.Test;
 
 public class XmlFileDataTypeProviderTest {
     @Test
-    public void testDeserialiseXml() throws Exception {
+    public void testDeserializeXml() throws Exception {
         InputStream stream = this.getClass().getResourceAsStream("XmlFileDataTypeProviderTest.xml");
         InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
 
-        TypeMappings mappings = XmlFileDataTypeProvider.deserialiseXml(reader);
+        TypeMappings mappings = XmlFileDataTypeProvider.deserializeXml(reader);
 
         Assert.assertEquals(mappings.getTableTypeMappings().size(), 1);
         TableTypeMapping tableTypeMapping = mappings.getTableTypeMappings().get(0);
@@ -87,6 +87,21 @@ public class XmlFileDataTypeProviderTest {
 
         Assert.assertEquals(dataTypeProvider.getDataTypeByName("JOIN_TABLE", "FOO_ID"), "java.math.BigDecimal");
         Assert.assertEquals(dataTypeProvider.getDataTypeByName("JOIN_TABLE", "BAR"), null);
+    }
+
+    @Test
+    public void testGetDataTypeBySqlName() throws Exception {
+        TypeMappings typeMappings = new TypeMappings();
+        typeMappings.setDefaultTypeMappings(Arrays.asList(
+                new DefaultTypeMapping("DECIMAL", "java.lang.Long"),
+                new DefaultTypeMapping("TIMESTAMP", "java.time.LocalDateTime")
+        ));
+        XmlFileDataTypeProvider dataTypeProvider = new XmlFileDataTypeProvider(typeMappings, new DefaultDataTypeProvider());
+
+        Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType("DECIMAL"));
+        Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType("decimal"));
+        Assert.assertEquals("java.time.LocalDateTime", dataTypeProvider.getDataTypeBySqlType("TIMESTAMP"));
+        Assert.assertEquals("java.time.LocalDateTime", dataTypeProvider.getDataTypeBySqlType("timestamp"));
     }
 
     private void assertEqualsIgnoreXmlWhiteSpaces(String expected, String actual) {

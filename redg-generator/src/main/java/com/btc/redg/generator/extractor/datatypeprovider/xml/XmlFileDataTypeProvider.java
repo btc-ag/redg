@@ -38,7 +38,6 @@ import schemacrawler.schema.Column;
  *              &lt;column name="ID"&gt;java.lang.String&lt;/column&gt;
  *         &lt;/table&gt;
  *     &lt;/tableTypeMappings&gt;
- *     &lt;!-- TODO --&gt;
  *     &lt;defaultTypeMappings&gt;
  *         &lt;type sql="DECIMAL(1)"&gt;java.lang.Boolean&lt;/type&gt;
  *     &lt;/defaultTypeMappings&gt;
@@ -50,7 +49,7 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
     private DataTypeProvider fallbackDataTypeProvider;
 
     public XmlFileDataTypeProvider(Reader xmlReader, DataTypeProvider fallbackDataTypeProvider) throws IOException {
-        this(deserialiseXml(xmlReader), fallbackDataTypeProvider);
+        this(deserializeXml(xmlReader), fallbackDataTypeProvider);
     }
 
     public XmlFileDataTypeProvider(TypeMappings typeMappings, DataTypeProvider fallbackDataTypeProvider) {
@@ -58,7 +57,7 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
         this.fallbackDataTypeProvider = fallbackDataTypeProvider;
     }
 
-    static TypeMappings deserialiseXml(Reader xmlReader) {
+    static TypeMappings deserializeXml(Reader xmlReader) {
         TypeMappings typeMappings;
         XStream xStream = createXStream();
         typeMappings = (TypeMappings) xStream.fromXML(xmlReader, new TypeMappings());
@@ -81,7 +80,9 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
     @Override
     public String getCanonicalDataTypeName(final Column column) {
         String dataTypeByName = getDataTypeByName(column.getParent().getName(), column.getName());
-        return dataTypeByName != null ? dataTypeByName : fallbackDataTypeProvider.getCanonicalDataTypeName(column);
+        String dataTypeByType = getDataTypeBySqlType(column.getColumnDataType().getName());
+        return dataTypeByName != null ? dataTypeByName :
+                dataTypeByType != null ? dataTypeByType : fallbackDataTypeProvider.getCanonicalDataTypeName(column);
     }
 
     String getDataTypeByName(String tableName, String columnName) {
@@ -92,5 +93,12 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
                 .findFirst()
                 .map(ColumnTypeMapping::getJavaType)
                 .orElse(null);
+    }
+
+    String getDataTypeBySqlType(final String type) {
+        return typeMappings.getDefaultTypeMappings().stream()
+                .filter(defaultTypeMapping -> defaultTypeMapping.getSqlType().toUpperCase().equals(type.toUpperCase()))
+                .map(DefaultTypeMapping::getJavaType)
+                .findFirst().orElse(null);
     }
 }

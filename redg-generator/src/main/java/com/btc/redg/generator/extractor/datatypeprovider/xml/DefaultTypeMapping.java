@@ -43,4 +43,13 @@ public class DefaultTypeMapping {
     public void setJavaType(String javaType) {
         this.javaType = javaType;
     }
+
+
+    public DefaultTypeMapping() {
+    }
+
+    public DefaultTypeMapping(final String sqlType, final String javaType) {
+        this.sqlType = sqlType;
+        this.javaType = javaType;
+    }
 }

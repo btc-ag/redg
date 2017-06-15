@@ -32,14 +32,14 @@ public class XmlFileConvenienceSetterProvider implements ConvenienceSetterProvid
     private ConvenienceSetterConfig convenienceSetterConfig;
 
     public XmlFileConvenienceSetterProvider(Reader xmlReader) throws IOException {
-        this(deserialiseXml(xmlReader));
+        this(deserializeXml(xmlReader));
     }
 
     public XmlFileConvenienceSetterProvider(ConvenienceSetterConfig convenienceSetterConfig) {
         this.convenienceSetterConfig = convenienceSetterConfig;
     }
 
-    static ConvenienceSetterConfig deserialiseXml(Reader xmlReader) {
+    static ConvenienceSetterConfig deserializeXml(Reader xmlReader) {
         ConvenienceSetterConfig config;
         XStream xStream = createXStream();
         config = (ConvenienceSetterConfig) xStream.fromXML(xmlReader, new ConvenienceSetterConfig());
