@@ -64,12 +64,15 @@ public abstract class AbstractRedG {
     }
 
     /**
-     * Sets the default value strategy for all entity generated afterwards. Does not affect previously added entities.
+     * Sets the default value strategy. May only be called before entities are created, otherwise an {@link IllegalStateException} gets thrown.
      * Passing {@code null} resets the strategy to a {@link DefaultDefaultValueStrategy}.
      *
      * @param defaultValueStrategy The new default value strategy to use from now on
      */
     public void setDefaultValueStrategy(final DefaultValueStrategy defaultValueStrategy) {
+        if (entities.size() > 0) {
+            throw new IllegalStateException("The default value strategy cannot be changed after an entity was generated!");
+        }
         if (defaultValueStrategy == null) {
             this.defaultValueStrategy = new DefaultDefaultValueStrategy();
         } else {
@@ -88,10 +91,14 @@ public abstract class AbstractRedG {
 
     /**
      * Sets the insert value formatter. Passing {@code null} resets it to a {@link DefaultSQLValuesFormatter}.
+     * Must not be called after entities are created or an {@link IllegalStateException} gets thrown.
      *
      * @param sqlValuesFormatter The new insert value formatter
      */
     public void setSqlValuesFormatter(final SQLValuesFormatter sqlValuesFormatter) {
+        if (entities.size() > 0) {
+            throw new IllegalStateException("The SQL values formatter cannot be changed after an entity was generated!");
+        }
         if (sqlValuesFormatter == null) {
             this.sqlValuesFormatter = new DefaultSQLValuesFormatter();
         } else {
@@ -110,10 +117,14 @@ public abstract class AbstractRedG {
 
     /**
      * Sets the PreparedStatementParameterSetter that will be used to set parameter values on {@link PreparedStatement}s.
+     * Must not be called after entities are created or an {@link IllegalStateException} gets thrown.
      *
      * @param preparedStatementParameterSetter new The PreparedStatementParameterSetter.
      */
     public void setPreparedStatementParameterSetter(final PreparedStatementParameterSetter preparedStatementParameterSetter) {
+        if (entities.size() > 0) {
+            throw new IllegalStateException("The PreparedStatement parameter setter cannot be changed after an entity was generated!");
+        }
         if (preparedStatementParameterSetter == null) {
             this.preparedStatementParameterSetter = new DefaultPreparedStatementParameterSetter();
         } else {
@@ -132,10 +143,14 @@ public abstract class AbstractRedG {
 
     /**
      * Sets the new dummy factory, that will be used to generate dummy entities from now on. Changing this does not affect old dummy entities.
+     * Must not be called after entities are created or an {@link IllegalStateException} gets thrown.
      *
      * @param dummyFactory The new dummy factory. If {@code null}, a {@link DefaultDummyFactory} gets used.
      */
     public void setDummyFactory(final DummyFactory dummyFactory) {
+        if (entities.size() > 0) {
+            throw new IllegalStateException("The dummy factory cannot be changed after an entity was generated!");
+        }
         if (dummyFactory == null) {
             this.dummyFactory = new DefaultDummyFactory();
         } else {
