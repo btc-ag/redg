@@ -644,7 +644,7 @@ public class Existing<table.className> extends <table.className> {
     @Override
     public String getSQLString() {
     <if (table.primaryKeyColumns)>
-        return String.format("SELECT COUNT(*) FROM <table.sqlName> WHERE " +
+        return String.format("SELECT COUNT(*) FROM <escape.(table.sqlName)> WHERE " +
                         "<table.primaryKeyColumns:{it|<escape.(it.dbName)> = %s};separator=" AND ">",
                 <table.primaryKeyColumns:overrideColumnInsertValues();separator=",\n">
         );
@@ -656,7 +656,7 @@ public class Existing<table.className> extends <table.className> {
     @Override
     public String getPreparedStatementString() {
     <if (table.primaryKeyColumns)>
-        return "SELECT COUNT(*) FROM <table.sqlName> WHERE " +
+        return "SELECT COUNT(*) FROM <escape.(table.sqlName)> WHERE " +
                 <table.primaryKeyColumns:{it|"<escape.(it.dbName)> = ?};separator=" AND \" +\n">";
     <else>
         return "Your table has no primary key(s), referencing existing entities is not possible!";
