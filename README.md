@@ -1,6 +1,6 @@
 # RedG test data generation library
 
-This is the code repository for the RedG project.
+This is the code repository for the RedG project. For a quick overview [visit the website](https://btc-ag.github.io/redg).
 
 ## Maven
 
@@ -8,7 +8,7 @@ All RedG artifacts can be found in [Maven Central](https://search.maven.org/#sea
 
 ## Documentation
 
-You can find the documentation [here](https://btc-ag.github.io/redg)
+You can find the documentation [here](https://btc-ag.github.io/redg/documentation/)
 
 ## Authors
 
