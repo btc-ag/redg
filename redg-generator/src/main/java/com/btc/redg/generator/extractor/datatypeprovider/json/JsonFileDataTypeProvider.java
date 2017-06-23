@@ -17,12 +17,14 @@
 package com.btc.redg.generator.extractor.datatypeprovider.json;
 
 import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
+import com.btc.redg.generator.extractor.datatypeprovider.helpers.DataTypePrecisionHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import schemacrawler.schema.Column;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -42,7 +44,8 @@ import java.util.Objects;
  *         ...
  *     },
  *     "defaultMappings": {
- *         "DECIMAL": "java.lang.YourFavoriteNumberType"
+ *         "DECIMAL": "java.lang.YourFavoriteNumberType",
+ *         "DECIMAL(1)": "java.lang.Boolean"
  *     }
  * <p>
  * }
@@ -82,9 +85,12 @@ public class JsonFileDataTypeProvider implements DataTypeProvider {
         }
         final HashMap<String, String> defaultMappings = typeMappings.getDefaultTypeMappings();
         if (defaultMappings != null) {
-            final String defaultType = defaultMappings.get(column.getColumnDataType().getName());
-            if (defaultType != null) {
-                return defaultType;
+            List<String> variants = DataTypePrecisionHelper.getDataTypeWithAllPrecisionVariants(column);
+            for (final String variant : variants) {
+                final String defaultType = defaultMappings.get(variant);
+                if (defaultType != null) {
+                    return defaultType;
+                }
             }
         }
         return fallbackProvider.getCanonicalDataTypeName(column);

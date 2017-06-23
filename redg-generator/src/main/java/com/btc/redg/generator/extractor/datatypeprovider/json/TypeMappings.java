@@ -17,6 +17,8 @@
 package com.btc.redg.generator.extractor.datatypeprovider.json;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The JSON type mapping definition for mapping with Jackson
@@ -40,6 +42,7 @@ public class TypeMappings {
     }
 
     public void setDefaultTypeMappings(final HashMap<String, String> defaultTypeMappings) {
-        this.defaultTypeMappings = defaultTypeMappings;
+        this.defaultTypeMappings = (HashMap<String, String>) defaultTypeMappings.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey().replaceAll("\\s", ""), Map.Entry::getValue));
     }
 }

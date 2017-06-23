@@ -16,6 +16,14 @@
 
 package com.btc.redg.generator.extractor.datatypeprovider.xml;
 
+import com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import schemacrawler.schema.Column;
+import schemacrawler.schema.ColumnDataType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,10 +31,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-
-import com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class XmlFileDataTypeProviderTest {
     @Test
@@ -94,14 +98,25 @@ public class XmlFileDataTypeProviderTest {
         TypeMappings typeMappings = new TypeMappings();
         typeMappings.setDefaultTypeMappings(Arrays.asList(
                 new DefaultTypeMapping("DECIMAL", "java.lang.Long"),
-                new DefaultTypeMapping("TIMESTAMP", "java.time.LocalDateTime")
+                new DefaultTypeMapping("DECIMAL(1)", "java.lang.Boolean")
         ));
+
+        ColumnDataType cdt = Mockito.mock(ColumnDataType.class);
+        Mockito.when(cdt.getName()).thenReturn("DECIMAL");
+        Column column1 = Mockito.mock(Column.class);
+        Mockito.when(column1.getColumnDataType()).thenReturn(cdt);
+        Mockito.when(column1.getSize()).thenReturn(1);
+        Mockito.when(column1.getDecimalDigits()).thenReturn(0);
+
+        Column column2 = Mockito.mock(Column.class);
+        Mockito.when(column2.getColumnDataType()).thenReturn(cdt);
+        Mockito.when(column2.getSize()).thenReturn(10);
+        Mockito.when(column2.getSize()).thenReturn(0);
+
         XmlFileDataTypeProvider dataTypeProvider = new XmlFileDataTypeProvider(typeMappings, new DefaultDataTypeProvider());
 
-        Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType("DECIMAL"));
-        Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType("decimal"));
-        Assert.assertEquals("java.time.LocalDateTime", dataTypeProvider.getDataTypeBySqlType("TIMESTAMP"));
-        Assert.assertEquals("java.time.LocalDateTime", dataTypeProvider.getDataTypeBySqlType("timestamp"));
+        Assert.assertEquals("java.lang.Boolean", dataTypeProvider.getDataTypeBySqlType(column1));
+        Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType(column2));
     }
 
     private void assertEqualsIgnoreXmlWhiteSpaces(String expected, String actual) {

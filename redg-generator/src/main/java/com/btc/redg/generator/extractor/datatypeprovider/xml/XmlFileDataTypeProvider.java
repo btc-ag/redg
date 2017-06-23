@@ -16,15 +16,16 @@
 
 package com.btc.redg.generator.extractor.datatypeprovider.xml;
 
+import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
+import com.btc.redg.generator.extractor.datatypeprovider.helpers.DataTypePrecisionHelper;
+import com.thoughtworks.xstream.XStream;
+import schemacrawler.schema.Column;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
-import com.thoughtworks.xstream.XStream;
-
-import schemacrawler.schema.Column;
+import java.util.Objects;
 
 /**
  * <p>
@@ -80,7 +81,7 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
     @Override
     public String getCanonicalDataTypeName(final Column column) {
         String dataTypeByName = getDataTypeByName(column.getParent().getName(), column.getName());
-        String dataTypeByType = getDataTypeBySqlType(column.getColumnDataType().getName());
+        String dataTypeByType = getDataTypeBySqlType(column);
         return dataTypeByName != null ? dataTypeByName :
                 dataTypeByType != null ? dataTypeByType : fallbackDataTypeProvider.getCanonicalDataTypeName(column);
     }
@@ -95,9 +96,14 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
                 .orElse(null);
     }
 
-    String getDataTypeBySqlType(final String type) {
-        return typeMappings.getDefaultTypeMappings().stream()
-                .filter(defaultTypeMapping -> defaultTypeMapping.getSqlType().toUpperCase().equals(type.toUpperCase()))
+    String getDataTypeBySqlType(final Column column) {
+        List<String> variants = DataTypePrecisionHelper.getDataTypeWithAllPrecisionVariants(column);
+        return variants.stream()
+                .map(variant ->
+                        typeMappings.getDefaultTypeMappings().stream()
+                                .filter(dtm -> dtm.getSqlType().replaceAll("\\s", "").toUpperCase().equals(variant.toUpperCase()))
+                                .findFirst().orElse(null))
+                .filter(Objects::nonNull)
                 .map(DefaultTypeMapping::getJavaType)
                 .findFirst().orElse(null);
     }
