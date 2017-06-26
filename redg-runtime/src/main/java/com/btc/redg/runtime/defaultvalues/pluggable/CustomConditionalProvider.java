@@ -18,33 +18,31 @@ package com.btc.redg.runtime.defaultvalues.pluggable;
 
 import com.btc.redg.models.ColumnModel;
 
+import java.util.function.Predicate;
+
 /**
  * A conditional provider that is even more flexible than the {@link ConditionalProvider}
  */
 public class CustomConditionalProvider implements PluggableDefaultValueProvider {
 
-    private final ProvideCondition provideCondition;
+    private final Predicate<ColumnModel> provideCondition;
     private final PluggableDefaultValueProvider provider;
 
-    public CustomConditionalProvider(final ProvideCondition provideCondition, final PluggableDefaultValueProvider provider) {
+    public CustomConditionalProvider(final Predicate<ColumnModel> provideCondition, final PluggableDefaultValueProvider provider) {
         this.provideCondition = provideCondition;
         this.provider = provider;
     }
 
     @Override
     public <T> T getDefaultValue(final ColumnModel columnModel, final Class<T> type) {
-        return provideCondition.matches(columnModel) ?
+        return provideCondition.test(columnModel) ?
                 provider.getDefaultValue(columnModel, type) : null;
     }
 
     @Override
     public boolean willProvide(final ColumnModel columnModel) {
-        return provideCondition.matches(columnModel)
+        return provideCondition.test(columnModel)
                 && provider.willProvide(columnModel);
     }
 
-    @FunctionalInterface
-    public interface ProvideCondition {
-        boolean matches(ColumnModel columnModel);
-    }
 }

@@ -22,6 +22,7 @@ import com.btc.redg.runtime.defaultvalues.DefaultValueStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * A {@link DefaultValueStrategy} that implements a simple plugin system. Add your {@link PluggableDefaultValueProvider}s to it in
@@ -83,7 +84,7 @@ public class PluggableDefaultValueStrategy implements DefaultValueStrategy {
             return this;
         }
 
-        public Builder when(final CustomConditionalProvider.ProvideCondition condition) {
+        public Builder when(final Predicate<ColumnModel> condition) {
             this.lastProvider = new CustomConditionalProvider(condition, this.lastProvider);
             return this;
         }

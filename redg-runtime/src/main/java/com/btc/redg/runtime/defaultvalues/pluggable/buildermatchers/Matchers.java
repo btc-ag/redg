@@ -27,35 +27,35 @@ import java.util.function.Predicate;
  */
 public class Matchers {
 
-    public static CustomConditionalProvider.ProvideCondition tableName(final Predicate<String> condition) {
+    public static Predicate<ColumnModel> tableName(final Predicate<String> condition) {
         return (cM) -> condition.test(cM.getDbTableName());
     }
 
-    public static CustomConditionalProvider.ProvideCondition fullTableName(final Predicate<String> condition) {
+    public static Predicate<ColumnModel> fullTableName(final Predicate<String> condition) {
         return (cM) -> condition.test(cM.getDbFullTableName());
     }
 
-    public static CustomConditionalProvider.ProvideCondition columnName(final Predicate<String> condition) {
+    public static Predicate<ColumnModel> columnName(final Predicate<String> condition) {
         return (cM) -> condition.test(cM.getDbName());
     }
 
-    public static CustomConditionalProvider.ProvideCondition type(final Predicate<Class<?>> condition) {
+    public static Predicate<ColumnModel> type(final Predicate<Class<?>> condition) {
         return (cM) -> condition.test(cM.getJavaTypeAsClass());
     }
 
-    public static CustomConditionalProvider.ProvideCondition notNull(final Predicate<Boolean> condition) {
+    public static Predicate<ColumnModel> notNull(final Predicate<Boolean> condition) {
         return (cM) -> condition.test(cM.isNotNull());
     }
 
-    public static CustomConditionalProvider.ProvideCondition isNotNull() {
+    public static Predicate<ColumnModel> isNotNull() {
         return ColumnModel::isNotNull;
     }
 
-    public static CustomConditionalProvider.ProvideCondition isUnique() {
+    public static Predicate<ColumnModel> isUnique() {
         return ColumnModel::isUnique;
     }
 
-    public static CustomConditionalProvider.ProvideCondition isPrimary() {
+    public static Predicate<ColumnModel> isPrimary() {
         return ColumnModel::isPartOfPrimaryKey;
     }
 
@@ -65,9 +65,9 @@ public class Matchers {
      * @param conditions The conditions to be checked
      * @return A condition that returns true if all passed conditions return true
      */
-    public static CustomConditionalProvider.ProvideCondition allOf(final CustomConditionalProvider.ProvideCondition... conditions) {
+    public static Predicate<ColumnModel> allOf(final Predicate<ColumnModel>... conditions) {
         return (cM) -> Arrays.stream(conditions)
-                .allMatch(c -> c.matches(cM));
+                .allMatch(c -> c.test(cM));
     }
 
     /**
@@ -76,9 +76,9 @@ public class Matchers {
      * @param conditions The conditions to be checked
      * @return A condition that returns true if any of the passed conditions return true
      */
-    public static CustomConditionalProvider.ProvideCondition anyOf(final CustomConditionalProvider.ProvideCondition... conditions) {
+    public static Predicate<ColumnModel> anyOf(final Predicate<ColumnModel>... conditions) {
         return (cM) -> Arrays.stream(conditions)
-                .anyMatch(c -> c.matches(cM));
+                .anyMatch(c -> c.test(cM));
     }
 
     /**
@@ -87,8 +87,8 @@ public class Matchers {
      * @param conditions The conditions to be checked
      * @return A condition that returns true if exactly one of the passed conditions return true
      */
-    public static CustomConditionalProvider.ProvideCondition oneOf(final CustomConditionalProvider.ProvideCondition... conditions) {
+    public static Predicate<ColumnModel> oneOf(final Predicate<ColumnModel>... conditions) {
         return (cM) -> Arrays.stream(conditions)
-                .map(c -> c.matches(cM)).filter(b -> b).count() == 1;
+                .map(c -> c.test(cM)).filter(b -> b).count() == 1;
     }
 }
