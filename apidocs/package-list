@@ -10,6 +10,7 @@ com.btc.redg.generator.extractor
 com.btc.redg.generator.extractor.conveniencesetterprovider
 com.btc.redg.generator.extractor.conveniencesetterprovider.xml
 com.btc.redg.generator.extractor.datatypeprovider
+com.btc.redg.generator.extractor.datatypeprovider.helpers
 com.btc.redg.generator.extractor.datatypeprovider.json
 com.btc.redg.generator.extractor.datatypeprovider.xml
 com.btc.redg.generator.extractor.explicitattributedecider

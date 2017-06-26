@@ -1027,14 +1027,15 @@ The <code>DEMO_COMPANY</code> gets the same mapping for the <code>ID</code> and 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DemoTestData</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="n">AbstractRedG</span> <span class="nf">getDataSet</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">RedG</span> <span class="n">redG</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RedG</span><span class="o">();</span>
 
         <span class="n">PluggableDefaultValueStrategy</span> <span class="n">strategy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PluggableDefaultValueStrategy</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
             <span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="k">new</span> <span class="n">IncrementingNumberProvider</span><span class="o">())</span>
             <span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="k">new</span> <span class="n">CurrentDateProvider</span><span class="o">())</span>
             <span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="k">new</span> <span class="n">CostantStringProvider</span><span class="o">(</span><span class="s">&quot;Example&quot;</span><span class="o">));</span>
 
-        <span class="n">redG</span><span class="o">.</span><span class="na">setDefaultValueStrategy</span><span class="o">(</span><span class="n">strategy</span><span class="o">);</span>
+        <span class="n">RedG</span> <span class="n">redG</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RedGBuilder</span><span class="o">&lt;</span><span class="n">RedG</span><span class="o">&gt;()</span>
+            <span class="o">.</span><span class="na">withDefaultValueStrategy</span><span class="o">(</span><span class="n">strategy</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
         <span class="n">GDemoBankAccount</span> <span class="n">companyBankAccount</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addDemoBankAccount</span><span class="o">()</span>
                 <span class="o">.</span><span class="na">bic</span><span class="o">(</span><span class="s">&quot;ONEPIZZAPLZ&quot;</span><span class="o">)</span>

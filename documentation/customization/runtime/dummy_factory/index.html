@@ -603,13 +603,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#modify-generated-dummy-entities" title="Modify generated dummy entities" class="md-nav__link">
-    Modify generated dummy entities
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#implement-own-dummyfactory" title="Implement own DummyFactory" class="md-nav__link">
     Implement own DummyFactory
   </a>
@@ -686,13 +679,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#modify-generated-dummy-entities" title="Modify generated dummy entities" class="md-nav__link">
-    Modify generated dummy entities
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#implement-own-dummyfactory" title="Implement own DummyFactory" class="md-nav__link">
     Implement own DummyFactory
   </a>
@@ -730,32 +716,18 @@ and a guide on how to use this mechanism, check <a href="../../../features/dummy
 </ul>
 <p>If the latter occurs, feel free to open an <a href="https://gitlab.com/btc-redg/redg/issues/new">issue</a> and we might try to 
 implement support for your case.</p>
-<h2 id="modify-generated-dummy-entities">Modify generated dummy entities<a class="headerlink" href="#modify-generated-dummy-entities" title="Permanent link">&para;</a></h2>
-<p>When you are using the <code>DefaultDummyFactory</code>, you can add <code>DummyPostProcessor</code>s. Each post-processor can modify 
-(or even replace) the dummy entity before it is inserted into RedG's entity store and returned from the 
-<code>getDummyX()</code> method.</p>
-<p>Yo can add a post-processor with the <code>addDummyPostProcessor</code> method of the <code>DefaultDummyFactory</code>.</p>
-<p>The <code>DummyPostProcessor</code> interface is incredibly simple:</p>
-<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DummyPostProcessor</span> <span class="o">{</span>
-    <span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">RedGEntity</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">processDummy</span><span class="o">(</span><span class="n">T</span> <span class="n">entity</span><span class="o">);</span>
-<span class="o">}</span>
-</pre></div>
-
-
 <h2 id="implement-own-dummyfactory">Implement own DummyFactory<a class="headerlink" href="#implement-own-dummyfactory" title="Permanent link">&para;</a></h2>
 <p>If you need to, you can always implement your own <code>DummyFactory</code>. Here are a few tips when implementing your custom factory:</p>
 <ul>
 <li>Remember to take care of all transitive dependencies.</li>
-<li>Abstain from using user-generated entities already within RedG as dummies, as the post-processors might change them.</li>
-<li>If you do not support <code>DummyPostProcessor</code>s, please throw an <code>UnsupportedOperationException</code> and do not silently discard the post-processor. This might bewilder users who expect their post-processors to be called.</li>
+<li>Abstain from using user-generated entities already within RedG as dummies. Dummies should be entities your factory generated.</li>
+<li>Implement <code>isDummy</code> correctly, or features like the visualization will not work properly.</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DummyFactory</span> <span class="o">{</span>
 
     <span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">RedGEntity</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">getDummy</span><span class="o">(</span><span class="n">AbstractRedG</span> <span class="n">redG</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">dummyClass</span><span class="o">);</span>
 
-    <span class="kt">void</span> <span class="nf">addDummyPostProcessor</span><span class="o">(</span><span class="n">DummyPostProcessor</span> <span class="n">dummyPostProcessor</span><span class="o">);</span>
-    <span class="kt">void</span> <span class="nf">removeDummyPostProcessor</span><span class="o">(</span><span class="n">DummyPostProcessor</span> <span class="n">dummyPostProcessor</span><span class="o">);</span>
-    <span class="kt">void</span> <span class="nf">removeAllDummyPostProcessors</span><span class="o">();</span>
+    <span class="kt">boolean</span> <span class="nf">isDummy</span><span class="o">(</span><span class="n">RedGEntity</span> <span class="n">entity</span><span class="o">);</span>
 <span class="o">}</span>
 </pre></div>
                 

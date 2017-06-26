@@ -747,16 +747,30 @@ There are three cases, where this might not be enough:</p>
 <h2 id="json-file">JSON file<a class="headerlink" href="#json-file" title="Permanent link">&para;</a></h2>
 <p>If you want to specify your mapping in a JSON file, use the <code>JsonFileDataTypeProvider</code>. The 
 <a href="../../../integration/maven_plugin/">Maven plugin</a> has built-in support for JSON files.</p>
-<p>The syntax for the JSON file is simple: Each table gets an own object. The key for that object is the full table name 
+<p>The syntax for the JSON file is simple: You can specify <code>tableMappings</code> that specify the type for a column inside a table
+or you can use the <code>defaultMappings</code> where you can assign a data type to be used for a specific SQL type. The <code>tableMappings</code> have a higher priority and can be 
+used to override the <code>defaultMappings</code>.</p>
+<p>For the <code>tableMappings</code>: Each table gets an own object. The key for that object is the full table name 
 (including the schema name). This object contains a key for each column you want to map. The key is the column name. 
 The value for each key is the wanted data type.</p>
+<p>For the <code>defaultMappings</code>: The key is the SQL data type (with or without precision information), the value is the Java type. SQL types with precision information
+always take precedence over types without precision information. So when a column has the data type <code>NUMBER(1)</code> and the mappings contain both <code>NUMBER -&gt; Long</code> and
+<code>NUMBER(1) -&gt; Boolean</code> the column will be mapped to a <code>Boolean</code> type. When dealing with <code>VARCHAR</code>s or similar, you can also use "precision" (aka length) information,
+but do not include <code>CHAR</code> inside the brackets (eg. if type is <code>VARCHAR2(100 CHAR)</code>, use <code>VARCHAR2(100)</code> to match this).</p>
+<p><strong>Example:</strong></p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;SCHEMA-NAME.TABLE-NAME&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;COLUMN-NAME&quot;</span><span class="p">:</span> <span class="s2">&quot;your.java.Datatype&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;OTHER-COLUMN&quot;</span><span class="p">:</span> <span class="s2">&quot;other.Type&quot;</span>
+  <span class="nt">&quot;tableMappings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;SCHEMA-NAME.TABLE-NAME&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;COLUMN-NAME&quot;</span><span class="p">:</span> <span class="s2">&quot;your.java.Datatype&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;OTHER-COLUMN&quot;</span><span class="p">:</span> <span class="s2">&quot;other.Type&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;SCHEMA-NAME.OTHER-TABLE&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;ID-COLUMN&quot;</span><span class="p">:</span> <span class="s2">&quot;long&quot;</span>
+    <span class="p">}</span>
   <span class="p">},</span>
-  <span class="nt">&quot;SCHEMA-NAME.OTHER-TABLE&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;ID-COLUMN&quot;</span><span class="p">:</span> <span class="s2">&quot;long&quot;</span>
+  <span class="nt">&quot;defaultMappings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;NUMBER&quot;</span><span class="p">:</span> <span class="s2">&quot;java.lang.Long&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;NUMBER(1)&quot;</span><span class="p">:</span> <span class="s2">&quot;java.lang.Boolean&quot;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -769,14 +783,18 @@ The value for each key is the wanted data type.</p>
 specify the types for gets a <code class="codehilite"><span class="nt">&lt;table&gt;</span></code> element with a <code>name</code> attribute specifying the table name. 
 Each table element has <code class="codehilite"><span class="nt">&lt;column&gt;</span></code> child elements. These elements have a <code>name</code> attribute and their value is
 the wanted data type.</p>
-<p>Future versions of RedG will allow more possibilities with XML mappings (mapping complete SQL types to different Java
-data types).</p>
+<p>The other allowed child element is <code class="codehilite"><span class="nt">&lt;defaultTypeMappings&gt;</span></code>. It can have multiple <code class="codehilite"><span class="nt">&lt;type&gt;</span></code> children with a <code>sql</code> attribute specifying the SQL data 
+type (with precision support just like for JSON). The value of this node is the Java type that the SQL type should be mapped to.</p>
+<p><strong>Example:</strong></p>
 <div class="codehilite"><pre><span></span><span class="nt">&lt;typeMappings&gt;</span>
    <span class="nt">&lt;tableTypeMappings&gt;</span>
        <span class="nt">&lt;table</span> <span class="na">name=</span><span class="s">&quot;TABLE_NAME&quot;</span><span class="nt">&gt;</span>
             <span class="nt">&lt;column</span> <span class="na">name=</span><span class="s">&quot;COLUMN_NAME&quot;</span><span class="nt">&gt;</span>java.lang.String<span class="nt">&lt;/column&gt;</span>
        <span class="nt">&lt;/table&gt;</span>
    <span class="nt">&lt;/tableTypeMappings&gt;</span>
+   <span class="nt">&lt;defaultTypeMappings&gt;</span>
+       <span class="nt">&lt;type</span> <span class="na">sql=</span><span class="s">&quot;DECIMAL(1)&quot;</span><span class="nt">&gt;</span>java-lang.Boolean<span class="nt">&lt;/type&gt;</span>
+   <span class="nt">&lt;/defaultTypeMappings&gt;</span>
 <span class="nt">&lt;/typeMappings&gt;</span>
 </pre></div>
 

@@ -907,7 +907,8 @@ If no eligible provider is found or all return <code>null</code>, <code>null</co
 
 
 <p>Take a look at the Javadoc for <code>com.btc.redg.runtime.defaultvalues.pluggable.buildermatchers.Matchers</code> and 
-<code>com.btc.redg.runtime.defaultvalues.pluggable.buildermatchers.Conditions</code> for all available conditions to use in the <code>.when()</code> part.</p>
+<code>com.btc.redg.runtime.defaultvalues.pluggable.buildermatchers.Conditions</code> for all available conditions to use in the <code>.when()</code> part. As the <code>.when()</code> method 
+expects a <code>Predicate&lt;ColumnModel&gt;</code>, you can easily implement a custom system.</p>
 <h3 id="custom-provider-implementation">Custom provider implementation<a class="headerlink" href="#custom-provider-implementation" title="Permanent link">&para;</a></h3>
 <p>Implementing a custom provider is easy. Simply implement the <code>PluggableDefaultValueProvider</code> interface and implement
 both the <code>getDefaultValue</code> and <code>willProvide</code> method. The <code>willProvide</code> method should return <code>true</code> if <code>getDefaultValue</code>

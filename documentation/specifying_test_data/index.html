@@ -743,6 +743,8 @@ you'll need to pass them to the method. Passing a <code>null</code> value will r
 <p>Once you have created your entity you can use it's setters to set the values for the necessary fields.</p>
 <p>Example:</p>
 <div class="codehilite"><pre><span></span><span class="n">RedG</span> <span class="n">redG</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RedG</span><span class="o">();</span>
+<span class="c1">// or when customizing many things, consider using the RedGBuilder class</span>
+<span class="c1">// RedG redG = new RedGBuilder&lt;RedG&gt;().build();</span>
 
 <span class="c1">// either </span>
 <span class="n">GTeacher</span> <span class="n">mathTeacher</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addTeacher</span><span class="o">()</span>
