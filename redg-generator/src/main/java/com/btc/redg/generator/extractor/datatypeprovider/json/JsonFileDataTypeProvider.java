@@ -47,7 +47,6 @@ import java.util.Objects;
  *         "DECIMAL": "java.lang.YourFavoriteNumberType",
  *         "DECIMAL(1)": "java.lang.Boolean"
  *     }
- * <p>
  * }
  * </pre></blockquote>
  */
