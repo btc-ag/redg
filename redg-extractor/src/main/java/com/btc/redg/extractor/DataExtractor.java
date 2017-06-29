@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class DataExtractor {
 
@@ -42,6 +44,24 @@ public class DataExtractor {
     private static final String SELECT_FORMAT_STRING = "SELECT * FROM %s";
 
     private JavaCodeRepresentationProvider jcrProvider = new DefaultJavaCodeRepresentationProvider();
+
+    public JavaCodeRepresentationProvider getJcrProvider() {
+        return jcrProvider;
+    }
+
+    public void setJcrProvider(final JavaCodeRepresentationProvider jcrProvider) {
+        this.jcrProvider = jcrProvider;
+    }
+
+    public Predicate<EntityModel> getEntityFilter() {
+        return entityFilter;
+    }
+
+    public void setEntityFilter(final Predicate<EntityModel> entityFilter) {
+        this.entityFilter = entityFilter;
+    }
+
+    private Predicate<EntityModel> entityFilter = (em) -> true;
 
     public List<EntityModel> extractAllData(final Connection connection, final List<TableModel> tableModels) throws SQLException {
 
@@ -67,8 +87,8 @@ public class DataExtractor {
                         try {
                             final Object value = rs.getObject(fkcm.getDbName());
                             if (value != null) {
-                                referencedEntity.addValues(fkcm.getName(),
-                                        jcrProvider.getCodeForColumnValue(value, fkcm.getSqlType(), fkcm.getSqlTypeInt(), fkcm.getLocalType()));
+                                referencedEntity.addValues(fkcm.getName(), new EntityModel.ValueModel(
+                                        jcrProvider.getCodeForColumnValue(value, fkcm.getSqlType(), fkcm.getSqlTypeInt(), fkcm.getLocalType()), EntityModel.ValueModel.ForeignKeyState.UNKNOWN));
                             }
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
@@ -87,8 +107,9 @@ public class DataExtractor {
                 for (final ColumnModel cm : tableModel.getColumns()) {
                     final Object value = rs.getObject(cm.getDbName());
                     if (value != null) {
-                        entityModel.addValues(cm.getName(),
-                                jcrProvider.getCodeForColumnValue(value, cm.getSqlType(), cm.getSqlTypeInt(), cm.getJavaTypeName()));
+                        entityModel.addValues(cm.getName(), new EntityModel.ValueModel(
+                                jcrProvider.getCodeForColumnValue(value, cm.getSqlType(), cm.getSqlTypeInt(), cm.getJavaTypeName()),
+                                cm.isPartOfForeignKey() ? EntityModel.ValueModel.ForeignKeyState.FK : EntityModel.ValueModel.ForeignKeyState.NON_FK));
                     }
                 }
                 entities.add(entityModel);
@@ -118,18 +139,25 @@ public class DataExtractor {
 
         // now sort all entities
         LOG.debug("Sorting entities...");
-        return EntityModelSorter.sortEntityModels(entities);
+        return EntityModelSorter.sortEntityModels(entities).stream()
+                .filter(entityFilter)
+                .collect(Collectors.toList());
     }
 
     private EntityModel findCorrectEntity(final ReferencingEntityModel ref, final List<EntityModel> entities) {
         return entities.stream()
                 .filter(e -> {
+                    if (!ref.getTypeName().equals(e.getTableModel().getClassName())) {
+                        return false;
+                    }
                     for (final ColumnModel cm : e.getTableModel().getPrimaryKeyColumns()) {
-                        final String entityVal = e.getValues().get(cm.getName());
-                        final String refVal = ref.getValues().get(cm.getName());
+
+                        final String entityVal = e.getValues().get(cm.getName()).getValue();
+                        final String refVal = ref.getValues().get(cm.getName()).getValue();
                         if (!entityVal.equals(refVal)) {
                             return false;
                         }
+
                     }
                     return true;
                 })

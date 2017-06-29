@@ -43,7 +43,7 @@ public class EntityModel {
 
     private TableModel tableModel;
 
-    private Map<String, String> values;
+    private Map<String, ValueModel> values;
 
     private Map<String, EntityModel> nullableRefs;
 
@@ -69,15 +69,21 @@ public class EntityModel {
         this.variableName = variableName;
     }
 
-    public Map<String, String> getValues() {
+    public Map<String, ValueModel> getValues() {
         return values;
     }
 
-    public void setValues(final Map<String, String> values) {
+    public Map<String, ValueModel> getValuesWithoutFKs() {
+        return values.entrySet().stream()
+                .filter(e -> e.getValue().isNonFK())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public void setValues(final Map<String, ValueModel> values) {
         this.values = values;
     }
 
-    public void addValues(final String methodName, final String methodParameter) {
+    public void addValues(final String methodName, final ValueModel methodParameter) {
         this.values.put(methodName, methodParameter);
     }
 
@@ -112,4 +118,49 @@ public class EntityModel {
     public List<EntityModel> getAllRefs() {
         return Stream.concat(this.notNullRefs.stream(), this.nullableRefs.values().stream()).collect(Collectors.toList());
     }
+
+    public static final class ValueModel {
+        public enum ForeignKeyState {
+            FK, NON_FK, UNKNOWN
+        }
+
+        private String value;
+        private ForeignKeyState foreignKeyState;
+
+        public ValueModel(final String value, final ForeignKeyState foreignKeyState) {
+            this.value = value;
+            this.foreignKeyState = foreignKeyState;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public ForeignKeyState getForeignKeyState() {
+            return foreignKeyState;
+        }
+
+        public boolean isNonFK() {
+            return foreignKeyState != ForeignKeyState.FK;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ValueModel that = (ValueModel) o;
+
+            if (value != null ? !value.equals(that.value) : that.value != null) return false;
+            return foreignKeyState == that.foreignKeyState;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = value != null ? value.hashCode() : 0;
+            result = 31 * result + (foreignKeyState != null ? foreignKeyState.hashCode() : 0);
+            return result;
+        }
+    }
+
 }

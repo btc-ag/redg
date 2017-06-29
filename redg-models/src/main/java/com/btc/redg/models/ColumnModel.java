@@ -35,6 +35,7 @@ public class ColumnModel implements Serializable{
     private int sqlTypeInt;
     private boolean notNull;
     private boolean partOfPrimaryKey;
+    private boolean partOfForeignKey;
     private boolean explicitAttribute;
     private boolean unique;
     private List<ConvenienceSetterModel> convenienceSetters;
@@ -132,6 +133,14 @@ public class ColumnModel implements Serializable{
 
     public void setPartOfPrimaryKey(final boolean partOfPrimaryKey) {
         this.partOfPrimaryKey = partOfPrimaryKey;
+    }
+
+    public boolean isPartOfForeignKey() {
+        return partOfForeignKey;
+    }
+
+    public void setPartOfForeignKey(final boolean partOfForeignKey) {
+        this.partOfForeignKey = partOfForeignKey;
     }
 
     public boolean isExplicitAttribute() {

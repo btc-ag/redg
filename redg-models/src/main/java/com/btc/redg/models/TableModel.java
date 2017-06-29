@@ -157,9 +157,28 @@ public class TableModel implements Serializable {
                 .collect(Collectors.toList());
     }
 
+    public List<ColumnModel> getForeignKeyColumns() {
+        return columns.stream()
+                .filter(ColumnModel::isPartOfForeignKey)
+                .collect(Collectors.toList());
+    }
+
     public List<ColumnModel> getNonPrimaryKeyColumns() {
         return columns.stream()
                 .filter(c -> !c.isPartOfPrimaryKey())
+                .collect(Collectors.toList());
+    }
+
+    public List<ColumnModel> getNonPrimaryKeyNonFKColumns() {
+        return columns.stream()
+                .filter(c -> !c.isPartOfPrimaryKey())
+                .filter(c -> !c.isPartOfForeignKey())
+                .collect(Collectors.toList());
+    }
+
+    public List<ColumnModel> getNonForeignKeyColumns() {
+        return columns.stream()
+                .filter(c -> !c.isPartOfForeignKey())
                 .collect(Collectors.toList());
     }
 
@@ -172,6 +191,12 @@ public class TableModel implements Serializable {
     public List<ColumnModel> getNonExplicitAttributes() {
         return columns.stream()
                 .filter((columnModel) -> !columnModel.isExplicitAttribute())
+                .collect(Collectors.toList());
+    }
+    public List<ColumnModel> getNonExplicitNonFKAttributes() {
+        return columns.stream()
+                .filter((columnModel) -> !columnModel.isExplicitAttribute())
+                .filter(c -> !c.isPartOfForeignKey())
                 .collect(Collectors.toList());
     }
 }

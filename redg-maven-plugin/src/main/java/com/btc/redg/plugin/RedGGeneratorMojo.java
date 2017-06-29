@@ -205,7 +205,13 @@ public class RedGGeneratorMojo extends AbstractMojo {
             throw new MojoFailureException("Code generation failed", e);
         }
         getLog().info("Code generation successful. Adding code to compilation");
-        project.addTestCompileSourceRoot(outputDirectory.getPath());
+        if (outputDirectory.toString().contains("generated-test-sources")) {
+            project.addTestCompileSourceRoot(outputDirectory.getPath());
+        } else if (outputDirectory.toString().contains("generated-sources")) {
+            project.addCompileSourceRoot(outputDirectory.getPath());
+        } else {
+            getLog().warn("Code was neither placed in generated-sources or generated-test-sources folder and was not added to the sources. Use the build-helper-maven-plugin to do this manually!");
+        }
 
 
     }

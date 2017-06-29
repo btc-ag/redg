@@ -134,7 +134,7 @@ public class TableExtractor {
         model.setPackageName(this.targetPackage);
 
         model.setColumns(table.getColumns().stream()
-                .filter(c -> !c.isPartOfForeignKey())
+                //.filter(c -> !c.isPartOfForeignKey()) // no longer filter due to #12
                 .map(this.columnExtractor::extractColumnModel)
                 .collect(Collectors.toList()));
 
@@ -161,7 +161,7 @@ public class TableExtractor {
                 .map(this.foreignKeyExtractor::extractIncomingForeignKeyModel)
                 .collect(Collectors.toList()));
 
-        model.setHasColumnsAndForeignKeys(!model.getColumns().isEmpty() && !model.getForeignKeys().isEmpty());
+        model.setHasColumnsAndForeignKeys(!model.getNonForeignKeyColumns().isEmpty() && !model.getForeignKeys().isEmpty());
 
         return model;
     }

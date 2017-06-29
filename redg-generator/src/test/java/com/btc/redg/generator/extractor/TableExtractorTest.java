@@ -62,7 +62,8 @@ public class TableExtractorTest {
         assertEquals("com.demo.pkg", model.getPackageName());
         assertEquals("DEMO_USER", model.getSqlName());
         assertEquals(1, model.getForeignKeys().size());
-        assertEquals(5, model.getColumns().size());
+        assertEquals(6, model.getColumns().size()); // Due to #12 the FK-column gets counted as well
+        assertEquals(5, model.getNonForeignKeyColumns().size()); // Test for #12 without FK-column
         assertTrue(model.hasColumnsAndForeignKeys());
     }
 

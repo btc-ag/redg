@@ -47,7 +47,7 @@ public class DefaultJavaCodeRepresentationProvider implements JavaCodeRepresenta
             return value.toString();
         }
         if (javaType.equals("java.math.BigDecimal")) {
-            return "new java.math.BigDecimal(" + value.toString() + ")";
+            return "new java.math.BigDecimal(\"" + value.toString() + "\")";
         }
         if (javaType.equals("java.sql.Timestamp")) {
             return "java.sql.Timestamp.valueOf(" + value.toString() + ")";

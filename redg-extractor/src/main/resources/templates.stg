@@ -18,7 +18,7 @@ public class <className> {
 
 entityCreator(entity) ::= <<
 <entity.tableModel.className> <entity.variableName> = redG.add<entity.tableModel.name>(<entity.notNullRefs:{it|<it.variableName>};separator=", ">)
-    <entity.values.keys:{k|.<k>(<entity.values.(k)>)};separator="\n"><if(!entity.nullableRefs.keys)>;<endif>
+    <entity.valuesWithoutFKs.keys:{k|.<k>(<entity.values.(k).value>)};separator="\n"><if(!entity.nullableRefs.keys)>;<endif>
     <entity.nullableRefs.keys:{k|.<k>(<entity.nullableRefs.(k).variableName>)};separator="\n"><if(entity.nullableRefs.keys)>;<endif>
 
 
