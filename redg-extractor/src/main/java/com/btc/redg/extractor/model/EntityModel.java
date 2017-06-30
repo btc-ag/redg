@@ -163,4 +163,20 @@ public class EntityModel {
         }
     }
 
+    public boolean isGenerateAsNewEntity() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(this.getTableModel().getSqlFullName())
+                .append("[")
+                .append(this.getValues().entrySet().stream()
+                        .map((e) -> e.getKey() + " -> " + e.getValue().getValue())
+                        .collect(Collectors.joining(", ")))
+                .append("]");
+        return builder.toString();
+    }
+
 }

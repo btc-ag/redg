@@ -16,7 +16,10 @@
 
 package com.btc.redg.extractor;
 
+import com.btc.redg.extractor.generationmodes.DependencyAlreadyExcludedException;
+import com.btc.redg.extractor.generationmodes.EntityInclusionMode;
 import com.btc.redg.extractor.model.EntityModel;
+import com.btc.redg.extractor.model.ExistingEntityModel;
 import com.btc.redg.extractor.model.ReferencingEntityModel;
 import com.btc.redg.extractor.model.representationprovider.DefaultJavaCodeRepresentationProvider;
 import com.btc.redg.extractor.model.representationprovider.JavaCodeRepresentationProvider;
@@ -30,11 +33,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DataExtractor {
@@ -53,15 +53,15 @@ public class DataExtractor {
         this.jcrProvider = jcrProvider;
     }
 
-    public Predicate<EntityModel> getEntityFilter() {
-        return entityFilter;
+    public Function<EntityModel, EntityInclusionMode> getEntityModeDecider() {
+        return entityModeDecider;
     }
 
-    public void setEntityFilter(final Predicate<EntityModel> entityFilter) {
-        this.entityFilter = entityFilter;
+    public void setEntityModeDecider(final Function<EntityModel, EntityInclusionMode> entityModeDecider) {
+        this.entityModeDecider = entityModeDecider;
     }
 
-    private Predicate<EntityModel> entityFilter = (em) -> true;
+    private Function<EntityModel, EntityInclusionMode> entityModeDecider = (em) -> EntityInclusionMode.ADD_NEW;
 
     public List<EntityModel> extractAllData(final Connection connection, final List<TableModel> tableModels) throws SQLException {
 
@@ -139,9 +139,52 @@ public class DataExtractor {
 
         // now sort all entities
         LOG.debug("Sorting entities...");
-        return EntityModelSorter.sortEntityModels(entities).stream()
-                .filter(entityFilter)
-                .collect(Collectors.toList());
+        //return EntityModelSorter.sortEntityModels(entities).stream()
+        //        .map
+        //        .collect(Collectors.toList());
+        List<EntityModel> sortedEntities = EntityModelSorter.sortEntityModels(entities);
+        ListIterator<EntityModel> sortedIterator = sortedEntities.listIterator();
+
+        List<EntityModel> removedEntities = new LinkedList<>();
+        while (sortedIterator.hasNext()) {
+            EntityModel entityModel = sortedIterator.next();
+
+            EntityInclusionMode mode = this.entityModeDecider.apply(entityModel);
+            switch (mode) {
+                case EXCLUDE:
+                    removedEntities.add(entityModel);
+                    sortedIterator.remove();
+                    break;
+                case ADD_NEW:
+                    for (final EntityModel dependency : entityModel.getNotNullRefs()) {
+                        if (removedEntities.contains(dependency)) {
+                            throw new DependencyAlreadyExcludedException(entityModel);
+                        }
+                        entityModel.getNullableRefs().entrySet().removeIf(entry -> removedEntities.contains(entry.getValue()));
+                    }
+                    break;
+                case USE_EXISTING:
+                    ExistingEntityModel existingEntityModel = ExistingEntityModel.fromEntityModel(entityModel);
+                    sortedIterator.set(existingEntityModel);
+                    // replace all references to old entityModel with reference to new existingEntityModel
+                    for (final EntityModel eM : sortedEntities) {
+                        ListIterator<EntityModel> innerIterator = eM.getNotNullRefs().listIterator();
+                        while (innerIterator.hasNext()) {
+                            if (innerIterator.next().equals(entityModel)) {
+                                innerIterator.set(existingEntityModel);
+                            }
+                        }
+                        eM.setNullableRefs(eM.getNullableRefs().entrySet().stream()
+                                .collect(Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        e -> (e.getValue().equals(entityModel)) ? existingEntityModel : e.getValue()
+                                )));
+                    }
+                    break;
+            }
+        }
+
+        return sortedEntities;
     }
 
     private EntityModel findCorrectEntity(final ReferencingEntityModel ref, final List<EntityModel> entities) {

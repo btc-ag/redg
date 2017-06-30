@@ -17,9 +17,12 @@ public class <className> {
 >>
 
 entityCreator(entity) ::= <<
+<if(entity.generateAsNewEntity)>
 <entity.tableModel.className> <entity.variableName> = redG.add<entity.tableModel.name>(<entity.notNullRefs:{it|<it.variableName>};separator=", ">)
     <entity.valuesWithoutFKs.keys:{k|.<k>(<entity.values.(k).value>)};separator="\n"><if(!entity.nullableRefs.keys)>;<endif>
     <entity.nullableRefs.keys:{k|.<k>(<entity.nullableRefs.(k).variableName>)};separator="\n"><if(entity.nullableRefs.keys)>;<endif>
-
+<else>
+<entity.tableModel.className> <entity.variableName> = redG.existing<entity.tableModel.name>(<entity.primaryKeyValues:{it|<it.value>};separator=", ">);
+<endif>
 
 >>
