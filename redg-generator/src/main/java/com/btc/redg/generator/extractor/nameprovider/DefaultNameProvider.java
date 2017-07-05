@@ -17,6 +17,7 @@
 package com.btc.redg.generator.extractor.nameprovider;
 
 import com.btc.redg.generator.utils.NameUtils;
+
 import schemacrawler.schema.Column;
 import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.Table;
@@ -63,8 +64,12 @@ public class DefaultNameProvider implements NameProvider {
      */
     @Override
     public String getMethodNameForColumn(final Column column) {
+        return convertToJavaName(column.getName());
+    }
+
+    public static String convertToJavaName(String columnName) {
         final StringBuilder methodNameBuilder = new StringBuilder();
-        final List<String> words = new ArrayList<>(Arrays.asList(column.getName()
+        final List<String> words = new ArrayList<>(Arrays.asList(columnName
                 .toLowerCase()
                 .replaceAll("(^[0-9]+|[^a-z0-9_-])", "") // Delete every not-alphanumeric or _/- character and numbers at beginning
                 .split("_")));
@@ -79,13 +84,18 @@ public class DefaultNameProvider implements NameProvider {
         return methodNameBuilder.toString();
     }
 
+    @Override
+    public String getMethodNameForForeignKeyColumn(ForeignKey foreignKey, Column primaryKeyColumn, Column foreignKeyColumn) {
+        return getMethodNameForColumn(foreignKeyColumn);
+    }
+
     /**
      * Generates an appropriate method name for a foreign key
      * @param foreignKey The database foreign key
      * @return The generated name
      */
     @Override
-    public String getMethodNameForForeignKey(final ForeignKey foreignKey) {
+    public String getMethodNameForReference(final ForeignKey foreignKey) {
         final Column c = foreignKey.getColumnReferences().get(0).getForeignKeyColumn();
         // check if only one-column fk
         if (foreignKey.getColumnReferences().size() == 1) {
@@ -117,6 +127,6 @@ public class DefaultNameProvider implements NameProvider {
     public String getMethodNameForIncomingForeignKey(ForeignKey foreignKey) {
         Table referencingTable = foreignKey.getColumnReferences().get(0).getForeignKeyColumn().getParent();
         return NameUtils.firstCharacterToLowerCase(getClassNameForTable(referencingTable))
-                + "sFor" + NameUtils.firstCharacterToUpperCase(getMethodNameForForeignKey(foreignKey));
+                + "sFor" + NameUtils.firstCharacterToUpperCase(getMethodNameForReference(foreignKey));
     }
 }

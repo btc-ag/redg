@@ -146,7 +146,7 @@ public class ExistingGDemoUser extends GDemoUser {
         return String.format("SELECT COUNT(*) FROM DEMO_USER WHERE " +
                         "ID = %s",
                 this.redG.getSqlValuesFormatter().formatValue(super.id(),
-                        "DECIMAL", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER",
+                        "DECIMAL", "DEMO_USER",
                         "DEMO_USER", "ID")
         );
     }
@@ -167,7 +167,7 @@ public class ExistingGDemoUser extends GDemoUser {
     @Override
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[] {
-                new AttributeMetaInfo("ID", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true)
+                new AttributeMetaInfo("ID", "DEMO_USER", "DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true)
         };
     }
 }

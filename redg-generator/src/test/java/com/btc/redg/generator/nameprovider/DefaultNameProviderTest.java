@@ -59,10 +59,10 @@ public class DefaultNameProviderTest {
     public void testForeignKeyNameGeneration() {
         DefaultNameProvider provider = new DefaultNameProvider();
         assertEquals("creatorUser",
-                provider.getMethodNameForForeignKey(DummyDatabaseStructureProvider.getSimpleForeignKey("creator", "X", "User")));
+                provider.getMethodNameForReference(DummyDatabaseStructureProvider.getSimpleForeignKey("creator", "X", "User")));
 
         assertEquals("blogPostCreator",
-                provider.getMethodNameForForeignKey(
+                provider.getMethodNameForReference(
                         DummyDatabaseStructureProvider.getMultiPartForeignKey("FK_BLOG_POST_CREATOR_USER", "User")));
     }
 

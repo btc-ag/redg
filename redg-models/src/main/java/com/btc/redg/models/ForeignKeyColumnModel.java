@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 public class ForeignKeyColumnModel implements Serializable{
 
-    private String name;
+    private String primaryKeyAttributeName;
     private String localName;
     private String localType;
     private String dbName;
@@ -33,12 +33,12 @@ public class ForeignKeyColumnModel implements Serializable{
     public ForeignKeyColumnModel() {
     }
 
-    public String getName() {
-        return name;
+    public String getPrimaryKeyAttributeName() {
+        return primaryKeyAttributeName;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setPrimaryKeyAttributeName(final String primaryKeyAttributeName) {
+        this.primaryKeyAttributeName = primaryKeyAttributeName;
     }
 
     public String getLocalName() {

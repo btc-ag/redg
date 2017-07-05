@@ -87,6 +87,17 @@ public class ColumnExtractorTest {
         assertTrue(columnModel.isExplicitAttribute());
     }
 
+    @Test
+    public void testExtractColumnModelForKeywordColumn() throws Exception {
+        Column column = extractColumnFromDemoDb("DEMO_USER", "\"DAY\"");
+
+        ColumnExtractor extractor = new ColumnExtractor(new DefaultDataTypeProvider(), new DefaultNameProvider(),
+                new DefaultExplicitAttributeDecider(), new DefaultConvenienceSetterProvider());
+        ColumnModel model = extractor.extractColumnModel(column);
+
+        assertEquals("DAY", model.getDbName());
+    }
+
     private Column extractColumnFromDemoDb(String tableName, String columnName) throws Exception {
         Schema s = catalog.lookupSchema("\"RT-CE\".PUBLIC").orElse(null);
         assertNotNull(s);

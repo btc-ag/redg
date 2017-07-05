@@ -63,7 +63,7 @@ public class ForeignKeyExtractorTest {
         assertEquals(1, model.getReferences().size());
         assertTrue(model.getReferences().containsKey("WORKS_AT"));
         ForeignKeyColumnModel columnModel = model.getReferences().get("WORKS_AT");
-        assertEquals("id", columnModel.getName());
+        assertEquals("id", columnModel.getPrimaryKeyAttributeName());
         assertEquals("worksAt", columnModel.getLocalName());
         assertEquals("java.math.BigDecimal", columnModel.getLocalType());
         assertEquals("WORKS_AT", columnModel.getDbName());

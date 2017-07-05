@@ -890,14 +890,14 @@ public class GDatesTable implements RedGEntity {
 
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[]{
-                new AttributeMetaInfo("A_DATE", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "DATE", 91, java.sql.Date.class, false),
-                new AttributeMetaInfo("A_TIME", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIME", 92, java.sql.Time.class, false),
-                new AttributeMetaInfo("A_TIMESTAMP", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP", 93, java.sql.Timestamp.class, true),
-                new AttributeMetaInfo("A_TIMESTAMP_WTZ", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.lang.Object.class, false),
-                new AttributeMetaInfo("B_DATE", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "DATE", 91, java.sql.Date.class, false),
-                new AttributeMetaInfo("B_TIME", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIME", 92, java.sql.Time.class, false),
-                new AttributeMetaInfo("B_TIMESTAMP", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP", 93, java.sql.Timestamp.class, true),
-                new AttributeMetaInfo("B_TIMESTAMP_WTZ", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.lang.Object.class, false)
+                new AttributeMetaInfo("A_DATE", "DATES_TABLE", "DATES_TABLE", "DATE", 91, java.sql.Date.class, false),
+                new AttributeMetaInfo("A_TIME", "DATES_TABLE", "DATES_TABLE", "TIME", 92, java.sql.Time.class, false),
+                new AttributeMetaInfo("A_TIMESTAMP", "DATES_TABLE", "DATES_TABLE", "TIMESTAMP", 93, java.sql.Timestamp.class, true),
+                new AttributeMetaInfo("A_TIMESTAMP_WTZ", "DATES_TABLE", "DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.lang.Object.class, false),
+                new AttributeMetaInfo("B_DATE", "DATES_TABLE", "DATES_TABLE", "DATE", 91, java.sql.Date.class, false),
+                new AttributeMetaInfo("B_TIME", "DATES_TABLE", "DATES_TABLE", "TIME", 92, java.sql.Time.class, false),
+                new AttributeMetaInfo("B_TIMESTAMP", "DATES_TABLE", "DATES_TABLE", "TIMESTAMP", 93, java.sql.Timestamp.class, true),
+                new AttributeMetaInfo("B_TIMESTAMP_WTZ", "DATES_TABLE", "DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.lang.Object.class, false)
         };
     }
 
@@ -908,11 +908,15 @@ public class GDatesTable implements RedGEntity {
         return serializedTableModel;
     }
 
-    public static TableModel getTableModel() throws java.io.IOException, ClassNotFoundException {
+    public static TableModel getTableModel() {
         if (tableModel == null) {
             byte[] data = java.util.Base64.getDecoder().decode(serializedTableModel);
-            java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
-            tableModel = (TableModel) ois.readObject();
+            try {
+                java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
+                tableModel = (TableModel) ois.readObject();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return tableModel;
     }

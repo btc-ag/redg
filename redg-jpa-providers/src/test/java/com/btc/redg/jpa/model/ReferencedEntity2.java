@@ -36,7 +36,7 @@ public class ReferencedEntity2 implements Serializable {
 
 	@Id
 	@Column(name = "ID_2")
-	private BigDecimal id2;
+	private BigDecimal theOtherIdPart;
 
 	@OneToMany
 	private List<SubEntity> subEntity;

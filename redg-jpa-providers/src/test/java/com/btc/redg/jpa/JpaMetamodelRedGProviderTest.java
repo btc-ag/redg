@@ -17,6 +17,7 @@
 package com.btc.redg.jpa;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Optional;
 
 import org.junit.Assert;
@@ -36,25 +37,26 @@ import schemacrawler.schema.Table;
 public class JpaMetamodelRedGProviderTest {
 
 	private static JpaMetamodelRedGProvider provider;
-	private static Connection connection;
 	private static Catalog catalog;
 
 	@BeforeClass
 	public static void setUp() throws Exception {
 		provider = JpaMetamodelRedGProvider.fromPersistenceUnit("com.btc.redg");
-		connection = DatabaseManager.connectToDatabase("org.h2.Driver", "jdbc:h2:mem:jpaprovidertest", "sa", "");
-		catalog = DatabaseManager.crawlDatabase(connection, null, null);
+		try(Connection connection = DatabaseManager.connectToDatabase("org.h2.Driver", "jdbc:h2:mem:jpaprovidertest", "sa", "");
+			Statement statement = connection.createStatement()) {
+			statement.execute("create table NON_MAPPED_TABLE ("
+					+ "  NORMAL_COLUMN NUMBER(19),"
+					+ "  FK NUMBER(19) references MANAGEDSUPERCLASSJOINED(ID),"
+					+ ")");
+			catalog = DatabaseManager.crawlDatabase(connection, null, null);
+		}
 	}
 
 	/**
-	 * TODO:
-	 * back references
-	 * embeddables
+	 * TODO explicit support (no fallback) for:
 	 * secondary tables
 	 * persistent sets
 	 */
-
-
 
 	@Test
 	public void testGetClassNameForTable() throws Exception {
@@ -101,8 +103,8 @@ public class JpaMetamodelRedGProviderTest {
 
 	@Test
 	public void testGetMethodNameForForeignKey() throws Exception {
-		Assert.assertEquals("subJoinedManyToOne", provider.getMethodNameForForeignKey(getForeignKey("SUB_ENTITY_JOINED_1", "SUBJOINEDMANYTOONE_ID")));
-		Assert.assertEquals("refEntity2", provider.getMethodNameForForeignKey(getForeignKey("REFERENCEDENTITY1", "REFENTITY2_ID1")));
+		Assert.assertEquals("subJoinedManyToOne", provider.getMethodNameForReference(getForeignKey("SUB_ENTITY_JOINED_1", "SUBJOINEDMANYTOONE_ID")));
+		Assert.assertEquals("refEntity2", provider.getMethodNameForReference(getForeignKey("REFERENCEDENTITY1", "REFENTITY2_ID1")));
 	}
 
 	@Test
@@ -116,6 +118,28 @@ public class JpaMetamodelRedGProviderTest {
 	@Test
 	public void testGetDataTypeForEmbedded() throws Exception {
 			Assert.assertEquals("long", provider.getCanonicalDataTypeName(getColumn("REFERENCEDENTITY1", "EMBEDDEDLONGATTRIBUTE")));
+	}
+
+	@Test
+	public void testGetMethodNameForForeignKeyColumn() throws Exception {
+		Assert.assertEquals("refEntity2Id2", provider.getMethodNameForForeignKeyColumn(
+				getForeignKey("REFERENCEDENTITY1", "REFENTITY2_ID_2"),
+				getColumn("REF_ENTITY_2", "ID_2"),
+				getColumn("REFERENCEDENTITY1", "REFENTITY2_ID_2"))
+		);
+		Assert.assertEquals("referencedEntity2WithExpliciteJoinColumnsId2", provider.getMethodNameForForeignKeyColumn(
+				getForeignKey("REFERENCEDENTITY1", "REF_2_ID2"),
+				getColumn("REF_ENTITY_2", "ID_2"),
+				getColumn("REFERENCEDENTITY1", "REF_2_ID2"))
+		);
+	}
+
+	@Test
+	public void testFallBackToDefaultImplementation() throws Exception {
+		Assert.assertEquals("NonMappedTable", provider.getClassNameForTable(getTable("NON_MAPPED_TABLE")));
+		Assert.assertEquals("normalColumn", provider.getMethodNameForColumn(getColumn("NON_MAPPED_TABLE", "NORMAL_COLUMN")));
+		Assert.assertEquals("fkManagedsuperclassjoined", provider.getMethodNameForReference(getForeignKey("NON_MAPPED_TABLE", "FK")));
+		Assert.assertEquals("fkManagedsuperclassjoinedId", provider.getMethodNameForForeignKeyColumn(getForeignKey("NON_MAPPED_TABLE", "FK"), getColumn("MANAGEDSUPERCLASSJOINED", "ID"), getColumn("NON_MAPPED_TABLE", "FK")));
 	}
 
 	private Column getColumn(String tableName, String columnName) {

@@ -106,12 +106,12 @@ public class MultiProviderNameProviderTest {
 
         NameProvider extraProvider = mock(NameProvider.class);
 
-        when(extraProvider.getMethodNameForForeignKey(same(userFk))).thenReturn("creator");
-        when(extraProvider.getMethodNameForForeignKey(same(blogFk))).thenReturn(null);
+        when(extraProvider.getMethodNameForReference(same(userFk))).thenReturn("creator");
+        when(extraProvider.getMethodNameForReference(same(blogFk))).thenReturn(null);
         provider.appendProvider(extraProvider);
 
-        assertEquals("creator", provider.getMethodNameForForeignKey(userFk));
-        assertEquals("blogPostCreator", provider.getMethodNameForForeignKey(blogFk));
+        assertEquals("creator", provider.getMethodNameForReference(userFk));
+        assertEquals("blogPostCreator", provider.getMethodNameForReference(blogFk));
 
     }
 }

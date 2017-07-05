@@ -24,7 +24,7 @@ import com.btc.redg.generator.extractor.explicitattributedecider.DefaultExplicit
 import com.btc.redg.generator.extractor.explicitattributedecider.ExplicitAttributeDecider;
 import com.btc.redg.generator.extractor.nameprovider.DefaultNameProvider;
 import com.btc.redg.generator.extractor.nameprovider.NameProvider;
-import com.btc.redg.generator.utils.NameUtils;
+import com.btc.redg.models.ModelUtil;
 import com.btc.redg.models.TableModel;
 import schemacrawler.schema.Column;
 import schemacrawler.schema.ForeignKey;
@@ -129,7 +129,7 @@ public class TableExtractor {
         model.setClassName(this.classPrefix + this.nameProvider.getClassNameForTable(table));
         model.setName(this.nameProvider.getClassNameForTable(table));
         model.setSqlFullName(table.getFullName());
-        model.setSqlName(table.getName());
+        model.setSqlName(ModelUtil.removeQuotes(table.getName()));
 
         model.setPackageName(this.targetPackage);
 

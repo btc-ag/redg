@@ -30,7 +30,7 @@ import com.btc.redg.models.*;
  *     </tr>
  *     <tr>
  *         <td>Full table name</td>
- *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+ *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
  *     </tr>
  * </table>
  */
@@ -54,6 +54,7 @@ public class GDemoUser implements RedGEntity {
             this.username = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("USERNAME"), java.lang.String.class);
             this.firstName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("FIRST_NAME"), java.lang.String.class);
             this.lastName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("LAST_NAME"), java.lang.String.class);
+            this.day = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("DAY"), java.sql.Timestamp.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
@@ -93,7 +94,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -138,7 +139,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -180,7 +181,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -225,7 +226,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -267,7 +268,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -312,7 +313,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -354,7 +355,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -396,7 +397,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -438,7 +439,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -480,7 +481,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -506,6 +507,90 @@ public class GDemoUser implements RedGEntity {
      */
     public java.lang.String lastName() {
         return this.lastName;
+    }
+
+    private java.sql.Timestamp day;
+
+    /**
+     * <table summary="The column model attributes and their values">
+     *     <tr>
+     *         <td><strong>Attribute</strong></td>
+     *         <td><strong>Value</strong></td>
+     *     </tr>
+     *     <tr>
+     *         <td>Table name</td>
+     *         <td>DEMO_USER</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Full table name</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Column name</td>
+     *         <td>DAY</td>
+     *     </tr>
+     *     <tr>
+     *         <td>SQL type</td>
+     *         <td>TIMESTAMP</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Not nullable?</td>
+     *         <td>false</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Part of Primary key?</td>
+     *         <td>false</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Unique?</td>
+     *         <td>false</td>
+     *     </tr>
+     * </table>
+     */
+    public GDemoUser day(java.sql.Timestamp value) {
+        this.day = value;
+        this.modifiedFields.add("day");
+        return this;
+    }
+
+    /**
+     * <table summary="The column model attributes and their values">
+     *     <tr>
+     *         <td><strong>Attribute</strong></td>
+     *         <td><strong>Value</strong></td>
+     *     </tr>
+     *     <tr>
+     *         <td>Table name</td>
+     *         <td>DEMO_USER</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Full table name</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Column name</td>
+     *         <td>DAY</td>
+     *     </tr>
+     *     <tr>
+     *         <td>SQL type</td>
+     *         <td>TIMESTAMP</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Not nullable?</td>
+     *         <td>false</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Part of Primary key?</td>
+     *         <td>false</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Unique?</td>
+     *         <td>false</td>
+     *     </tr>
+     * </table>
+     */
+    public java.sql.Timestamp day() {
+        return this.day;
     }
 
 
@@ -543,7 +628,7 @@ public class GDemoUser implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
-     *         <td>"RT-CG-TT".PUBLIC.DEMO_USER</td>
+     *         <td>TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER</td>
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
@@ -567,48 +652,51 @@ public class GDemoUser implements RedGEntity {
 
 
     public String getSQLString() {
-        return String.format("INSERT INTO \"RT-CG-TT\".PUBLIC.DEMO_USER (" +
+        return String.format("INSERT INTO TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER (" +
                         "WORKS_AT" +
                         "" +
                         ", " +
-                        "DTYPE, ID, USERNAME, FIRST_NAME, LAST_NAME" +
+                        "DTYPE, ID, USERNAME, FIRST_NAME, LAST_NAME, DAY" +
                         ") VALUES (" +
                         "%s" +
                         "" +
                         ", " +
-                        "%s, %s, %s, %s, %s)",
+                        "%s, %s, %s, %s, %s, %s)",
                 this.redG.getSqlValuesFormatter().formatValue(this.worksAtDemoCompany.id(),
-                        "DECIMAL", "\"RT-CG-TT\".PUBLIC.DEMO_USER",
+                        "DECIMAL", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
                         "DEMO_USER", "WORKS_AT"),
                 this.redG.getSqlValuesFormatter().formatValue(this.dtype(),
-                        "VARCHAR", "\"RT-CG-TT\".PUBLIC.DEMO_USER",
+                        "VARCHAR", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
                         "DEMO_USER", "DTYPE"),
                 this.redG.getSqlValuesFormatter().formatValue(this.id(),
-                        "DECIMAL", "\"RT-CG-TT\".PUBLIC.DEMO_USER",
+                        "DECIMAL", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
                         "DEMO_USER", "ID"),
                 this.redG.getSqlValuesFormatter().formatValue(this.username(),
-                        "VARCHAR", "\"RT-CG-TT\".PUBLIC.DEMO_USER",
+                        "VARCHAR", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
                         "DEMO_USER", "USERNAME"),
                 this.redG.getSqlValuesFormatter().formatValue(this.firstName(),
-                        "VARCHAR", "\"RT-CG-TT\".PUBLIC.DEMO_USER",
+                        "VARCHAR", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
                         "DEMO_USER", "FIRST_NAME"),
                 this.redG.getSqlValuesFormatter().formatValue(this.lastName(),
-                        "VARCHAR", "\"RT-CG-TT\".PUBLIC.DEMO_USER",
-                        "DEMO_USER", "LAST_NAME")
+                        "VARCHAR", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
+                        "DEMO_USER", "LAST_NAME"),
+                this.redG.getSqlValuesFormatter().formatValue(this.day(),
+                        "TIMESTAMP", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER",
+                        "DEMO_USER", "DAY")
         );
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO \"RT-CG-TT\".PUBLIC.DEMO_USER (" +
+        return "INSERT INTO TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER (" +
                 "WORKS_AT" +
                 "" +
                 ", " +
-                "DTYPE, ID, USERNAME, FIRST_NAME, LAST_NAME" +
+                "DTYPE, ID, USERNAME, FIRST_NAME, LAST_NAME, DAY" +
                 ") VALUES (" +
                 "?" +
                 "" +
                 ", " +
-                "?, ?, ?, ?, ?)";
+                "?, ?, ?, ?, ?, ?)";
     }
 
     public Object[] getPreparedStatementValues() {
@@ -618,33 +706,39 @@ public class GDemoUser implements RedGEntity {
                 this.id(),
                 this.username(),
                 this.firstName(),
-                this.lastName()
+                this.lastName(),
+                this.day()
         };
     }
 
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[]{
-                new AttributeMetaInfo("WORKS_AT", "DEMO_USER", "\"RT-CG-TT\".PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true),
-                new AttributeMetaInfo("DTYPE", "DEMO_USER", "\"RT-CG-TT\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
-                new AttributeMetaInfo("ID", "DEMO_USER", "\"RT-CG-TT\".PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true),
-                new AttributeMetaInfo("USERNAME", "DEMO_USER", "\"RT-CG-TT\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
-                new AttributeMetaInfo("FIRST_NAME", "DEMO_USER", "\"RT-CG-TT\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
-                new AttributeMetaInfo("LAST_NAME", "DEMO_USER", "\"RT-CG-TT\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, false)
+                new AttributeMetaInfo("WORKS_AT", "DEMO_USER", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true),
+                new AttributeMetaInfo("DTYPE", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
+                new AttributeMetaInfo("ID", "DEMO_USER", "DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true),
+                new AttributeMetaInfo("USERNAME", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
+                new AttributeMetaInfo("FIRST_NAME", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
+                new AttributeMetaInfo("LAST_NAME", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
+                new AttributeMetaInfo("DAY", "DEMO_USER", "DEMO_USER", "TIMESTAMP", 93, java.sql.Timestamp.class, false)
         };
     }
 
-    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWx0b/Ys7hpPuAIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAF0AAlHRGVtb1VzZXJzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAABncEAAAABnNyAB9jb20uYnRjLnJlZGcubW9kZWxzLkNvbHVtbk1vZGVsZ6XLR7cE1PwCAA1aABFleHBsaWNpdEF0dHJpYnV0ZVoAB25vdE51bGxaABBwYXJ0T2ZGb3JlaWduS2V5WgAQcGFydE9mUHJpbWFyeUtleUkACnNxbFR5cGVJbnRaAAZ1bmlxdWVMABJjb252ZW5pZW5jZVNldHRlcnNxAH4AAkwAD2RiRnVsbFRhYmxlTmFtZXEAfgABTAAGZGJOYW1lcQB+AAFMAAtkYlRhYmxlTmFtZXEAfgABTAAMamF2YVR5cGVOYW1lcQB+AAFMAARuYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAEBAAAAAAAMAHNyAB9qYXZhLnV0aWwuQ29sbGVjdGlvbnMkRW1wdHlMaXN0ergXtDynnt4CAAB4cHQAGyJSVC1DRy1UVCIuUFVCTElDLkRFTU9fVVNFUnQABURUWVBFdAAJREVNT19VU0VSdAAQamF2YS5sYW5nLlN0cmluZ3QABWR0eXBldAAHVkFSQ0hBUnNxAH4ACAABAAEAAAADAXEAfgALdAAbIlJULUNHLVRUIi5QVUJMSUMuREVNT19VU0VSdAACSURxAH4ADnQAFGphdmEubWF0aC5CaWdEZWNpbWFsdAACaWR0AAdERUNJTUFMc3EAfgAIAAEAAAAAAAwAcQB+AAt0ABsiUlQtQ0ctVFQiLlBVQkxJQy5ERU1PX1VTRVJ0AAhVU0VSTkFNRXEAfgAOcQB+AA90AAh1c2VybmFtZXEAfgARc3EAfgAIAAAAAAAAAAwAcQB+AAt0ABsiUlQtQ0ctVFQiLlBVQkxJQy5ERU1PX1VTRVJ0AApGSVJTVF9OQU1FcQB+AA5xAH4AD3QACWZpcnN0TmFtZXEAfgARc3EAfgAIAAAAAAAAAAwAcQB+AAt0ABsiUlQtQ0ctVFQiLlBVQkxJQy5ERU1PX1VTRVJ0AAlMQVNUX05BTUVxAH4ADnEAfgAPdAAIbGFzdE5hbWVxAH4AEXNxAH4ACAABAQAAAAADAHEAfgALdAAbIlJULUNHLVRUIi5QVUJMSUMuREVNT19VU0VSdAAIV09SS1NfQVRxAH4ADnEAfgAVdAAHd29ya3NBdHEAfgAXeHNxAH4ABgAAAAF3BAAAAAFzcgAjY29tLmJ0Yy5yZWRnLm1vZGVscy5Gb3JlaWduS2V5TW9kZWywIo6l+NfYkAIABFoAB25vdE51bGxMAAxqYXZhVHlwZU5hbWVxAH4AAUwABG5hbWVxAH4AAUwACnJlZmVyZW5jZXNxAH4AA3hwAXQADEdEZW1vQ29tcGFueXQAEndvcmtzQXREZW1vQ29tcGFueXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAABcQB+ACZzcgApY29tLmJ0Yy5yZWRnLm1vZGVscy5Gb3JlaWduS2V5Q29sdW1uTW9kZWzVeRDNwI/rZgIACEkACnNxbFR5cGVJbnRMAA9kYkZ1bGxUYWJsZU5hbWVxAH4AAUwABmRiTmFtZXEAfgABTAALZGJUYWJsZU5hbWVxAH4AAUwACWxvY2FsTmFtZXEAfgABTAAJbG9jYWxUeXBlcQB+AAFMAARuYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAAAAAN0ABsiUlQtQ0ctVFQiLlBVQkxJQy5ERU1PX1VTRVJxAH4AJnEAfgAOdAAHd29ya3NBdHEAfgAVdAACaWRxAH4AF3h4c3EAfgAGAAAAAHcEAAAAAHhzcQB+AC0/QAAAAAAAAHcIAAAAEAAAAAB4dAAIRGVtb1VzZXJ0ABZjb20uYnRjLnJlZGcuZ2VuZXJhdGVkdAAbIlJULUNHLVRUIi5QVUJMSUMuREVNT19VU0VScQB+AA4=";
+    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWx0b/Ys7hpPuAIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAF0AAlHRGVtb1VzZXJzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAB3cEAAAAB3NyAB9jb20uYnRjLnJlZGcubW9kZWxzLkNvbHVtbk1vZGVsZ6XLR7cE1PwCAA1aABFleHBsaWNpdEF0dHJpYnV0ZVoAB25vdE51bGxaABBwYXJ0T2ZGb3JlaWduS2V5WgAQcGFydE9mUHJpbWFyeUtleUkACnNxbFR5cGVJbnRaAAZ1bmlxdWVMABJjb252ZW5pZW5jZVNldHRlcnNxAH4AAkwAD2RiRnVsbFRhYmxlTmFtZXEAfgABTAAGZGJOYW1lcQB+AAFMAAtkYlRhYmxlTmFtZXEAfgABTAAMamF2YVR5cGVOYW1lcQB+AAFMAARuYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAEBAAAAAAAMAHNyAB9qYXZhLnV0aWwuQ29sbGVjdGlvbnMkRW1wdHlMaXN0ergXtDynnt4CAAB4cHQAKFRFU1RFTkFCTEVWSVNVQUxJWkFUSU9OLlBVQkxJQy5ERU1PX1VTRVJ0AAVEVFlQRXQACURFTU9fVVNFUnQAEGphdmEubGFuZy5TdHJpbmd0AAVkdHlwZXQAB1ZBUkNIQVJzcQB+AAgAAQABAAAAAwFxAH4AC3QAKFRFU1RFTkFCTEVWSVNVQUxJWkFUSU9OLlBVQkxJQy5ERU1PX1VTRVJ0AAJJRHEAfgAOdAAUamF2YS5tYXRoLkJpZ0RlY2ltYWx0AAJpZHQAB0RFQ0lNQUxzcQB+AAgAAQAAAAAADABxAH4AC3QAKFRFU1RFTkFCTEVWSVNVQUxJWkFUSU9OLlBVQkxJQy5ERU1PX1VTRVJ0AAhVU0VSTkFNRXEAfgAOcQB+AA90AAh1c2VybmFtZXEAfgARc3EAfgAIAAAAAAAAAAwAcQB+AAt0AChURVNURU5BQkxFVklTVUFMSVpBVElPTi5QVUJMSUMuREVNT19VU0VSdAAKRklSU1RfTkFNRXEAfgAOcQB+AA90AAlmaXJzdE5hbWVxAH4AEXNxAH4ACAAAAAAAAAAMAHEAfgALdAAoVEVTVEVOQUJMRVZJU1VBTElaQVRJT04uUFVCTElDLkRFTU9fVVNFUnQACUxBU1RfTkFNRXEAfgAOcQB+AA90AAhsYXN0TmFtZXEAfgARc3EAfgAIAAEBAAAAAAMAcQB+AAt0AChURVNURU5BQkxFVklTVUFMSVpBVElPTi5QVUJMSUMuREVNT19VU0VSdAAIV09SS1NfQVRxAH4ADnEAfgAVdAAHd29ya3NBdHEAfgAXc3EAfgAIAAAAAAAAAF0AcQB+AAt0AChURVNURU5BQkxFVklTVUFMSVpBVElPTi5QVUJMSUMuREVNT19VU0VSdAADREFZcQB+AA50ABJqYXZhLnNxbC5UaW1lc3RhbXB0AANkYXl0AAlUSU1FU1RBTVB4c3EAfgAGAAAAAXcEAAAAAXNyACNjb20uYnRjLnJlZGcubW9kZWxzLkZvcmVpZ25LZXlNb2RlbLAijqX419iQAgAEWgAHbm90TnVsbEwADGphdmFUeXBlTmFtZXEAfgABTAAEbmFtZXEAfgABTAAKcmVmZXJlbmNlc3EAfgADeHABdAAMR0RlbW9Db21wYW55dAASd29ya3NBdERlbW9Db21wYW55c3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAADHcIAAAAEAAAAAFxAH4AJnNyACljb20uYnRjLnJlZGcubW9kZWxzLkZvcmVpZ25LZXlDb2x1bW5Nb2RlbEp74Kp2qOp+AgAISQAKc3FsVHlwZUludEwAD2RiRnVsbFRhYmxlTmFtZXEAfgABTAAGZGJOYW1lcQB+AAFMAAtkYlRhYmxlTmFtZXEAfgABTAAJbG9jYWxOYW1lcQB+AAFMAAlsb2NhbFR5cGVxAH4AAUwAF3ByaW1hcnlLZXlBdHRyaWJ1dGVOYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAAAAAN0AChURVNURU5BQkxFVklTVUFMSVpBVElPTi5QVUJMSUMuREVNT19VU0VScQB+ACZxAH4ADnQAB3dvcmtzQXRxAH4AFXQAAmlkcQB+ABd4eHNxAH4ABgAAAAB3BAAAAAB4c3EAfgAzP0AAAAAAAAB3CAAAABAAAAAAeHQACERlbW9Vc2VydAAWY29tLmJ0Yy5yZWRnLmdlbmVyYXRlZHQAKFRFU1RFTkFCTEVWSVNVQUxJWkFUSU9OLlBVQkxJQy5ERU1PX1VTRVJxAH4ADg==";
     private static TableModel tableModel;
 
     public static String getSerializedTableModel() {
         return serializedTableModel;
     }
 
-    public static TableModel getTableModel() throws java.io.IOException, ClassNotFoundException {
+    public static TableModel getTableModel() {
         if (tableModel == null) {
             byte[] data = java.util.Base64.getDecoder().decode(serializedTableModel);
-            java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
-            tableModel = (TableModel) ois.readObject();
+            try {
+                java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
+                tableModel = (TableModel) ois.readObject();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return tableModel;
     }

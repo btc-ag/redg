@@ -18,12 +18,15 @@ package com.btc.redg.runtime;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.sql.DataSource;
 
 import com.btc.redg.runtime.defaultvalues.DefaultDefaultValueStrategy;
 import com.btc.redg.runtime.defaultvalues.DefaultValueStrategy;
@@ -184,6 +187,27 @@ public abstract class AbstractRedG {
      */
     public void insertDataIntoDatabase(final Connection connection) {
         RedGDatabaseUtil.insertDataIntoDatabase(getEntitiesSortedForInsert(), connection, preparedStatementParameterSetter);
+    }
+
+    /**
+     * Inserts all data previously prepared by RedG into the database using the specified dataSource.
+     * Entities are going to be inserted in the order they were added. <br>
+     * This method uses prepared statements to efficiently insert even great amount of data.<br>
+     * If a Insertion/Update updates more than 1 entry, a warning will be logged to the console.
+     * If a entity that is marked as "existing" (via redG.existingX()) is not found, an error will be logged and an {@link ExistingEntryMissingException} will
+     * be thrown.
+     *
+     * @param dataSource The DataSource to use.
+     * @throws ExistingEntryMissingException When an entry defined as "existing" (via redG.existingX()) cannot be found in the database
+     * @throws InsertionFailedException      When problems with the prepared statement occur. This is often the result of a faulty data type mapping or
+     *                                       {@link PreparedStatementParameterSetter}
+     */
+    public void insertDataIntoDatabase(final DataSource dataSource) {
+        try (Connection connection = dataSource.getConnection()) {
+            RedGDatabaseUtil.insertDataIntoDatabase(getEntitiesSortedForInsert(), connection, preparedStatementParameterSetter);
+        } catch (SQLException e) {
+            throw new InsertionFailedException("Cannot disable autocommit!", e);
+        }
     }
 
     /**

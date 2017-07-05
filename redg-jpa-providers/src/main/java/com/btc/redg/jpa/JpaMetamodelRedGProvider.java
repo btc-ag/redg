@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
+
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,11 +44,15 @@ import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 
-import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
-import com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider;
-import com.btc.redg.generator.extractor.nameprovider.NameProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.btc.redg.generator.extractor.datatypeprovider.DataTypeProvider;
+import com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider;
+import com.btc.redg.generator.extractor.nameprovider.DefaultNameProvider;
+import com.btc.redg.generator.extractor.nameprovider.NameProvider;
+import com.btc.redg.generator.utils.NameUtils;
+
 import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.ForeignKeyColumnReference;
 import schemacrawler.schema.Table;
@@ -63,6 +68,7 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	private final Map<QualifiedColumnName, SingularAttribute> singularAttributesByColumnName = new HashMap<>();
 	private final Map<ForeignKeyRelation, SingularAttribute> singularAttributesByForeignKeyRelation = new HashMap<>();
 
+	private NameProvider fallbackNameProvider = new DefaultNameProvider();
 	private DataTypeProvider fallbackDataTypeProvider = new DefaultDataTypeProvider();
 
 	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName) {
@@ -104,27 +110,15 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	private void analyzeAttributes(ManagedType<?> managedType, String targetTableName) {
 		managedType.getSingularAttributes().forEach(attribute -> {
 			ManagedType<?> targetEntity = managedTypesByClass.get(attribute.getJavaType());
-			if (targetEntity != null && attribute.getType() instanceof IdentifiableType) { // this is a relation
-				List<String> idAttributeNames = targetEntity.getSingularAttributes().stream()
-						.filter(this::isIdAttribute)
-						.map(this::getSingularAttributeColumnName)
-						.collect(Collectors.toList());
-
-				JoinColumns joinColumnsAnnotation = ((AnnotatedElement) attribute.getJavaMember()).getAnnotation(JoinColumns.class);
-				JoinColumn joinColumnAnnotation = ((AnnotatedElement) attribute.getJavaMember()).getAnnotation(JoinColumn.class);
-				JoinColumn[] joinColumns = joinColumnsAnnotation != null ? joinColumnsAnnotation.value() : joinColumnAnnotation != null ? new JoinColumn[]{joinColumnAnnotation} : null;
-				Map<String, String> referenceColumnNamesMap;
-				if (joinColumns != null) {
-					referenceColumnNamesMap = Arrays.stream(joinColumns)
-							.collect(Collectors.toMap(JoinColumn::name, joinColumn -> joinColumn.referencedColumnName().length() > 0 ? joinColumn.referencedColumnName() : idAttributeNames.get(0)));
-				} else {
-					referenceColumnNamesMap = idAttributeNames.stream()
-							.collect(Collectors.toMap(idAttributeName -> attribute.getName().toUpperCase() + "_" + idAttributeName, idAttributeName -> idAttributeName));
-				}
-				singularAttributesByForeignKeyRelation.put(new ForeignKeyRelation(targetTableName, getTableName(targetEntity.getJavaType()), referenceColumnNamesMap),
-						attribute);
-			} else if (targetEntity != null && attribute.getType() instanceof EmbeddableType) {
+			if (targetEntity != null && attribute.getType() instanceof EmbeddableType) {
 				analyzeAttributes((EmbeddableType) attribute.getType(), targetTableName);
+			} else if (targetEntity != null && attribute.getType() instanceof IdentifiableType) { // this is a relation
+				Map<String, String> referenceColumnNamesMap =
+						getReferenceColumnNamesMapForReferenceAttribute(attribute, targetEntity);
+				singularAttributesByForeignKeyRelation.put(
+						new ForeignKeyRelation(targetTableName, getTableName(targetEntity.getJavaType()), referenceColumnNamesMap),
+						attribute
+				);
 			} else {
 				String columnName = getSingularAttributeColumnName(attribute);
 				singularAttributesByColumnName.put(new QualifiedColumnName(targetTableName, columnName), attribute);
@@ -132,41 +126,86 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 		});
 	}
 
+	private Map<String, String> getReferenceColumnNamesMapForReferenceAttribute(SingularAttribute<?, ?> attribute, ManagedType<?> targetEntity) {
+		List<String> idAttributeNames = targetEntity.getSingularAttributes().stream()
+                .filter(this::isIdAttribute)
+                .map(this::getSingularAttributeColumnName)
+                .collect(Collectors.toList());
+
+		JoinColumns joinColumnsAnnotation =
+                ((AnnotatedElement) attribute.getJavaMember()).getAnnotation(JoinColumns.class);
+		JoinColumn joinColumnAnnotation =
+                ((AnnotatedElement) attribute.getJavaMember()).getAnnotation(JoinColumn.class);
+		JoinColumn[] joinColumns = joinColumnsAnnotation != null ? joinColumnsAnnotation.value() :
+                joinColumnAnnotation != null ? new JoinColumn[]{joinColumnAnnotation} : null;
+		Map<String, String> referenceColumnNamesMap;
+		if (joinColumns != null) {
+            referenceColumnNamesMap = Arrays.stream(joinColumns)
+                    .collect(Collectors.toMap(JoinColumn::name, joinColumn ->
+                            joinColumn.referencedColumnName().length() > 0 ? joinColumn.referencedColumnName() :
+                                    idAttributeNames.get(0)));
+        } else {
+            referenceColumnNamesMap = idAttributeNames.stream()
+                    .collect(Collectors.toMap(idAttributeName -> attribute.getName().toUpperCase() + "_"
+                            + idAttributeName, idAttributeName -> idAttributeName));
+        }
+		return referenceColumnNamesMap;
+	}
+
 	@Override
 	public String getClassNameForTable(Table table) {
 		ManagedType managedType = managedTypesByTableName.get(table.getName());
-		return managedType != null ? managedType.getJavaType().getSimpleName() : null;
+		return managedType != null ? managedType.getJavaType().getSimpleName() : fallbackNameProvider.getClassNameForTable(table);
 	}
 
 	@Override
 	public String getMethodNameForColumn(schemacrawler.schema.Column column) {
-		SingularAttribute singularAttribute = singularAttributesByColumnName.get(new QualifiedColumnName(column.getParent().getName(), column.getName()));
-		return singularAttribute != null ? singularAttribute.getName() : null;
+		String tableName = column.getParent().getName();
+		SingularAttribute singularAttribute = singularAttributesByColumnName.get(new QualifiedColumnName(tableName, column.getName()));
+		return singularAttribute != null ? singularAttribute.getName() : fallbackNameProvider.getMethodNameForColumn(column);
 	}
 
-	private boolean isIdAttribute(SingularAttribute attribute) {
+    @Override
+    public String getMethodNameForForeignKeyColumn(ForeignKey foreignKey, schemacrawler.schema.Column primaryKeyColumn, schemacrawler.schema.Column foreignKeyColumn) {
+		String referenceMethodName = getMethodNameForReference(foreignKey);
+		String primaryKeyColumnName = foreignKey.getColumnReferences().stream()
+				.filter(columnReference -> columnReference.getPrimaryKeyColumn().getName().equals(primaryKeyColumn.getName()))
+				.map(columnReference -> columnReference.getPrimaryKeyColumn().getName())
+				.findFirst().orElse("asdf");
+        return referenceMethodName + NameUtils.firstCharacterToUpperCase(DefaultNameProvider.convertToJavaName(primaryKeyColumnName));
+	}
+
+    private boolean isIdAttribute(SingularAttribute attribute) {
 		return ((AnnotatedElement) attribute.getJavaMember()).isAnnotationPresent(Id.class);
 	}
 
 	private String getSingularAttributeColumnName(SingularAttribute attribute) {
-		Column annotation = ((AnnotatedElement) attribute.getJavaMember()).getAnnotation(Column.class);
-		return annotation != null && annotation.name().length() > 0 ?
-				annotation.name().toUpperCase() : attribute.getName().toUpperCase();
+		Column columnAnnotation = ((AnnotatedElement) attribute.getJavaMember()).getAnnotation(Column.class);
+		if (columnAnnotation != null && columnAnnotation.name().length() > 0) {
+			return columnAnnotation.name().toUpperCase();
+		} else {
+			return attribute.getName().toUpperCase();
+		}
 	}
 
 	@Override
-	public String getMethodNameForForeignKey(ForeignKey foreignKey) {
+	public String getMethodNameForReference(ForeignKey foreignKey) {
+		ForeignKeyRelation foreignKeyRelation = toForeignKeyRelation(foreignKey);
+		SingularAttribute singularAttribute = singularAttributesByForeignKeyRelation.get(foreignKeyRelation);
+		return singularAttribute != null ? singularAttribute.getName() : fallbackNameProvider.getMethodNameForReference(foreignKey);
+	}
+
+	private ForeignKeyRelation toForeignKeyRelation(ForeignKey foreignKey) {
 		String referencingTableName = foreignKey.getColumnReferences().get(0).getForeignKeyColumn().getParent().getName();
 		String referencedTableName = foreignKey.getColumnReferences().get(0).getPrimaryKeyColumn().getParent().getName();
 		Map<String, String> referenceColumnNamesMap = foreignKey.getColumnReferences().stream()
 				.collect(Collectors.toMap(columnReference -> columnReference.getForeignKeyColumn().getName(), columnReference -> columnReference.getPrimaryKeyColumn().getName()));
-		SingularAttribute singularAttribute = singularAttributesByForeignKeyRelation.get(new ForeignKeyRelation(referencingTableName, referencedTableName, referenceColumnNamesMap));
-		return singularAttribute != null ? singularAttribute.getName() : null;
+		return new ForeignKeyRelation(referencingTableName, referencedTableName, referenceColumnNamesMap);
 	}
 
 	@Override
 	public String getMethodNameForIncomingForeignKey(ForeignKey foreignKey) {
-		return null;
+		return fallbackNameProvider.getMethodNameForIncomingForeignKey(foreignKey);
 	}
 
 	private static String getTableName(Class javaType) {
@@ -272,6 +311,10 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 		public int hashCode() {
 			return Objects.hash(referencingTableName, referencedTableName, referencingColumn2ReferencedColumn);
 		}
+	}
+
+	public void setFallbackNameProvider(NameProvider fallbackNameProvider) {
+		this.fallbackNameProvider = fallbackNameProvider;
 	}
 
 	public void setFallbackDataTypeProvider(DataTypeProvider fallbackDataTypeProvider) {

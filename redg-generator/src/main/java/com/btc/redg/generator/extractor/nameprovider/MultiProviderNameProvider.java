@@ -66,19 +66,31 @@ public class MultiProviderNameProvider implements NameProvider {
         return this.fallbackProvider.getMethodNameForColumn(column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getMethodNameForForeignKey(final ForeignKey foreignKey) {
+    public String getMethodNameForForeignKeyColumn(ForeignKey foreignKey, Column primaryKeyColumn, Column foreignKeyColumn) {
         this.wasUsedBefore = true;
         for (final NameProvider provider : providers) {
-            final String name = provider.getMethodNameForForeignKey(foreignKey);
+            final String name = provider.getMethodNameForForeignKeyColumn(foreignKey, primaryKeyColumn, foreignKeyColumn);
             if (Objects.nonNull(name)) {
                 return name;
             }
         }
-        return this.fallbackProvider.getMethodNameForForeignKey(foreignKey);
+        return this.fallbackProvider.getMethodNameForForeignKeyColumn(foreignKey, primaryKeyColumn, foreignKeyColumn);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMethodNameForReference(final ForeignKey foreignKey) {
+        this.wasUsedBefore = true;
+        for (final NameProvider provider : providers) {
+            final String name = provider.getMethodNameForReference(foreignKey);
+            if (Objects.nonNull(name)) {
+                return name;
+            }
+        }
+        return this.fallbackProvider.getMethodNameForReference(foreignKey);
     }
 
     @Override

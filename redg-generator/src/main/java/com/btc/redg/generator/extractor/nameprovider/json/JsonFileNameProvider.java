@@ -61,7 +61,12 @@ public class JsonFileNameProvider implements NameProvider {
     }
 
     @Override
-    public String getMethodNameForForeignKey(final ForeignKey foreignKey) {
+    public String getMethodNameForForeignKeyColumn(ForeignKey foreignKey, Column primaryKeyColumn, Column foreignKeyColumn) {
+        return getMethodNameForColumn(foreignKeyColumn);
+    }
+
+    @Override
+    public String getMethodNameForReference(final ForeignKey foreignKey) {
         ForeignKeyColumnReference firstForeignKeyColumnReferences = foreignKey.getColumnReferences().get(0);
         final String tableName = firstForeignKeyColumnReferences.getForeignKeyColumn().getParent().getName();
         if (mappings.containsKey(tableName)) {

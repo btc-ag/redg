@@ -217,7 +217,7 @@ public class CodeGeneratorTest {
 
     @Test
     public void testEnableVisualization() throws Exception {
-        Connection connection = DatabaseManager.connectToDatabase("org.h2.Driver", "jdbc:h2:mem:rt-cg-tt", "", "");
+        Connection connection = DatabaseManager.connectToDatabase("org.h2.Driver", "jdbc:h2:mem:testEnableVisualization", "", "");
         assertNotNull(connection);
         File tempFile = Helpers.getResourceAsFile("codegenerator/test.sql");
         assertNotNull(tempFile);

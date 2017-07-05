@@ -224,8 +224,8 @@ public class <table.className> implements RedGEntity {
     <table.nonForeignKeyColumns:convenienceSetters(table.className)>
     <table.nullableForeignKeys:tableClassAttribute(table.className)>
     <table.notNullForeignKeys:tableClassAttribute(table.className)>
-    <table.nullableForeignKeys:extraGettersWithNullCheck()>
-    <table.notNullForeignKeys:extraGetters()>
+    <table.nullableForeignKeys:rawForeignKeyGettersWithNullCheck()>
+    <table.notNullForeignKeys:rawForeignKeyGetters()>
     <dependenciesGetter(table)>
     <table.incomingForeignKeys:incomingFKGetter()>
     <table.nullableIncomingForeignKeys:incomingFKAdd(table.className)>
@@ -289,11 +289,15 @@ public class <table.className> implements RedGEntity {
         return serializedTableModel;
     }
 
-    public static TableModel getTableModel() throws java.io.IOException, ClassNotFoundException {
+    public static TableModel getTableModel() {
         if (tableModel == null) {
             byte[] data = java.util.Base64.getDecoder().decode(serializedTableModel);
-            java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
-            tableModel = (TableModel) ois.readObject();
+            try {
+                java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
+                tableModel = (TableModel) ois.readObject();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return tableModel;
     }
@@ -514,23 +518,23 @@ foreignKeyInsertStmtPlaceholder(foreignKey) ::= <<
 >>
 
 foreignKeyInsertValues(foreignKey) ::= <<
-<foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue(this.<foreignKey.name>.<foreignKey.references.(k).name>(),
+<foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue(this.<foreignKey.name>.<foreignKey.references.(k).primaryKeyAttributeName>(),
         "<foreignKey.references.(k).sqlType>", "<escape.(foreignKey.references.(k).dbFullTableName)>",
         "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbName)>")};separator=",\n">
 >>
 
 foreignKeyInsertValuesNullable(foreignKey) ::= <<
-<foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue((this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).name>() : null,
+<foreignKey.references.keys:{k|this.redG.getSqlValuesFormatter().formatValue((this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).primaryKeyAttributeName>() : null,
         "<foreignKey.references.(k).sqlType>", "<escape.(foreignKey.references.(k).dbFullTableName)>",
         "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbName)>")};separator=",\n">
 >>
 
 foreignKeyInsertStmtValues(foreignKey) ::= <<
-<foreignKey.references.keys:{k|this.<foreignKey.name>.<foreignKey.references.(k).name>()};separator=",\n">
+<foreignKey.references.keys:{k|this.<foreignKey.name>.<foreignKey.references.(k).primaryKeyAttributeName>()};separator=",\n">
 >>
 
 foreignKeyInsertStmtValuesNullable(foreignKey) ::= <<
-<foreignKey.references.keys:{k|(this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).name>() : null};separator=",\n">
+<foreignKey.references.keys:{k|(this.<foreignKey.name> != null) ? this.<foreignKey.name>.<foreignKey.references.(k).primaryKeyAttributeName>() : null};separator=",\n">
 >>
 
 foreignKeyInsertValueMetaInfos(foreignKey, notNull) ::= <<
@@ -538,7 +542,7 @@ foreignKeyInsertValueMetaInfos(foreignKey, notNull) ::= <<
 >>
 
 columnInsertValueMetaInfo(column) ::= <<
-new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbFullTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
+new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
 >>
 
 columnInsertValues(column) ::= <<
@@ -547,12 +551,12 @@ this.redG.getSqlValuesFormatter().formatValue(this.<column.name>(),
         "<escape.(column.dbTableName)>", "<escape.(column.dbName)>")
 >>
 
-extraGetters(fKey) ::= <<
-<fKey.references.keys:{k|<extraGetter(fKey.references.(k), fKey.name)>}>
+rawForeignKeyGetters(fKey) ::= <<
+<fKey.references.keys:{k|<rawForeignKeyGetter(fKey.references.(k), fKey.name)>}>
 >>
 
-extraGettersWithNullCheck(fKey) ::= <<
-<fKey.references.keys:{k|<extraGetterWithNullCheck(fKey.references.(k), fKey.name)>}>
+rawForeignKeyGettersWithNullCheck(fKey) ::= <<
+<fKey.references.keys:{k|<rawForeignKeyGetterWithNullCheck(fKey.references.(k), fKey.name)>}>
 >>
 
 dependenciesGetter(table) ::= <<
@@ -563,7 +567,7 @@ public List\<RedGEntity> getDependencies() {
 }<\n>
 >>
 
-extraGetter(ref, varName) ::= <<
+rawForeignKeyGetter(ref, varName) ::= <<
 /**
  * \<table summary="The column model attributes and their values"\>
  *     \<tr\>
@@ -589,14 +593,14 @@ extraGetter(ref, varName) ::= <<
  * \</table\>
  */
 public <ref.localType> <ref.localName>() {
-    return this.<varName>.<ref.name>();
+    return this.<varName>.<ref.primaryKeyAttributeName>();
 }<\n>
 >>
 
-extraGetterWithNullCheck(ref, varName) ::= <<
+rawForeignKeyGetterWithNullCheck(ref, varName) ::= <<
 public <ref.localType> <ref.localName>() {
     if (this.<varName> != null) {
-        return this.<varName>.<ref.name>();
+        return this.<varName>.<ref.primaryKeyAttributeName>();
     }
     return null;
 }<\n>
@@ -639,7 +643,7 @@ public class Existing<table.className> extends <table.className> {
     <table.nonPrimaryKeyNonFKColumns:overrideTableClassAttributes(table.className)>
     <table.nonForeignKeyColumns:overrideConvenienceSetters(table.className)>
     <table.foreignKeys:overrideTableClassAttributes(table.className)>
-    <table.foreignKeys:overrideExtraGetters()>
+    <table.foreignKeys:overrideRawForeignKeyGetters()>
 
     @Override
     public String getSQLString() {
@@ -736,11 +740,11 @@ private <column.javaTypeName> <column.name>;
 <endif>
 >>
 
-overrideExtraGetters(fKey) ::= <<
-<fKey.references.keys:{k|<overrideExtraGetter(fKey.references.(k), fKey.name)>}>
+overrideRawForeignKeyGetters(fKey) ::= <<
+<fKey.references.keys:{k|<overrideRawForeignKeyGetter(fKey.references.(k), fKey.name)>}>
 >>
 
-overrideExtraGetter(ref, varName) ::= <<
+overrideRawForeignKeyGetter(ref, varName) ::= <<
 @Override
 public <ref.localType> <ref.localName>() {
     throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
@@ -749,7 +753,7 @@ public <ref.localType> <ref.localName>() {
 
 overrideColumnInsertValues(column) ::= <<
 this.redG.getSqlValuesFormatter().formatValue(super.<column.name>(),
-        "<column.sqlType>", "<escape.(column.dbFullTableName)>",
+        "<column.sqlType>", "<escape.(column.dbTableName)>",
         "<escape.(column.dbTableName)>", "<escape.(column.dbName)>")
 >>
 

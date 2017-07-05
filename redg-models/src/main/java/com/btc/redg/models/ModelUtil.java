@@ -43,4 +43,8 @@ public class ModelUtil {
             "char"
     );
 
+    public static String removeQuotes(String name) {
+        return name.replace("\"", "");
+    }
+
 }

@@ -284,8 +284,8 @@ public class GDemoCompany implements RedGEntity {
 
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[]{
-                new AttributeMetaInfo("COUNTRY_CODE", "DEMO_COMPANY", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true),
-                new AttributeMetaInfo("NAME", "DEMO_COMPANY", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true)
+                new AttributeMetaInfo("COUNTRY_CODE", "DEMO_COMPANY", "DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true),
+                new AttributeMetaInfo("NAME", "DEMO_COMPANY", "DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true)
         };
     }
 
@@ -296,11 +296,15 @@ public class GDemoCompany implements RedGEntity {
         return serializedTableModel;
     }
 
-    public static TableModel getTableModel() throws java.io.IOException, ClassNotFoundException {
+    public static TableModel getTableModel() {
         if (tableModel == null) {
             byte[] data = java.util.Base64.getDecoder().decode(serializedTableModel);
-            java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
-            tableModel = (TableModel) ois.readObject();
+            try {
+                java.io.ObjectInputStream ois = new java.io.ObjectInputStream(new java.io.ByteArrayInputStream(data));
+                tableModel = (TableModel) ois.readObject();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return tableModel;
     }

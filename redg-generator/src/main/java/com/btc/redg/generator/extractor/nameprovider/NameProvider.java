@@ -51,6 +51,21 @@ public interface NameProvider {
     String getMethodNameForColumn(Column column);
 
     /**
+     * Generates a method name for a database column that represents a foreign key or is part of a foreign key.
+     * E.g. the value of "OTHER_ID" column, not the method returning a RedGEntity.
+     * The returned string should adhere to the <a href="https://google.github.io/styleguide/javaguide.html#s5.2.3-method-names">Google Java style Guide</a>
+     * and consist solely of alphanumeric characters in lowerCamelCase. While numbers are discouraged, they may be used in the method name,
+     * though not at the start of the name.
+     * <p><b>This method must be deterministic!</b> Passing the same table multiple times has to yield the same result for each call.</p>
+     *
+     * @param foreignKey The foreign key.
+     * @param primaryKeyColumn The referenced database column.
+     * @param foreignKeyColumn The referencing database column.
+     * @return The generated name
+     */
+    String getMethodNameForForeignKeyColumn(ForeignKey foreignKey, Column primaryKeyColumn, Column foreignKeyColumn);
+
+    /**
      * Generates a method name for a foreign key.
      * The returned string should adhere to the <a href="https://google.github.io/styleguide/javaguide.html#s5.2.3-method-names">Google Java style Guide</a>
      * and consist solely of alphanumeric characters in lowerCamelCase. While numbers are discouraged, they may be used in the method name,
@@ -60,7 +75,7 @@ public interface NameProvider {
      * @param foreignKey The database foreign key
      * @return The generated name
      */
-    String getMethodNameForForeignKey(ForeignKey foreignKey);
+    String getMethodNameForReference(ForeignKey foreignKey);
 
     /**
      * Generates a method name for an incoming foreign key.

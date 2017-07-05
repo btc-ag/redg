@@ -22,6 +22,8 @@ import com.btc.redg.generator.extractor.explicitattributedecider.ExplicitAttribu
 import com.btc.redg.generator.extractor.nameprovider.NameProvider;
 import com.btc.redg.generator.utils.NameUtils;
 import com.btc.redg.models.ColumnModel;
+import com.btc.redg.models.ModelUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import schemacrawler.schema.Column;
@@ -59,7 +61,7 @@ public class ColumnExtractor {
         LOG.debug("Extracting model for column {}", column.getName());
         ColumnModel model = new ColumnModel();
         model.setName(this.nameProvider.getMethodNameForColumn(column));
-        model.setDbName(column.getName());
+        model.setDbName(ModelUtil.removeQuotes(column.getName()));
         model.setDbTableName(column.getParent().getName());
         model.setDbFullTableName(column.getParent().getFullName());
 
