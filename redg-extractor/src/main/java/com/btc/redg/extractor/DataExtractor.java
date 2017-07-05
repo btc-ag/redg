@@ -37,6 +37,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.sql.DataSource;
+
 public class DataExtractor {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataExtractor.class);
@@ -44,6 +46,7 @@ public class DataExtractor {
     private static final String SELECT_FORMAT_STRING = "SELECT * FROM %s";
 
     private JavaCodeRepresentationProvider jcrProvider = new DefaultJavaCodeRepresentationProvider();
+    private Function<EntityModel, EntityInclusionMode> entityModeDecider = (em) -> EntityInclusionMode.ADD_NEW;
 
     public JavaCodeRepresentationProvider getJcrProvider() {
         return jcrProvider;
@@ -61,64 +64,77 @@ public class DataExtractor {
         this.entityModeDecider = entityModeDecider;
     }
 
-    private Function<EntityModel, EntityInclusionMode> entityModeDecider = (em) -> EntityInclusionMode.ADD_NEW;
+    public List<EntityModel> extractAllData(final DataSource dataSource, final List<TableModel> tableModels) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            return extractAllData(connection, tableModels);
+        }
+    }
 
     public List<EntityModel> extractAllData(final Connection connection, final List<TableModel> tableModels) throws SQLException {
+        final List<EntityModel> entities = extractEntityModels(connection, tableModels);
+        resolveReferences(entities);
+        return sortEntities(entities);
+    }
 
+    private List<EntityModel> extractEntityModels(Connection connection, List<TableModel> tableModels) throws SQLException {
         final List<EntityModel> entities = new LinkedList<>();
         LOG.debug("Disabling auto commit for connection...");
         connection.setAutoCommit(false);
         LOG.debug("Creating JDBC statement...");
-        final Statement st = connection.createStatement();
-        LOG.debug("Setting fetch size to 50 rows...");
-        st.setFetchSize(50);
 
-        for (final TableModel tableModel : tableModels) {
-            LOG.debug("Fetching data from table {}...", tableModel.getSqlFullName());
-            final ResultSet rs = st.executeQuery(String.format(SELECT_FORMAT_STRING, tableModel.getSqlFullName()));
-            long counter = 0;
-            while (rs.next()) {
-                ++counter;
+        try (Statement st = connection.createStatement()) {
+            LOG.debug("Setting fetch size to 50 rows...");
+            st.setFetchSize(50);
 
-                final EntityModel entityModel = new EntityModel(tableModel);
-                for (final ForeignKeyModel fkm : tableModel.getForeignKeys()) {
-                    final EntityModel referencedEntity = new ReferencingEntityModel(fkm.getJavaTypeName());
-                    fkm.getReferences().forEach((name, fkcm) -> {
-                        try {
-                            final Object value = rs.getObject(fkcm.getDbName());
-                            if (value != null) {
-                                referencedEntity.addValues(fkcm.getName(), new EntityModel.ValueModel(
-                                        jcrProvider.getCodeForColumnValue(value, fkcm.getSqlType(), fkcm.getSqlTypeInt(), fkcm.getLocalType()), EntityModel.ValueModel.ForeignKeyState.UNKNOWN));
+            for (final TableModel tableModel : tableModels) {
+                LOG.debug("Fetching data from table {}...", tableModel.getSqlFullName());
+                final ResultSet rs = st.executeQuery(String.format(SELECT_FORMAT_STRING, tableModel.getSqlFullName()));
+                long counter = 0;
+                while (rs.next()) {
+                    ++counter;
+
+                    final EntityModel entityModel = new EntityModel(tableModel);
+                    for (final ForeignKeyModel fkm : tableModel.getForeignKeys()) {
+                        final EntityModel referencedEntity = new ReferencingEntityModel(fkm.getJavaTypeName());
+                        fkm.getReferences().forEach((name, fkcm) -> {
+                            try {
+                                final Object value = rs.getObject(fkcm.getDbName());
+                                if (value != null) {
+                                    referencedEntity.addValues(fkcm.getPrimaryKeyAttributeName(), new EntityModel.ValueModel(
+                                            jcrProvider.getCodeForColumnValue(value, fkcm.getSqlType(), fkcm.getSqlTypeInt(), fkcm.getLocalType()), EntityModel.ValueModel.ForeignKeyState.UNKNOWN));
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
                             }
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                        });
+                        if (fkm.isNotNull()) {
+                            entityModel.addNotNullRef(referencedEntity);
+                        } else {
+                            if (referencedEntity.getValues().size() > 0) {
+                                entityModel.addNullableRef(fkm.getName(), referencedEntity);
+                            }
                         }
-                    });
-                    if (fkm.isNotNull()) {
-                        entityModel.addNotNullRef(referencedEntity);
-                    } else {
-                        if (referencedEntity.getValues().size() > 0) {
-                            entityModel.addNullableRef(fkm.getName(), referencedEntity);
-                        }
+
                     }
 
-                }
-
-                for (final ColumnModel cm : tableModel.getColumns()) {
-                    final Object value = rs.getObject(cm.getDbName());
-                    if (value != null) {
-                        entityModel.addValues(cm.getName(), new EntityModel.ValueModel(
-                                jcrProvider.getCodeForColumnValue(value, cm.getSqlType(), cm.getSqlTypeInt(), cm.getJavaTypeName()),
-                                cm.isPartOfForeignKey() ? EntityModel.ValueModel.ForeignKeyState.FK : EntityModel.ValueModel.ForeignKeyState.NON_FK));
+                    for (final ColumnModel cm : tableModel.getColumns()) {
+                        final Object value = rs.getObject(cm.getDbName());
+                        if (value != null) {
+                            entityModel.addValues(cm.getName(), new EntityModel.ValueModel(
+                                    jcrProvider.getCodeForColumnValue(value, cm.getSqlType(), cm.getSqlTypeInt(), cm.getJavaTypeName()),
+                                    cm.isPartOfForeignKey() ? EntityModel.ValueModel.ForeignKeyState.FK : EntityModel.ValueModel.ForeignKeyState.NON_FK));
+                        }
                     }
-                }
-                entities.add(entityModel);
+                    entities.add(entityModel);
 
+                }
+                LOG.debug("Extracted {} entities from table {}", counter, tableModel.getSqlFullName());
             }
-            LOG.debug("Extracted {} entities from table {}", counter, tableModel.getSqlFullName());
         }
+        return entities;
+    }
 
-        // now resolve all referencing entities
+    private void resolveReferences(List<EntityModel> entities) {
         LOG.debug("Resolving references...");
         for (final EntityModel entity : entities) {
             List<EntityModel> newNotNullRefs = new LinkedList<>();
@@ -136,12 +152,10 @@ public class DataExtractor {
             });
             entity.setNullableRefs(newNullableRefs);
         }
+    }
 
-        // now sort all entities
+    private List<EntityModel> sortEntities(List<EntityModel> entities) {
         LOG.debug("Sorting entities...");
-        //return EntityModelSorter.sortEntityModels(entities).stream()
-        //        .map
-        //        .collect(Collectors.toList());
         List<EntityModel> sortedEntities = EntityModelSorter.sortEntityModels(entities);
         ListIterator<EntityModel> sortedIterator = sortedEntities.listIterator();
 
@@ -183,7 +197,6 @@ public class DataExtractor {
                     break;
             }
         }
-
         return sortedEntities;
     }
 
