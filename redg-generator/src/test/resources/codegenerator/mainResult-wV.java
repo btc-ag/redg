@@ -177,6 +177,13 @@ public class RedG extends AbstractRedG {
     }
 
 
+    public static java.util.List<com.btc.redg.models.TableModel> getAllTableModels() {
+        return java.util.Arrays.asList(
+            GDemoCompany.getTableModel(),
+            GDemoUser.getTableModel()
+        );
+    }
+
     public String getVisualizationJson() {
         return VisualizationUtil.getVisualizationJson(this.getEntities(), this.getDummyFactory()::isDummy);
     }

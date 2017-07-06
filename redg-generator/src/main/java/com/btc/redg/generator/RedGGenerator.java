@@ -101,7 +101,7 @@ public class RedGGenerator {
         new CodeGenerator().generate(tables, targetWithPkgFolders, enableVisualizationSupport);
     }
 
-    private static Catalog crawlDatabase(Connection connection, InclusionRule schemaRule, InclusionRule tableRule, boolean shouldCloseConnection) {
+    public static Catalog crawlDatabase(Connection connection, InclusionRule schemaRule, InclusionRule tableRule, boolean shouldCloseConnection) {
         Catalog database;
         try {
             LOG.info("Crawling the database for metadata...");
@@ -122,7 +122,7 @@ public class RedGGenerator {
         return database;
     }
 
-    private static List<TableModel> extractTableModel(TableExtractor tableExtractor, Catalog database) {
+    public static List<TableModel> extractTableModel(TableExtractor tableExtractor, Catalog database) {
         LOG.info("Extracting the required information from the metadata...");
         final List<TableModel> tables = MetadataExtractor.extract(database, tableExtractor);
         LOG.info("Extraction done.");
@@ -134,7 +134,7 @@ public class RedGGenerator {
         return tables;
     }
 
-    private static Path createPackageFolderStructure(Path targetDirectory, String targetPackage) {
+    public static Path createPackageFolderStructure(Path targetDirectory, String targetPackage) {
         Path targetWithPkgFolders;
         try {
             LOG.info("Creating package folder structure...");

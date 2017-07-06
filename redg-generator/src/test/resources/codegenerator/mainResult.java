@@ -167,6 +167,13 @@ public class RedG extends AbstractRedG {
     }
 
 
+    public static java.util.List<com.btc.redg.models.TableModel> getAllTableModels() {
+        return java.util.Arrays.asList(
+            GDemoCompany.getTableModel(),
+            GDemoUser.getTableModel()
+        );
+    }
+
     public String getVisualizationJson() {
         throw new UnsupportedOperationException("Visualization support is disabled for this code." +
                 "Re-run code generation with active visualization support to use this feature!");
