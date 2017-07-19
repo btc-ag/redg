@@ -36,7 +36,7 @@
     <url>https://btc-ag.github.io/redg</url>
 
     <organization>
-        <name>BTC Business Technology AG</name>
+        <name>BTC Business Technology Consulting AG</name>
         <url>https://www.btc-ag.com</url>
     </organization>
 
@@ -45,14 +45,14 @@
             <id>olewehrmeyer</id>
             <name>Ole Wehrmeyer</name>
             <email>ole.wehrmeyer@btc-ag.com</email>
-            <organization>BTC Business Technology AG</organization>
+            <organization>BTC Business Technology Consulting AG</organization>
             <timezone>Europe/Berlin</timezone>
         </developer>
         <developer>
             <id>yamass</id>
             <name>Yann Massard</name>
             <email>yann.massard@btc-ag.com</email>
-            <organization>BTC Business Technology AG</organization>
+            <organization>BTC Business Technology Consulting AG</organization>
             <timezone>Europe/Berlin</timezone>
         </developer>
     </developers>
