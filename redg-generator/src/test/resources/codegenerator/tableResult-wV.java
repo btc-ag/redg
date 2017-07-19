@@ -63,15 +63,11 @@ public class GDemoUser implements RedGEntity {
 
     GDemoUser(AbstractRedG redG, GDemoCompany worksAtDemoCompany) {
         // dummy constructor (without explicit attributes)
-        try {
-            this(
-                    redG,
-                    redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("DTYPE"), java.lang.String.class),
-                    worksAtDemoCompany
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Could not get default value", e);
-        }
+        this(
+                redG,
+                redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("DTYPE"), java.lang.String.class),
+                worksAtDemoCompany
+        );
     }
 
     GDemoUser(int meaningOfLife, AbstractRedG redG) {

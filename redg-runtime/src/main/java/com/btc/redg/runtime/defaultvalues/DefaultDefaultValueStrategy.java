@@ -16,22 +16,27 @@
 
 package com.btc.redg.runtime.defaultvalues;
 
-import com.btc.redg.models.ColumnModel;
-import com.btc.redg.runtime.defaultvalues.pluggable.AbstractDateProvider;
-import com.btc.redg.runtime.defaultvalues.pluggable.NumberProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import com.btc.redg.models.ColumnModel;
+import com.btc.redg.runtime.defaultvalues.pluggable.AbstractDateProvider;
+import com.btc.redg.runtime.defaultvalues.pluggable.NumberProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple default value strategy, returning empty or 0 values for the most common data types. If the field is nullable, null is returned.
@@ -75,7 +80,8 @@ public class DefaultDefaultValueStrategy implements DefaultValueStrategy {
         defaultMappings.put(AtomicInteger.class, new AtomicInteger(0));
         defaultMappings.put(AtomicLong.class, new AtomicLong(0));
         // SQL Date & Time
-        defaultMappings.put(Date.class, new Date(0));
+        defaultMappings.put(java.util.Date.class, new java.util.Date(0));
+        defaultMappings.put(java.sql.Date.class, new java.sql.Date(0));
         defaultMappings.put(Time.class, new Time(0));
         defaultMappings.put(Timestamp.class, new Timestamp(0));
         // Java 8 Date & Time

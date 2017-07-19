@@ -208,15 +208,11 @@ public class <table.className> implements RedGEntity {
     <table.className>(AbstractRedG redG<\\>
            <if(table.notNullForeignKeys)>, <endif><table.notNullForeignKeys:{it | <it.javaTypeName> <it.name>};separator=", ">) {
         // dummy constructor (without explicit attributes)
-        try {
-            this(
-                    redG,
-                    <table.explicitAttributes:{it | redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<escape.(it.dbName)>"), <it.javaTypeName>.class)}; separator=",\n"><if(table.notNullForeignKeys)>,<endif>
-                    <table.notNullForeignKeys:{it | <it.name>};separator=",\n">
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Could not get default value", e);
-        }
+        this(
+                redG,
+                <table.explicitAttributes:{it | redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<escape.(it.dbName)>"), <it.javaTypeName>.class)}; separator=",\n"><if(table.notNullForeignKeys)>,<endif>
+                <table.notNullForeignKeys:{it | <it.name>};separator=",\n">
+        );
     }
     <endif>
 

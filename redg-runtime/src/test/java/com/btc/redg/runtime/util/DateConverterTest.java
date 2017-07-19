@@ -30,10 +30,15 @@ public class DateConverterTest {
 
     @Test
     public void testParseInstant() throws Exception {
-        Assert.assertEquals(EXPECTED_DATETIME, DateConverter.parseInstant("2017-01-02T03:04:05.000Z").atOffset(ZoneOffset.UTC));
-        Assert.assertEquals(EXPECTED_DATETIME, DateConverter.parseInstant("2017-01-02T03:04:05").atOffset(ZoneOffset.UTC));
-        Assert.assertEquals(EXPECTED_DATE, DateConverter.parseInstant("2017-01-02").atOffset(ZoneOffset.UTC));
-        Assert.assertEquals(EXPECTED_DATETIME2, DateConverter.parseInstant("2017-01-02-03:00").atOffset(ZoneOffset.UTC));
+        Assert.assertEquals(EXPECTED_DATETIME, DateConverter.parseInstant("2017-01-02T03:04:05.000Z", ZoneOffset.UTC).atOffset(ZoneOffset.UTC));
+        Assert.assertEquals(EXPECTED_DATETIME, DateConverter.parseInstant("2017-01-02T03:04:05", ZoneOffset.UTC).atOffset(ZoneOffset.UTC));
+        Assert.assertEquals(EXPECTED_DATE, DateConverter.parseInstant("2017-01-02", ZoneOffset.UTC).atOffset(ZoneOffset.UTC));
+        Assert.assertEquals(EXPECTED_DATETIME2, DateConverter.parseInstant("2017-01-02-03:00", ZoneOffset.UTC).atOffset(ZoneOffset.UTC));
+    }
+
+    @Test
+    public void testParseInstantWithNonIsoDate() throws Exception {
+        Assert.assertEquals(EXPECTED_DATETIME, DateConverter.parseInstant("2017-01-02 03:04:05.000", ZoneOffset.UTC).atOffset(ZoneOffset.UTC));
     }
 
 }
