@@ -1,5 +1,6 @@
-
 com.btc.redg.extractor
+com.btc.redg.extractor.filter
+com.btc.redg.extractor.generationmodes
 com.btc.redg.extractor.model
 com.btc.redg.extractor.model.entitynameprovider
 com.btc.redg.extractor.model.representationprovider
