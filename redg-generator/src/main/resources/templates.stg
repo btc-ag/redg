@@ -43,7 +43,7 @@ public class <prefix>RedG extends AbstractRedG {
     <tables:tableBuilderExisting()>
     <tables:tableBuilderDummy()>
 
-    public static java.util.List\<com.btc.redg.models.TableModel\> getAllTableModels() {
+    public static java.util.List\<com.btc.redg.models.TableModel> getAllTableModels() {
         return java.util.Arrays.asList(
             <tables:{it | <it.className>.getTableModel()};separator=",\n">
         );
