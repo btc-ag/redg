@@ -55,56 +55,6 @@ public class PluggableDefaultValueStrategyTest {
     }
 
     @Test
-    public void test_Builder() {
-        PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy.Builder()
-                .use(new StaticNumberProvider(42)).when(columnName(eq("THE_ANSWER")))
-                .use(new StaticNumberProvider(1337)).when(tableName(eq("LEET")))
-                .use(new StaticNumberProvider(21))
-                .build();
-        assertEquals(42, (int) strategy.getDefaultValue(TestUtils.getCM("", "", "THE_ANSWER", Integer.class, true), Integer.class));
-
-        assertEquals(1337, (int) strategy.getDefaultValue(TestUtils.getCM("", "LEET", "", Integer.class, true), Integer.class));
-
-        assertEquals(42, (int) strategy.getDefaultValue(TestUtils.getCM("", "LEET", "THE_ANSWER", Integer.class, true), Integer.class));
-
-        assertEquals(21, (int) strategy.getDefaultValue(TestUtils.getCM("", "", "TEST", Integer.class, true), Integer.class));
-    }
-
-    @Test
-    public void test_Builder2() {
-        PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy.Builder()
-                .use(new ConstantStringProvider("not_test")).when(fullTableName(neq("PUBLIC.TEST")))
-                .use(new ConstantStringProvider("contains_a_vowel")).when(columnName(matchesRegex(".+[aeiouAEIOU].+")))
-                .useDefault()
-                .build();
-
-        assertEquals("not_test", strategy.getDefaultValue(TestUtils.getCM("PUBLIC.STUFF", "", "", String.class, true), String.class));
-        assertEquals("-", strategy.getDefaultValue(TestUtils.getCM("PUBLIC.TEST", "", "", String.class, true), String.class));
-
-        assertEquals("contains_a_vowel", strategy.getDefaultValue(TestUtils.getCM("PUBLIC.TEST", "", "TEST", String.class, true), String.class));
-        assertEquals("-", strategy.getDefaultValue(TestUtils.getCM("PUBLIC.TEST", "", "QWRTZ", String.class, true), String.class));
-    }
-
-    @Test
-    public void test_Builder3() {
-        PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy.Builder()
-                .use(new ConstantStringProvider("and_test")).when(allOf(tableName(eq("A")), columnName(eq("B"))))
-                .use(new ConstantStringProvider("or_test")).when(anyOf(tableName(contains("C")), columnName(contains("D"))))
-                .useDefault()
-                .build();
-
-        assertEquals("and_test", strategy.getDefaultValue(TestUtils.getCM("", "A", "B", String.class, true), String.class));
-        assertNotEquals("and_test", strategy.getDefaultValue(TestUtils.getCM("", "A", "C", String.class, true), String.class));
-        assertNotEquals("and_test", strategy.getDefaultValue(TestUtils.getCM("", "B", "B", String.class, true), String.class));
-        assertNotEquals("and_test", strategy.getDefaultValue(TestUtils.getCM("", "B", "C", String.class, true), String.class));
-
-        assertEquals("or_test", strategy.getDefaultValue(TestUtils.getCM("", "C", "D", String.class, true), String.class));
-        assertEquals("or_test", strategy.getDefaultValue(TestUtils.getCM("", "B", "D", String.class, true), String.class));
-        assertEquals("or_test", strategy.getDefaultValue(TestUtils.getCM("", "C", "A", String.class, true), String.class));
-        assertNotEquals("or_test", strategy.getDefaultValue(TestUtils.getCM("", "A", "B", String.class, true), String.class));
-    }
-
-    @Test
     public void testProvider_StaticDateProvider() {
         final Date date = new Date(1234567891011L);
 

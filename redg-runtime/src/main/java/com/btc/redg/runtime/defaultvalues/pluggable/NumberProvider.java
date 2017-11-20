@@ -44,7 +44,21 @@ public abstract class NumberProvider implements PluggableDefaultValueProvider {
         return Number.class.isAssignableFrom(columnModel.getJavaTypeAsClass());
     }
 
-    public static <T> T convertNumber(BigDecimal number, final Class<T> type) {
+    public static <T> T convertNumber(BigDecimal number, Class<T> type) {
+        if (type == double.class) {
+            type = (Class<T>) Double.class;
+        } else if (type == float.class) {
+            type = (Class<T>) Float.class;
+        } else if (type == long.class) {
+            type = (Class<T>) Long.class;
+        } else if (type == int.class) {
+            type = (Class<T>) Integer.class;
+        } else if (type == byte.class) {
+            type = (Class<T>) Byte.class;
+        } else if (type == short.class) {
+            type = (Class<T>) Short.class;
+        }
+
         if (BigDecimal.class.equals(type)) {
             return type.cast(number);
         } else if (Double.class.equals(type)) {

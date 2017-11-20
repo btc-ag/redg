@@ -62,49 +62,4 @@ public class PluggableDefaultValueStrategy implements DefaultValueStrategy {
         this.providers.add(provider);
     }
 
-    public void removeProvider(final PluggableDefaultValueProvider provider) {
-        this.providers.remove(provider);
-    }
-
-    public void clearProviders() {
-        this.providers.clear();
-    }
-
-    public static class Builder {
-
-        private PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy();
-
-        PluggableDefaultValueProvider lastProvider;
-
-        public Builder use(final PluggableDefaultValueProvider provider) {
-            if (lastProvider != null) {
-                strategy.addProvider(lastProvider);
-            }
-            lastProvider = provider;
-            return this;
-        }
-
-        public Builder when(final Predicate<ColumnModel> condition) {
-            this.lastProvider = new CustomConditionalProvider(condition, this.lastProvider);
-            return this;
-        }
-
-        public Builder useDefault() {
-            if (lastProvider != null) {
-                strategy.addProvider(lastProvider);
-            }
-            lastProvider = new DefaultDefaultValueProvider();
-            return this;
-        }
-
-        public PluggableDefaultValueStrategy build() {
-            if (lastProvider != null) {
-                strategy.addProvider(lastProvider);
-                lastProvider = null;
-            }
-            return strategy;
-        }
-    }
-
-
 }
