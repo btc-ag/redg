@@ -52,7 +52,7 @@ public class CodeGenerator {
      * </ul>
      * There is no check build in, code generation will fail if this template does not exist.
      *
-     * @param templateResource
+     * @param templateResource The name of the template resource, relative to class loader
      */
     public CodeGenerator(final String templateResource) {
         try {
