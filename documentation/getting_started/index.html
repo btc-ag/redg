@@ -268,15 +268,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sql-preparation-script" title="SQL preparation script" class="md-nav__link">
-    SQL preparation script
+  <a href="#sql-schema-script" title="SQL Schema Script" class="md-nav__link">
+    SQL Schema Script
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#type-mappings" title="Type mappings" class="md-nav__link">
-    Type mappings
+  <a href="#type-mappings" title="Type Mappings" class="md-nav__link">
+    Type Mappings
   </a>
   
 </li>
@@ -294,15 +294,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#test-data-specification" title="Test data specification" class="md-nav__link">
-    Test data specification
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#junit-integration" title="JUnit integration" class="md-nav__link">
-    JUnit integration
+  <a href="#test-data-specification" title="Test Data Specification" class="md-nav__link">
+    Test Data Specification
   </a>
   
 </li>
@@ -775,15 +768,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sql-preparation-script" title="SQL preparation script" class="md-nav__link">
-    SQL preparation script
+  <a href="#sql-schema-script" title="SQL Schema Script" class="md-nav__link">
+    SQL Schema Script
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#type-mappings" title="Type mappings" class="md-nav__link">
-    Type mappings
+  <a href="#type-mappings" title="Type Mappings" class="md-nav__link">
+    Type Mappings
   </a>
   
 </li>
@@ -801,15 +794,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#test-data-specification" title="Test data specification" class="md-nav__link">
-    Test data specification
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#junit-integration" title="JUnit integration" class="md-nav__link">
-    JUnit integration
+  <a href="#test-data-specification" title="Test Data Specification" class="md-nav__link">
+    Test Data Specification
   </a>
   
 </li>
@@ -837,10 +823,11 @@
                 
                 
                 <h1 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
-<p>This chapter will guide you through your first project with RedG. You'll use RedG via the <a href="../integration/maven_plugin/">RedG Maven Plugin</a> and integrate it into a JUnit unit test.
-If you don't use Maven or JUnit, take a look at the chapter <a href="../integration/">Integration</a> and choose the appropriate integration for your project.</p>
+<p>This chapter will guide you through your first project with RedG. You'll use RedG via the <a href="../integration/maven_plugin/">RedG Maven Plugin</a> and integrate it 
+into a unit test.</p>
 <h2 id="installation-and-configuration">Installation and configuration<a class="headerlink" href="#installation-and-configuration" title="Permanent link">&para;</a></h2>
-<p>If your project can process Maven artifacts, the installation is quite straightforward. RedG is available on Maven Central. The newest stable version is <strong>1.1.0</strong></p>
+<p>If your project can process Maven artifacts, the installation is quite straightforward. RedG is available on Maven Central. The newest stable version is <strong>1.1.1</strong>
+See <a href="https://mvnrepository.com/artifact/com.btc-ag.redg">here</a> for an overview of all RedG Maven artifacts and the newest versions.</p>
 <h3 id="maven">Maven<a class="headerlink" href="#maven" title="Permanent link">&para;</a></h3>
 <p>Add the dependency for the <code>redg-runtime</code>. If you want to use the visualization feature to debug your application, include <code>jackson-core</code> and <code>jackson-databind</code>.
 Include <code>junit</code> for the unit tests.</p>
@@ -848,7 +835,7 @@ Include <code>junit</code> for the unit tests.</p>
     <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>com.btc-ag.redg<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>redg-runtime<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>1.1.0<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.1.1<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
     <span class="c">&lt;!-- optional, for visualization only --&gt;</span>
@@ -879,7 +866,7 @@ Include <code>junit</code> for the unit tests.</p>
 <div class="codehilite"><pre><span></span><span class="nt">&lt;plugin&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.btc-ag.redg<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>redg-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.1.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.1.1<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;executions&gt;</span>
         <span class="nt">&lt;execution&gt;</span>
             <span class="nt">&lt;id&gt;</span>redg-generate<span class="nt">&lt;/id&gt;</span>
@@ -951,7 +938,7 @@ Include <code>junit</code> for the unit tests.</p>
 
 <h2 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">&para;</a></h2>
 <p>With RedG installed and set up, you can now prepare everything for the first code generation. If you followed the steps above, you'll need two more files before RedG can generate code for your database schema: <code>src/test/resources/create-schema.sql</code> and <code>src/test/resources/mappings.json</code>.</p>
-<h3 id="sql-preparation-script">SQL preparation script<a class="headerlink" href="#sql-preparation-script" title="Permanent link">&para;</a></h3>
+<h3 id="sql-schema-script">SQL Schema Script<a class="headerlink" href="#sql-schema-script" title="Permanent link">&para;</a></h3>
 <p>In order to generate the code for the schema, RedG needs a live database running that schema. As this example uses a H2 in-memory database, all the tables have to be created first. Create the file <code>src/test/resources/create-schema.sql</code> and fill it with your DDL statements.</p>
 <p>If you don't yet have a database schema or just want to tets RedG, feel free to use this little demo schema:</p>
 <div class="codehilite"><pre><span></span><span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">REDG</span><span class="p">;</span>
@@ -995,7 +982,7 @@ Include <code>junit</code> for the unit tests.</p>
 <p>This SQL code will create a schema that looks like this:
 <img alt="The demo schema" src="../img/demo-schema.png" />
 <span class="image-caption">The demo schema</span></p>
-<h3 id="type-mappings">Type mappings<a class="headerlink" href="#type-mappings" title="Permanent link">&para;</a></h3>
+<h3 id="type-mappings">Type Mappings<a class="headerlink" href="#type-mappings" title="Permanent link">&para;</a></h3>
 <p>When analysing a database schema, RedG always tries to find an appropriate Java data type for a column. There are three cases, where this might not be enough:</p>
 <ul>
 <li>You want a different Java data type that still represents the same database data type (eg. <code>long</code> instead of <code>BigDecimal</code> for <code>NUMBER(10)</code>)</li>
@@ -1023,54 +1010,37 @@ The <code>DEMO_COMPANY</code> gets the same mapping for the <code>ID</code> and 
 <p>By now everything is ready for the first round of code generation. If you are using Maven, either run your whole test-suite with <code>mvn test</code> or just RedG with <code>mvn redg:redg@redg-generate</code>. If you are using Gradle, run your custom solution or wait until the release of the Gradle plugin. If no error occured, you should find the generated sources in <code>target/generated-test-sources/redg</code>.</p>
 <p><img alt="The generated code" src="../img/demo-generated-code.png" />
 <span class="image-caption">The generated code</span></p>
-<h2 id="test-data-specification">Test data specification<a class="headerlink" href="#test-data-specification" title="Permanent link">&para;</a></h2>
-<p>Now that RedG has generated the entity classes, you can start to specify your test data. A good approach to specifying your test data in smaller projects is to create public methods in classes with a default constructor that return an <code>AbstractRedG</code>. Inside these methods you instantiate a <code>RedG</code> object, setup the default value providers, specify your data and return the filled <code>RedG</code> object.</p>
+<h2 id="test-data-specification">Test Data Specification<a class="headerlink" href="#test-data-specification" title="Permanent link">&para;</a></h2>
+<p>Now that RedG has generated the entity classes, you can create a RedG instance. 
+A good approach is to create a factory that will create <code>RedG</code> instances, so you don't have to configure the RedG instance every time you need one. </p>
 <p>An example for some test data:</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">com.btc.redg.generated.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.btc.redg.runtime.defaultvalues.pluggable.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.btc.redg.runtime.AbstractRedG</span><span class="o">;</span>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyRedGFactory</span> <span class="o">{</span>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DemoTestData</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="n">AbstractRedG</span> <span class="nf">getDataSet</span><span class="o">()</span> <span class="o">{</span>
-
-        <span class="n">PluggableDefaultValueStrategy</span> <span class="n">strategy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PluggableDefaultValueStrategy</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
-            <span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="k">new</span> <span class="n">IncrementingNumberProvider</span><span class="o">())</span>
-            <span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="k">new</span> <span class="n">CurrentDateProvider</span><span class="o">())</span>
-            <span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="k">new</span> <span class="n">CostantStringProvider</span><span class="o">(</span><span class="s">&quot;Example&quot;</span><span class="o">));</span>
-
-        <span class="n">RedG</span> <span class="n">redG</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RedGBuilder</span><span class="o">&lt;</span><span class="n">RedG</span><span class="o">&gt;()</span>
-            <span class="o">.</span><span class="na">withDefaultValueStrategy</span><span class="o">(</span><span class="n">strategy</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-
-        <span class="n">GDemoBankAccount</span> <span class="n">companyBankAccount</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addDemoBankAccount</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">bic</span><span class="o">(</span><span class="s">&quot;ONEPIZZAPLZ&quot;</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">iban</span><span class="o">(</span><span class="s">&quot;DE13109817441665870952&quot;</span><span class="o">);</span>
-        <span class="n">GDemoBankAccount</span> <span class="n">userBankAccount</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addDemoBankAccount</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">bic</span><span class="o">(</span><span class="s">&quot;THEREYOUGO1&quot;</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">iban</span><span class="o">(</span><span class="s">&quot;DE55617403662248482423&quot;</span><span class="o">);</span>
-        <span class="n">GDemoCompany</span> <span class="n">smallCompany</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addDemoCompany</span><span class="o">(</span><span class="n">companyBankAccount</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">countryCode</span><span class="o">(</span><span class="s">&quot;DE&quot;</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">&quot;Spielwarenfachgeschäft Müller&quot;</span><span class="o">);</span>
-        <span class="n">IntStream</span><span class="o">.</span><span class="na">rangeClosed</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">).</span><span class="na">forEach</span><span class="o">(</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="o">{</span>
-            <span class="n">redG</span><span class="o">.</span><span class="na">addDemoUser</span><span class="o">(</span><span class="n">userBankAccount</span><span class="o">)</span>
-                    <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">&quot;user&quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">)</span>
-                    <span class="o">.</span><span class="na">company</span><span class="o">(</span><span class="n">smallCompany</span><span class="o">);</span>
-        <span class="o">});</span>
-        <span class="n">GDemoCompany</span> <span class="n">dummy</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">dummyDemoCompany</span><span class="o">();</span>
-        <span class="n">redG</span><span class="o">.</span><span class="na">addDemoUser</span><span class="o">(</span><span class="n">dummy</span><span class="o">.</span><span class="na">bankAcc</span><span class="o">()).</span><span class="na">username</span><span class="o">(</span><span class="s">&quot;Diana_Dummy&quot;</span><span class="o">).</span><span class="na">company</span><span class="o">(</span><span class="n">dummy</span><span class="o">);</span>
-
+    <span class="kd">public</span> <span class="n">RedG</span> <span class="nf">createRedG</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">RedG</span> <span class="n">redG</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RedG</span><span class="o">();</span>
+        <span class="n">redG</span><span class="o">.</span><span class="na">setDefaultValueStrategy</span><span class="o">(</span><span class="n">createDefaultValueStrategy</span><span class="o">());</span>
         <span class="k">return</span> <span class="n">redG</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">DefaultValueStrategy</span> <span class="nf">createDefaultValueStrategy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">DefaultValueStrategyBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultValueStrategyBuilder</span><span class="o">();</span>
+
+        <span class="n">builder</span><span class="o">.</span><span class="na">whenColumnNameMatches</span><span class="o">(</span><span class="s">&quot;ID&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">thenUseProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">IncrementingNumberProvider</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">whenTableNameMatches</span><span class="o">(</span><span class="s">&quot;.*CARD&quot;</span><span class="o">).</span><span class="na">andColumnNameMatches</span><span class="o">(</span><span class="s">&quot;TYPE&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">thenUse</span><span class="o">(</span><span class="s">&quot;MASTERCARD&quot;</span><span class="o">);</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">columnModel</span> <span class="o">-&gt;</span> <span class="n">columnModel</span><span class="o">.</span><span class="na">getDbFullTableName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;CCM.CREDITCARD.UUID&quot;</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">thenCompute</span><span class="o">((</span><span class="n">columnModel</span><span class="o">,</span> <span class="n">expectedType</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+        <span class="c1">// ...</span>
+
+        <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
 
 
-<h2 id="junit-integration">JUnit integration<a class="headerlink" href="#junit-integration" title="Permanent link">&para;</a></h2>
-<p>There are multiple ways to integrate your test data specification into your JUnit tests, but for this guide the most simple approach is
-recommended. It is very simple and does not need further dependencies. Just call your test data specification method, open a JDBC connection and 
-call <code>AbstractRedG.insertDataIntoDatabase(Connection)</code>. In most cases this dead simple approach is all you need. 
-If you want to use RedG in a bigger project, consider some of the other <a href="../integration/#redg-runtime">integration possibilities</a>.</p>
+<p>Now you can model your test data. You might end up inlining the test data into your unit tests if it is not too complex.
+To make RedG insert the modeled data into the database, call <code>AbstractRedG.insertDataIntoDatabase(...)</code>. In most cases this dead simple approach is all you need. </p>
 <p>Example:</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">...</span><span class="o">;</span>
 
@@ -1078,10 +1048,25 @@ If you want to use RedG in a bigger project, consider some of the other <a href=
 
     <span class="nd">@Test</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testStuff</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="o">...;</span>
-        <span class="k">new</span> <span class="n">DemoTestData</span><span class="o">().</span><span class="na">getDataSet</span><span class="o">().</span><span class="na">insertDataIntoDatabase</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span>
 
-        <span class="c1">// perform your test</span>
+        <span class="c1">// instantiate RedG</span>
+        <span class="n">RedG</span> <span class="n">redG</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyRedGFactory</span><span class="o">().</span><span class="na">createRedG</span><span class="o">();</span>
+
+        <span class="c1">// create some test data </span>
+        <span class="n">GDemoBankAccount</span> <span class="n">companyBankAccount</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addDemoBankAccount</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">iban</span><span class="o">(</span><span class="s">&quot;DE13109817441665870952&quot;</span><span class="o">);</span>
+        <span class="n">GDemoCompany</span> <span class="n">smallCompany</span> <span class="o">=</span> <span class="n">redG</span><span class="o">.</span><span class="na">addDemoCompany</span><span class="o">(</span><span class="n">companyBankAccount</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">countryCode</span><span class="o">(</span><span class="s">&quot;DE&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">&quot;Spielwarenfachgeschäft Müller&quot;</span><span class="o">);</span>
+        <span class="n">redG</span><span class="o">.</span><span class="na">addDemoUser</span><span class="o">(</span><span class="n">redG</span><span class="o">.</span><span class="na">dummyDemoBankAccount</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">&quot;Diana_Dummy&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">company</span><span class="o">(</span><span class="n">smallCompany</span><span class="o">);</span>
+
+        <span class="c1">// insert the data into the database using a javax.sql.DataSource</span>
+        <span class="k">new</span> <span class="n">DemoTestData</span><span class="o">().</span><span class="na">getDataSet</span><span class="o">().</span><span class="na">insertDataIntoDatabase</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span> 
+
+        <span class="c1">// perform your actual test against the database...</span>
+        <span class="o">...</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
