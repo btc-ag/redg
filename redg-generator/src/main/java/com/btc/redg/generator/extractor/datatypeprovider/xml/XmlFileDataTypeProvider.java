@@ -87,6 +87,10 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
     }
 
     String getDataTypeByName(String tableName, String columnName) {
+        if (typeMappings.getTableTypeMappings() == null) {
+            return null;
+        }
+
         return typeMappings.getTableTypeMappings().stream()
                 .filter(tableTypeMapping -> tableName.matches(tableTypeMapping.getTableName()))
                 .flatMap(tableTypeMapping -> tableTypeMapping.getColumnTypeMappings().stream())
@@ -97,6 +101,10 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
     }
 
     String getDataTypeBySqlType(final Column column) {
+        if (typeMappings.getDefaultTypeMappings() == null) {
+            return null;
+        }
+
         List<String> variants = DataTypePrecisionHelper.getDataTypeWithAllPrecisionVariants(column);
         return variants.stream()
                 .map(variant ->

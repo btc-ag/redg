@@ -17,12 +17,15 @@
 package com.btc.redg.generator.extractor.datatypeprovider.xml;
 
 import com.btc.redg.generator.extractor.datatypeprovider.DefaultDataTypeProvider;
+import com.btc.redg.models.ColumnModel;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import schemacrawler.schema.Column;
 import schemacrawler.schema.ColumnDataType;
+import schemacrawler.schema.Table;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +34,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static org.mockito.Mockito.when;
 
 public class XmlFileDataTypeProviderTest {
     @Test
@@ -102,21 +107,55 @@ public class XmlFileDataTypeProviderTest {
         ));
 
         ColumnDataType cdt = Mockito.mock(ColumnDataType.class);
-        Mockito.when(cdt.getName()).thenReturn("DECIMAL");
+        when(cdt.getName()).thenReturn("DECIMAL");
         Column column1 = Mockito.mock(Column.class);
-        Mockito.when(column1.getColumnDataType()).thenReturn(cdt);
-        Mockito.when(column1.getSize()).thenReturn(1);
-        Mockito.when(column1.getDecimalDigits()).thenReturn(0);
+        when(column1.getColumnDataType()).thenReturn(cdt);
+        when(column1.getSize()).thenReturn(1);
+        when(column1.getDecimalDigits()).thenReturn(0);
 
         Column column2 = Mockito.mock(Column.class);
-        Mockito.when(column2.getColumnDataType()).thenReturn(cdt);
-        Mockito.when(column2.getSize()).thenReturn(10);
-        Mockito.when(column2.getSize()).thenReturn(0);
+        when(column2.getColumnDataType()).thenReturn(cdt);
+        when(column2.getSize()).thenReturn(10);
+        when(column2.getSize()).thenReturn(0);
 
         XmlFileDataTypeProvider dataTypeProvider = new XmlFileDataTypeProvider(typeMappings, new DefaultDataTypeProvider());
 
         Assert.assertEquals("java.lang.Boolean", dataTypeProvider.getDataTypeBySqlType(column1));
         Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType(column2));
+    }
+
+    @Test
+    public void testCanHandleMissingTableTypeMappings() throws Exception {
+        TypeMappings typeMappings = new TypeMappings();
+        typeMappings.setDefaultTypeMappings(Collections.emptyList());
+        XmlFileDataTypeProvider dataTypeProvider = new XmlFileDataTypeProvider(typeMappings, new DefaultDataTypeProvider());
+
+        Assert.assertEquals("java.lang.Integer", dataTypeProvider.getCanonicalDataTypeName(createColumnMock()));
+    }
+
+    @Test
+    public void testCanHandleMissingDefaultTypeMappings() throws Exception {
+        TypeMappings typeMappings = new TypeMappings();
+        typeMappings.setTableTypeMappings(Collections.emptyList());
+        XmlFileDataTypeProvider dataTypeProvider = new XmlFileDataTypeProvider(typeMappings, new DefaultDataTypeProvider());
+
+        Assert.assertEquals("java.lang.Integer", dataTypeProvider.getCanonicalDataTypeName(createColumnMock()));
+    }
+
+    private Column createColumnMock() {
+        Column columnMock = Mockito.mock(Column.class);
+        when(columnMock.getName()).thenReturn("MY_COLUMN");
+        ColumnDataType columnDataTypeMock = Mockito.mock(ColumnDataType.class);
+        when(columnDataTypeMock.getName()).thenReturn("NUMBER");
+        when(columnMock.getColumnDataType()).thenReturn(columnDataTypeMock);
+        when(columnMock.getColumnDataType()).thenReturn(columnDataTypeMock);
+        when(columnDataTypeMock.getTypeMappedClass()).then(invocationOnMock -> Integer.class);
+        when(columnMock.getSize()).thenReturn(23);
+        when(columnMock.getDecimalDigits()).thenReturn(10);
+        Table tableMock = Mockito.mock(Table.class);
+        when(tableMock.getName()).thenReturn("MY_TABLE");
+        when(columnMock.getParent()).thenReturn(tableMock);
+        return columnMock;
     }
 
     private void assertEqualsIgnoreXmlWhiteSpaces(String expected, String actual) {
