@@ -34,14 +34,14 @@ import java.util.Objects;
  * The format for the file is:
  * </p><p><blockquote><pre>
  * &lt;typeMappings&gt;
- *     &lt;tableTypeMappings&gt;
- *         &lt;table name="AUCTION"&gt;
- *              &lt;column name="ID"&gt;java.lang.String&lt;/column&gt;
- *         &lt;/table&gt;
- *     &lt;/tableTypeMappings&gt;
- *     &lt;defaultTypeMappings&gt;
- *         &lt;type sql="DECIMAL(1)"&gt;java.lang.Boolean&lt;/type&gt;
- *     &lt;/defaultTypeMappings&gt;
+ *   &lt;tableTypeMappings&gt;
+ *     &lt;table tableName="CUSTOMER"&gt;
+ *       &lt;column columnName="DTYPE" javaType="example.CustomerType"/&gt;
+ *     &lt;/table&gt;
+ *   &lt;/tableTypeMappings&gt;
+ *   &lt;defaultTypeMappings&gt;
+ *     &lt;typeMapping sqlType="TIMESTAMP WITH TIME ZONE" javaType="java.sql.Timestamp"/&gt;
+ *   &lt;/defaultTypeMappings&gt;
  * &lt;/typeMappings&gt;
  * </pre></blockquote>
  */
@@ -109,7 +109,12 @@ public class XmlFileDataTypeProvider implements DataTypeProvider {
         return variants.stream()
                 .map(variant ->
                         typeMappings.getDefaultTypeMappings().stream()
-                                .filter(dtm -> dtm.getSqlType().replaceAll("\\s", "").toUpperCase().equals(variant.toUpperCase()))
+                                .filter(dtm -> dtm.getSqlType()
+                                        .trim()
+                                        .replaceAll("\\s+", " ") // normalize multiple space characters
+                                        .replaceAll("\\s+(?=[(),])", "") // remove leading spaces before '(', ')' and ','
+                                        .replaceAll("(?<=[(),])\\s+", "") // remove trailing spaces after '(', ')' and ','
+                                        .toUpperCase().equals(variant.toUpperCase()))
                                 .findFirst().orElse(null))
                 .filter(Objects::nonNull)
                 .map(DefaultTypeMapping::getJavaType)

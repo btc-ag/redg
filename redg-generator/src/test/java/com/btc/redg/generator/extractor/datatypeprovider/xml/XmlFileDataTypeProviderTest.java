@@ -103,7 +103,8 @@ public class XmlFileDataTypeProviderTest {
         TypeMappings typeMappings = new TypeMappings();
         typeMappings.setDefaultTypeMappings(Arrays.asList(
                 new DefaultTypeMapping("DECIMAL", "java.lang.Long"),
-                new DefaultTypeMapping("DECIMAL(1)", "java.lang.Boolean")
+                new DefaultTypeMapping("DECIMAL(1)", "java.lang.Boolean"),
+                new DefaultTypeMapping(" TIMESTAMP  WITH    TIME ZONE ( 30 , 0 ) ", "java.sql.Timestamp")
         ));
 
         ColumnDataType cdt = Mockito.mock(ColumnDataType.class);
@@ -116,12 +117,20 @@ public class XmlFileDataTypeProviderTest {
         Column column2 = Mockito.mock(Column.class);
         when(column2.getColumnDataType()).thenReturn(cdt);
         when(column2.getSize()).thenReturn(10);
-        when(column2.getSize()).thenReturn(0);
+        when(column2.getDecimalDigits()).thenReturn(0);
+
+        ColumnDataType timestampWithTimeZoneDataType = Mockito.mock(ColumnDataType.class);
+        when(timestampWithTimeZoneDataType.getName()).thenReturn("TIMESTAMP WITH TIME ZONE");
+        Column column3 = Mockito.mock(Column.class);
+        when(column3.getColumnDataType()).thenReturn(timestampWithTimeZoneDataType);
+        when(column3.getSize()).thenReturn(30);
+        when(column3.getDecimalDigits()).thenReturn(0);
 
         XmlFileDataTypeProvider dataTypeProvider = new XmlFileDataTypeProvider(typeMappings, new DefaultDataTypeProvider());
 
         Assert.assertEquals("java.lang.Boolean", dataTypeProvider.getDataTypeBySqlType(column1));
         Assert.assertEquals("java.lang.Long", dataTypeProvider.getDataTypeBySqlType(column2));
+        Assert.assertEquals("java.sql.Timestamp", dataTypeProvider.getDataTypeBySqlType(column3));
     }
 
     @Test
