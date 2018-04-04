@@ -16,7 +16,7 @@
     
     
       
-        <title>Dummy data - RedG User Documentation</title>
+        <title>Debugging Maven plugin - RedG User Documentation</title>
       
     
     
@@ -82,11 +82,11 @@
             
               
                 <span class="md-header-nav__parent">
-                  Features
+                  Development
                 </span>
               
             
-            Dummy data
+            Debugging Maven plugin
           
         </span>
       </div>
@@ -232,12 +232,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
     
     <label class="md-nav__link" for="nav-4">
       Features
@@ -253,54 +251,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Dummy data
-      </label>
-    
-    <a href="./" title="Dummy data" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../features/dummy_data/" title="Dummy data" class="md-nav__link">
       Dummy data
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#customization" title="Customization" class="md-nav__link">
-    Customization
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -310,7 +265,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../visualization/" title="Visualization" class="md-nav__link">
+    <a href="../../features/visualization/" title="Visualization" class="md-nav__link">
       Visualization
     </a>
   </li>
@@ -322,7 +277,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../data_extractor/" title="Data extraction" class="md-nav__link">
+    <a href="../../features/data_extractor/" title="Data extraction" class="md-nav__link">
       Data extraction
     </a>
   </li>
@@ -334,7 +289,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../jpa_metamodel/" title="JPA meta-model analysis" class="md-nav__link">
+    <a href="../../features/jpa_metamodel/" title="JPA meta-model analysis" class="md-nav__link">
       JPA meta-model analysis
     </a>
   </li>
@@ -637,10 +592,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
     
     <label class="md-nav__link" for="nav-7">
       Development
@@ -658,7 +615,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../development/quick_start_guide/" title="Quick Start Guide" class="md-nav__link">
+    <a href="../quick_start_guide/" title="Quick Start Guide" class="md-nav__link">
       Quick Start Guide
     </a>
   </li>
@@ -668,11 +625,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../development/debugging_plugin/" title="Debugging Maven plugin" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+    <a href="./" title="Debugging Maven plugin" class="md-nav__link md-nav__link--active">
       Debugging Maven plugin
     </a>
+    
   </li>
 
         
@@ -722,27 +688,6 @@
     
   
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#customization" title="Customization" class="md-nav__link">
-    Customization
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -754,30 +699,16 @@
               
                 
                 
-                <h1 id="dummy-data">Dummy data<a class="headerlink" href="#dummy-data" title="Permanent link">&para;</a></h1>
-<p>RedG's dummy data feature allows you to focus on the test data you really need. No more specifying dozens of (transitive)
-dependencies you do not need for your test but your database needs them to satisfy the foreign key constraints.</p>
-<p>With RedG you can simply say "I want a dummy entity of that type" and you get one. With all of its dependencies
-set to other dummy objects. This works out-of-the-box with zero configuration in 99% of the cases.</p>
-<p>The RedG main class generated by RedG contains a <code>dummyXX</code> method for each entity type.</p>
-<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
-<p>Let's see this in action in a small example. Consider the following database schema:</p>
-<p><img alt="The example schema" src="../../img/demo-schema.png" /></p>
-<p>Because the user needs a bank account (it is a <code>NOT NULL</code> foreign key), you have to specify a bank account if you
-want to create a user with the <code>redG.addDemoUser(GDemoBankAccount bankAcc)</code> method. Simply passing <code>null</code> will not
-work here.</p>
-<p>If you now want to add a user and perform some tests that only require its first and last name, you can simply use a dummy
-as the bank account.</p>
-<div class="codehilite"><pre><span></span><span class="n">redG</span><span class="o">.</span><span class="na">addDemoUser</span><span class="o">(</span><span class="n">redG</span><span class="o">.</span><span class="na">dummyBankAccount</span><span class="o">())</span>
-    <span class="o">.</span><span class="na">firstName</span><span class="o">(</span><span class="s">&quot;Trevor&quot;</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">lastName</span><span class="o">(</span><span class="s">&quot;Testcase&quot;</span><span class="o">);</span>
-</pre></div>
-
-
-<p>As you can see, RedG does all the heavy work for you. No need to specify anything for the dummy. You get a valid dummy that 
-satisfies every database constraint so you can test the first and last name without worrying about the excess baggage.</p>
-<h2 id="customization">Customization<a class="headerlink" href="#customization" title="Permanent link">&para;</a></h2>
-<p>If you need to customize how RedG generates dummy data, see <a href="../../customization/runtime/dummy_factory/">here</a>.</p>
+                <h1 id="debugging-the-maven-plugin">Debugging the Maven Plugin<a class="headerlink" href="#debugging-the-maven-plugin" title="Permanent link">&para;</a></h1>
+<p>If you find problems during the code generation with the Maven plugin, take these steps to debug the redg-generator running inside the plugin:</p>
+<ul>
+<li>Import the <code>redg</code> project into your IDE (when using IDEA, open in new window)</li>
+<li>Set your IDE up for remote debugging of the <code>redg</code> project</li>
+<li>In your other project, add the remote debugging VM options to your Maven profile (<code>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</code>)</li>
+<li>Start the Maven build in the other project</li>
+<li>Set your breakpoints</li>
+<li>Attach the remote debugger</li>
+</ul>
                 
                   
                 
@@ -796,7 +727,7 @@ satisfies every database constraint so you can test the first and last name with
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../specifying_test_data/" title="Specifying test data" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../quick_start_guide/" title="Quick Start Guide" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -805,19 +736,19 @@ satisfies every database constraint so you can test the first and last name with
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Specifying test data
+                Quick Start Guide
               </span>
             </div>
           </a>
         
         
-          <a href="../visualization/" title="Visualization" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../compatibility/" title="Compatibility" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Visualization
+                Compatibility
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
