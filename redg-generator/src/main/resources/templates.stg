@@ -234,7 +234,7 @@ public class <table.className> implements RedGEntity {
     <joinTableSimplifier(table.joinTableSimplifierData)>
 
     public String getSQLString() {
-        return String.format("INSERT INTO <escape.(table.sqlFullName)> (" +
+        return String.format("INSERT INTO <escape.(table.sqlName)> (" +
                         "<table.notNullForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                         <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
                         "<table.nullableForeignKeys:foreignKeyInsertColumns();separator=", ">" +
@@ -253,7 +253,7 @@ public class <table.className> implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO <escape.(table.sqlFullName)> (" +
+        return "INSERT INTO <escape.(table.sqlName)> (" +
                 "<table.notNullForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                 <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
                 "<table.nullableForeignKeys:foreignKeyInsertColumns();separator=", ">" +
@@ -754,7 +754,7 @@ public <ref.localType> <ref.localName>() {
 >>
 
 overrideColumnInsertValues(column) ::= <<
-this.redG.getSqlValuesFormatter().formatValue(super.<column.name>(),
+this.redG.getSqlValuesFormatter().formatValue(<if(column.partOfForeignKey)>this.<column.name><else>super.<column.name>()<endif>,
         "<column.sqlType>", "<escape.(column.dbTableName)>",
         "<escape.(column.dbTableName)>", "<escape.(column.dbName)>")
 >>

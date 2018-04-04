@@ -829,7 +829,7 @@ public class GDatesTable implements RedGEntity {
 
 
     public String getSQLString() {
-        return String.format("INSERT INTO \"RT-CG-DCM\".PUBLIC.DATES_TABLE (" +
+        return String.format("INSERT INTO DATES_TABLE (" +
                         "" +
                         "" +
                         "A_DATE, A_TIME, A_TIMESTAMP, A_TIMESTAMP_WTZ, B_DATE, B_TIME, B_TIMESTAMP, B_TIMESTAMP_WTZ" +
@@ -865,7 +865,7 @@ public class GDatesTable implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO \"RT-CG-DCM\".PUBLIC.DATES_TABLE (" +
+        return "INSERT INTO DATES_TABLE (" +
                 "" +
                 "" +
                 "A_DATE, A_TIME, A_TIMESTAMP, A_TIMESTAMP_WTZ, B_DATE, B_TIME, B_TIMESTAMP, B_TIMESTAMP_WTZ" +

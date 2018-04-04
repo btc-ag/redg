@@ -519,7 +519,7 @@ public class GDemoUser implements RedGEntity {
 
 
     public String getSQLString() {
-        return String.format("INSERT INTO \"RT-CG-MPFK\".PUBLIC.DEMO_USER (" +
+        return String.format("INSERT INTO DEMO_USER (" +
                         "ACC_BIC, ACC_IBAN" +
                         ", " +
                         "WORKS_AT_NAME, WORKS_AT_CC" +
@@ -559,7 +559,7 @@ public class GDemoUser implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO \"RT-CG-MPFK\".PUBLIC.DEMO_USER (" +
+        return "INSERT INTO DEMO_USER (" +
                 "ACC_BIC, ACC_IBAN" +
                 ", " +
                 "WORKS_AT_NAME, WORKS_AT_CC" +
