@@ -51,8 +51,7 @@
         <developer>
             <id>yamass</id>
             <name>Yann Massard</name>
-            <email>yann.massard@btc-ag.com</email>
-            <organization>BTC Business Technology Consulting AG</organization>
+            <email>yamass@gmail.com</email>
             <timezone>Europe/Berlin</timezone>
         </developer>
     </developers>
