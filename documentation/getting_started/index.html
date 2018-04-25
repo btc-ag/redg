@@ -874,7 +874,7 @@
 <p>This chapter will guide you through your first project with RedG. You'll use RedG via the <a href="../integration/maven_plugin/">RedG Maven Plugin</a> and integrate it 
 into a unit test.</p>
 <h2 id="installation-and-configuration">Installation and configuration<a class="headerlink" href="#installation-and-configuration" title="Permanent link">&para;</a></h2>
-<p>If your project can process Maven artifacts, the installation is quite straightforward. RedG is available on Maven Central. The newest stable version is <strong>1.1.1</strong>
+<p>If your project can process Maven artifacts, the installation is quite straightforward. RedG is available on Maven Central. The newest stable version is <strong>1.1.2</strong>
 See <a href="https://mvnrepository.com/artifact/com.btc-ag.redg">here</a> for an overview of all RedG Maven artifacts and the newest versions.</p>
 <h3 id="maven">Maven<a class="headerlink" href="#maven" title="Permanent link">&para;</a></h3>
 <p>Add the dependency for the <code>redg-runtime</code>. If you want to use the visualization feature to debug your application, include <code>jackson-core</code> and <code>jackson-databind</code>.
@@ -883,7 +883,7 @@ Include <code>junit</code> for the unit tests.</p>
     <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>com.btc-ag.redg<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>redg-runtime<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>1.1.1<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.1.2<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
     <span class="c">&lt;!-- optional, for visualization only --&gt;</span>
@@ -914,7 +914,7 @@ Include <code>junit</code> for the unit tests.</p>
 <div class="codehilite"><pre><span></span><span class="nt">&lt;plugin&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.btc-ag.redg<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>redg-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.1.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.1.2<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;executions&gt;</span>
         <span class="nt">&lt;execution&gt;</span>
             <span class="nt">&lt;id&gt;</span>redg-generate<span class="nt">&lt;/id&gt;</span>
@@ -971,7 +971,7 @@ Include <code>junit</code> for the unit tests.</p>
 <p>Currently there is no Gradle plugin to generate the RedG entity code. See <a href="../integration/">here</a> for other ways to integrate the RedG code generator in your project.</p>
 <p>The RedG runtime can be included as a dependency.</p>
 <div class="codehilite"><pre><span></span><span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">&#39;com.btc-ag.redg&#39;</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">&#39;redg-runtime&#39;</span><span class="o">,</span> <span class="n">version</span> <span class="s1">&#39;1.1.0&#39;</span>
+    <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">&#39;com.btc-ag.redg&#39;</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">&#39;redg-runtime&#39;</span><span class="o">,</span> <span class="n">version</span> <span class="s1">&#39;1.1.2&#39;</span>
 
     <span class="c1">// optional, only for visualization support</span>
     <span class="n">testCompile</span> <span class="nl">group:</span> <span class="s1">&#39;com.fasterxml.jackson.core&#39;</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">&#39;jackson-core&#39;</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">&#39;2.8.5&#39;</span>
@@ -1182,7 +1182,7 @@ and paste/drag it into the <a href="../../visualizer/">RedG Visualizer</a>.</p>
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            © 2016-2018 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">BTC Business Technology Consulting AG</span>&emsp;&emsp;<a href="/redg/about/#imprint">Impressum</a>&emsp;<a href="/redg/about/#privacy-policy">Privacy Policy</a><br/> Unless stated otherwise, the <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">RedG User Documentation</span> is made available under CC-BY-SA 4.0 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="vertical-align:text-bottom" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>
+            © 2016-2018 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">BTC Business Technology Consulting AG</span>&emsp;&emsp;<a href="https://btc-ag.github.io/imprint.html">Impressum / Imprint</a>&emsp;<a href="https://btc-ag.github.io/privacy.html">Datenschutzerklärung / Privacy Policy</a><br/> Unless stated otherwise, the <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">RedG User Documentation</span> is made available under CC-BY-SA 4.0 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="vertical-align:text-bottom" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>
           </div>
         
         powered by
