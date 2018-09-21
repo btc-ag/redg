@@ -46,12 +46,34 @@ public class EntitySorter {
         }
 
         private int calculateDepth(RedGEntity entity) {
+            // Get depth if already calculated
+            if (this.depths.containsKey(entity)) {
+                return this.depths.get(entity);
+            }
+            // No depth if no dependencies
+            if (entity.getDependencies() == null || entity.getDependencies().size() == 0) {
+                this.depths.put(entity, 0);
+                return 0;
+            }
+
+            // otherwise, find max
+            int maxDepth = 0;
+            for (final RedGEntity childEntity : entity.getDependencies()) {
+                maxDepth = Math.max(maxDepth, this.calculateDepth(childEntity));
+            }
+            // one higher than before
+            maxDepth++;
+            // save it for the future
+            this.depths.put(entity, maxDepth);
+            return maxDepth;
+
+            /* Old solution, returns ConcurrentModificationException in edge cases
             return depths.computeIfAbsent(entity, e -> e.getDependencies().stream()
                     .map(this::calculateDepth)
                     .max(Comparator.comparingInt(d -> d))
                     .map(depth -> depth + 1)
                     .orElse(0)
-            );
+            );*/
         }
 
     }

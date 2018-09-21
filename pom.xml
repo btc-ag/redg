@@ -80,7 +80,7 @@
         <logbackVersion>1.1.7</logbackVersion>
         <slf4jVersion>1.7.21</slf4jVersion>
         <jacksonVersion>2.8.5</jacksonVersion>
-        <jacocoVersion>0.7.7.201606060606</jacocoVersion>
+        <jacocoVersion>0.8.2</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
         <mockitoVersion>2.3.5</mockitoVersion>
         <springVersion>4.3.5.RELEASE</springVersion>
