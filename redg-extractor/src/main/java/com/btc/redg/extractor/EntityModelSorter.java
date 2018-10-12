@@ -16,13 +16,13 @@
 
 package com.btc.redg.extractor;
 
-import com.btc.redg.extractor.model.EntityModel;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.btc.redg.extractor.model.EntityModel;
 
 public class EntityModelSorter {
 
@@ -43,12 +43,33 @@ public class EntityModelSorter {
         }
 
         private int calculateDepth(EntityModel entity) {
-            return depths.computeIfAbsent(entity, e -> e.getAllRefs().stream()
+            // Get depth if already calculated
+            if (this.depths.containsKey(entity)) {
+                return this.depths.get(entity);
+            }
+            // No depth if no dependencies
+            if (entity.getAllRefs() == null || entity.getAllRefs().size() == 0) {
+                this.depths.put(entity, 0);
+                return 0;
+            }
+
+            // otherwise, find max
+            int maxDepth = 0;
+            for (final EntityModel childEntity : entity.getAllRefs()) {
+                maxDepth = Math.max(maxDepth, this.calculateDepth(childEntity));
+            }
+            // one higher than before
+            maxDepth++;
+            // save it for the future
+            this.depths.put(entity, maxDepth);
+            return maxDepth;
+
+            /*return depths.computeIfAbsent(entity, e -> e.getAllRefs().stream()
                     .map(this::calculateDepth)
                     .max(Comparator.comparingInt(d -> d))
                     .map(depth -> depth + 1)
                     .orElse(0)
-            );
+            );*/
         }
     }
 }
