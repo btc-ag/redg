@@ -76,7 +76,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable aTimestampWtz(java.lang.Object value) {
+    public GDatesTable aTimestampWtz(java.time.OffsetDateTime value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -84,7 +84,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.lang.Object aTimestampWtz() {
+    public java.time.OffsetDateTime aTimestampWtz() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
@@ -140,7 +140,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable bTimestampWtz(java.lang.Object value) {
+    public GDatesTable bTimestampWtz(java.time.OffsetDateTime value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -148,7 +148,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.lang.Object bTimestampWtz() {
+    public java.time.OffsetDateTime bTimestampWtz() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
