@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>redg-tests</artifactId>
+    <groupId>com.btc-ag.redg</groupId>
+    <version>1.1.3-SNAPSHOT</version>
+
+    <description>
+        A test suite that tests RedG by extracting code from a DB and inserting entities with that code.
+        Always run these tests to make sure the generated code compiles and inserts the wanted entities.
+    </description>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <redg.version>1.1.3-SNAPSHOT</redg.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.btc-ag.redg</groupId>
+            <artifactId>redg-runtime</artifactId>
+            <version>${redg.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.btc-ag.redg</groupId>
+            <artifactId>redg-generator</artifactId>
+            <version>${redg.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.btc-ag.redg</groupId>
+                <artifactId>redg-maven-plugin</artifactId>
+                <version>${redg.version}</version>
+                <executions>
+                    <execution>
+                        <id>redg-generate-standard</id>
+                        <phase>generate-test-sources</phase> <!-- This plugin generates sources for the test code -->
+                        <goals>
+                            <goal>redg</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Provide database connection information. We'll just use a H2 in-memory database here -->
+                            <jdbcDriver>org.h2.Driver</jdbcDriver>
+                            <connectionString>jdbc:h2:mem:redg-standard</connectionString>
+                            <username>sa</username>
+                            <password>sa</password>
+                            <sqlScripts> <!-- the SQL scripts to run before schema analysis -->
+                                <param>src/test/resources/standard-schema.sql</param>
+                            </sqlScripts>
+                            <targetPackage>com.btc.redg.generated.standard</targetPackage>
+                            <schemaRegex>.*</schemaRegex>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>redg-generate-escape</id>
+                        <phase>generate-test-sources</phase> <!-- This plugin generates sources for the test code -->
+                        <goals>
+                            <goal>redg</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Provide database connection information. We'll just use a H2 in-memory database here -->
+                            <jdbcDriver>org.h2.Driver</jdbcDriver>
+                            <connectionString>jdbc:h2:mem:redg-escape</connectionString>
+                            <username>sa</username>
+                            <password>sa</password>
+                            <sqlScripts> <!-- the SQL scripts to run before schema analysis -->
+                                <param>src/test/resources/escape-schema.sql</param>
+                            </sqlScripts>
+                            <targetPackage>com.btc.redg.generated.escape</targetPackage>
+                            <schemaRegex>.*</schemaRegex>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <debug>true</debug>
+                    <debuglevel>lines,vars,source</debuglevel>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

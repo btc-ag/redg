@@ -61,7 +61,7 @@ public class ColumnExtractor {
         LOG.debug("Extracting model for column {}", column.getName());
         ColumnModel model = new ColumnModel();
         model.setName(this.nameProvider.getMethodNameForColumn(column));
-        model.setDbName(ModelUtil.removeQuotes(column.getName()));
+        model.setDbName(column.getName());
         model.setDbTableName(column.getParent().getName());
         model.setDbFullTableName(column.getParent().getFullName());
 

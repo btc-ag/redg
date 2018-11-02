@@ -508,7 +508,7 @@ public <className> <column.name>(<convenienceSetter.setterJavaTypeName> value) {
 >>
 
 foreignKeyInsertColumns(foreignKey) ::= <<
-<foreignKey.references.keys:{k|<k>};separator=", ">
+<foreignKey.references.keys:{k|<escape.(k)>};separator=", ">
 >>
 
 foreignKeyInsertPlaceholder(foreignKey) ::= <<
@@ -544,7 +544,7 @@ foreignKeyInsertValueMetaInfos(foreignKey, notNull) ::= <<
 >>
 
 columnInsertValueMetaInfo(column) ::= <<
-new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
+new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbFullTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
 >>
 
 columnInsertValues(column) ::= <<
