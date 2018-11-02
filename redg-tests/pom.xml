@@ -72,6 +72,25 @@
                             <schemaRegex>.*</schemaRegex>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>redg-generate-escape</id>
+                        <phase>generate-test-sources</phase> <!-- This plugin generates sources for the test code -->
+                        <goals>
+                            <goal>redg</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Provide database connection information. We'll just use a H2 in-memory database here -->
+                            <jdbcDriver>org.h2.Driver</jdbcDriver>
+                            <connectionString>jdbc:h2:mem:redg-escape</connectionString>
+                            <username>sa</username>
+                            <password>sa</password>
+                            <sqlScripts> <!-- the SQL scripts to run before schema analysis -->
+                                <param>src/test/resources/escape-schema.sql</param>
+                            </sqlScripts>
+                            <targetPackage>com.btc.redg.generated.escape</targetPackage>
+                            <schemaRegex>.*</schemaRegex>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
