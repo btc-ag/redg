@@ -592,10 +592,10 @@ public class GDemoUser implements RedGEntity {
                 new AttributeMetaInfo("ACC_IBAN", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
                 new AttributeMetaInfo("WORKS_AT_NAME", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
                 new AttributeMetaInfo("WORKS_AT_CC", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
-                new AttributeMetaInfo("ID", "DEMO_USER", "DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true),
-                new AttributeMetaInfo("USERNAME", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
-                new AttributeMetaInfo("FIRST_NAME", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
-                new AttributeMetaInfo("LAST_NAME", "DEMO_USER", "DEMO_USER", "VARCHAR", 12, java.lang.String.class, false)
+                new AttributeMetaInfo("ID", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true),
+                new AttributeMetaInfo("USERNAME", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, true),
+                new AttributeMetaInfo("FIRST_NAME", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, false),
+                new AttributeMetaInfo("LAST_NAME", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "VARCHAR", 12, java.lang.String.class, false)
         };
     }
 
