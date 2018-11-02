@@ -79,7 +79,7 @@
         <mavenProjectVersion>2.2.1</mavenProjectVersion>
         <logbackVersion>1.1.7</logbackVersion>
         <slf4jVersion>1.7.21</slf4jVersion>
-        <jacksonVersion>2.8.5</jacksonVersion>
+        <jacksonVersion>2.9.7</jacksonVersion>
         <jacocoVersion>0.8.2</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
         <mockitoVersion>2.3.5</mockitoVersion>
