@@ -1,5 +1,7 @@
 # RedG test data generation library
 
+[![Build Status](https://travis-ci.org/btc-ag/redg.svg?branch=develop)](https://travis-ci.org/btc-ag/redg)
+
 This is the code repository for the RedG project. For a quick overview [visit the website](https://btc-ag.github.io/redg).
 
 ## Maven
