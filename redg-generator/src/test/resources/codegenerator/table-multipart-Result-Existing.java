@@ -20,7 +20,7 @@ import com.btc.redg.runtime.*;
 public class ExistingGDemoUser extends GDemoUser {
 
     ExistingGDemoUser(AbstractRedG redG, java.math.BigDecimal id) {
-        super(42, redG);
+        super(false, redG);
         super.id(id);
     }
 

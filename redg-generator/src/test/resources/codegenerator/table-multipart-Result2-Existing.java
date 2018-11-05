@@ -20,7 +20,7 @@ import com.btc.redg.runtime.*;
 public class ExistingGDemoCompany extends GDemoCompany {
 
     ExistingGDemoCompany(AbstractRedG redG, java.lang.String countryCode, java.lang.String name) {
-        super(42, redG);
+        super(false, redG);
         super.countryCode(countryCode);
         super.name(name);
     }

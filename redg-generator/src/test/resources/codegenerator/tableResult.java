@@ -69,10 +69,22 @@ public class GDemoUser implements RedGEntity {
         );
     }
 
-    GDemoUser(int meaningOfLife, AbstractRedG redG) {
+    GDemoUser(boolean generateDefaultValues, AbstractRedG redG) {
         // First parameter exists simply because this constructor needs a different signature from the constructor above if the tables have no NOT NULL FK
-        // Only for ExistingGDemoUser , otherwise NOT NULL constraints cannot be checked and no default values are generated.
+        // Only for ExistingGDemoUser and usage with Supplier-Functions , otherwise NOT NULL constraints cannot be checked and no default values are generated.
         this.redG = redG;
+        if (generateDefaultValues) {
+            try {
+                this.id = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("ID"), java.math.BigDecimal.class);
+                this.username = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("USERNAME"), java.lang.String.class);
+                this.firstName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("FIRST_NAME"), java.lang.String.class);
+                this.lastName = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("LAST_NAME"), java.lang.String.class);
+                this.day = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("\"DAY\""), java.sql.Timestamp.class);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Could not get default value", e);
+            }
+        }
     }
 
     private java.lang.String dtype;

@@ -56,10 +56,25 @@ public class GDatesTable implements RedGEntity {
         }
     }
 
-    GDatesTable(int meaningOfLife, AbstractRedG redG) {
+    GDatesTable(boolean generateDefaultValues, AbstractRedG redG) {
         // First parameter exists simply because this constructor needs a different signature from the constructor above if the tables have no NOT NULL FK
-        // Only for ExistingGDatesTable , otherwise NOT NULL constraints cannot be checked and no default values are generated.
+        // Only for ExistingGDatesTable and usage with Supplier-Functions , otherwise NOT NULL constraints cannot be checked and no default values are generated.
         this.redG = redG;
+        if (generateDefaultValues) {
+            try {
+                this.aDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_DATE"), java.sql.Date.class);
+                this.aTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIME"), java.sql.Time.class);
+                this.aTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP"), java.sql.Timestamp.class);
+                this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP_WTZ"), java.lang.Object.class);
+                this.bDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_DATE"), java.sql.Date.class);
+                this.bTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIME"), java.sql.Time.class);
+                this.bTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP"), java.sql.Timestamp.class);
+                this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP_WTZ"), java.lang.Object.class);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Could not get default value", e);
+            }
+        }
     }
 
     private java.sql.Date aDate;

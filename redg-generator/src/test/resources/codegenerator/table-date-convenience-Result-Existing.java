@@ -20,7 +20,7 @@ import com.btc.redg.runtime.*;
 public class ExistingGDatesTable extends GDatesTable {
 
     ExistingGDatesTable(AbstractRedG redG) {
-        super(42, redG);
+        super(false, redG);
         throw new UnsupportedOperationException("Cannot reference an existing entity if the table has no primary keys");
     }
 

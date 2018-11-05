@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 <endif>
+import java.util.function.Supplier;
 
 /**
  * \<p\>This is the RedG main class. Use it to specify your test data and then insert them into the database.\</p\>
@@ -39,9 +40,16 @@ import java.util.stream.Collectors;
  */
 public class <prefix>RedG extends AbstractRedG {
 
+    private Object entitySelfReference;
+
     <tables:tableBuilder()>
+    <tables:tableBuilderSupplier()>
     <tables:tableBuilderExisting()>
     <tables:tableBuilderDummy()>
+
+    public \<T\> Supplier\<T\> entitySelfReference() {
+        return () -> (T) this.entitySelfReference;
+    }
 
     public static java.util.List\<com.btc.redg.models.TableModel> getAllTableModels() {
         return java.util.Arrays.asList(
@@ -60,6 +68,40 @@ public class <prefix>RedG extends AbstractRedG {
     }
     <endif>
 }
+>>
+
+tableBuilderSupplier(table) ::= <<
+<if(table.explicitAttributes || table.notNullForeignKeys)>
+/**
+ * Adds a new entity of the type {@link <table.className>} to the RedG entities and returns it for further modification.
+ *
+ * \<table summary="The table model attributes and their values"\>
+ *     \<tr\>
+ *         \<td\>\<strong\>Attribute\</strong\>\</td\>
+ *         \<td\>\<strong\>Value\</strong\>\</td\>
+ *     \</tr\>
+ *     \<tr\>
+ *         \<td\>Table name\</td\>
+ *         \<td\><table.sqlName>\</td\>
+ *     \</tr\>
+ *     \<tr\>
+ *         \<td\>Full table name\</td\>
+ *         \<td\><table.sqlFullName>\</td\>
+ *     \</tr\>
+ * \</table\>
+ */
+public <table.className> add<table.name>(<\\>
+            <table.explicitAttributes:{it | Supplier\<<it.javaTypeName>\> <it.name>};separator=", "><\\>
+            <if(table.explicitAttributes && table.notNullForeignKeys)>, <endif><table.notNullForeignKeys:{it | Supplier\<<it.javaTypeName>\> <it.name>};separator=", ">) {
+    <table.className> obj = new <table.className>(true, this);
+    this.entitySelfReference = obj;
+    <table.explicitAttributes:{it | obj.<it.name>(<it.name>.get());};separator="\n">
+    <table.notNullForeignKeys:{it | obj.<it.name>(<it.name>.get());};separator="\n">
+    this.addEntity(obj);
+    this.entitySelfReference = null;
+    return obj;
+}<\n>
+<endif>
 >>
 
 tableBuilderExisting(table) ::= <<
@@ -216,10 +258,17 @@ public class <table.className> implements RedGEntity {
     }
     <endif>
 
-    <table.className>(int meaningOfLife, AbstractRedG redG) {
+    <table.className>(boolean generateDefaultValues, AbstractRedG redG) {
         // First parameter exists simply because this constructor needs a different signature from the constructor above if the tables have no NOT NULL FK
-        // Only for Existing<table.className> , otherwise NOT NULL constraints cannot be checked and no default values are generated.
+        // Only for Existing<table.className> and usage with Supplier-Functions , otherwise NOT NULL constraints cannot be checked and no default values are generated.
         this.redG = redG;
+        if (generateDefaultValues) {
+            try {
+                <table.nonExplicitNonFKAttributes:{it | this.<it.name> = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<escape.(it.dbName)>"), <it.javaTypeName>.class);<\n>}>
+            } catch (Exception e) {
+                throw new RuntimeException("Could not get default value", e);
+            }
+        }
     }
 
     <table.nonForeignKeyColumns:tableClassAttribute(table.className)>
@@ -633,7 +682,7 @@ import com.btc.redg.runtime.*;
 public class Existing<table.className> extends <table.className> {
 
     Existing<table.className>(AbstractRedG redG<if(table.primaryKeyColumns)>, <endif><table.primaryKeyColumns:{it|<it.javaTypeName> <it.name>};separator=", ">) {
-        super(42, redG);
+        super(false, redG);
         <if (table.primaryKeyColumns)>
         <table.primaryKeyColumns:{it|<if(it.partOfForeignKey)>this.<it.name> = <it.name><else>super.<it.name>(<it.name>)<endif>};separator=";\n">;
         <else>
