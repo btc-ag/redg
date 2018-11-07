@@ -50,10 +50,19 @@ public class GDemoCompany implements RedGEntity {
         }
     }
 
-    GDemoCompany(int meaningOfLife, AbstractRedG redG) {
+    GDemoCompany(boolean generateDefaultValues, AbstractRedG redG) {
         // First parameter exists simply because this constructor needs a different signature from the constructor above if the tables have no NOT NULL FK
-        // Only for ExistingGDemoCompany , otherwise NOT NULL constraints cannot be checked and no default values are generated.
+        // Only for ExistingGDemoCompany and usage with Supplier-Functions , otherwise NOT NULL constraints cannot be checked and no default values are generated.
         this.redG = redG;
+        if (generateDefaultValues) {
+            try {
+                this.countryCode = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("COUNTRY_CODE"), java.lang.String.class);
+                this.name = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("NAME"), java.lang.String.class);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Could not get default value", e);
+            }
+        }
     }
 
     private java.lang.String countryCode;
@@ -284,8 +293,8 @@ public class GDemoCompany implements RedGEntity {
 
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[]{
-                new AttributeMetaInfo("COUNTRY_CODE", "DEMO_COMPANY", "DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true),
-                new AttributeMetaInfo("NAME", "DEMO_COMPANY", "DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true)
+                new AttributeMetaInfo("COUNTRY_CODE", "DEMO_COMPANY", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true),
+                new AttributeMetaInfo("NAME", "DEMO_COMPANY", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true)
         };
     }
 

@@ -92,7 +92,7 @@ public class ForeignKeyExtractor {
             columnModel.setSqlType(reference.getForeignKeyColumn().getColumnDataType().getName());
             columnModel.setSqlTypeInt(reference.getForeignKeyColumn().getColumnDataType().getJavaSqlType().getJavaSqlType());
 
-            columnModel.setDbName(ModelUtil.removeQuotes(reference.getForeignKeyColumn().getName()));
+            columnModel.setDbName(reference.getForeignKeyColumn().getName());
             columnModel.setDbTableName(originTable.getName());
             columnModel.setDbFullTableName(originTable.getFullName());
             model.getReferences().put(reference.getForeignKeyColumn().getName(), columnModel);

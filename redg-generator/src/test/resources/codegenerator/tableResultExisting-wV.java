@@ -17,18 +17,18 @@ import com.btc.redg.runtime.*;
 /**
  * {@inheritDoc}
  */
-public class ExistingGDatesTable extends GDatesTable {
+public class ExistingGDemoUser extends GDemoUser {
 
-    ExistingGDatesTable(AbstractRedG redG) {
+    ExistingGDemoUser(AbstractRedG redG, java.math.BigDecimal id) {
         super(false, redG);
-        throw new UnsupportedOperationException("Cannot reference an existing entity if the table has no primary keys");
+        super.id(id);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable aDate(java.sql.Date value) {
+    public GDemoUser id(java.math.BigDecimal value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -36,7 +36,24 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.sql.Date aDate() {
+    public java.math.BigDecimal id() {
+        return super.id();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GDemoUser dtype(java.lang.String value) {
+        throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public java.lang.String dtype() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
@@ -44,7 +61,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable aTime(java.sql.Time value) {
+    public GDemoUser username(java.lang.String value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -52,7 +69,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.sql.Time aTime() {
+    public java.lang.String username() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
@@ -60,7 +77,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable aTimestamp(java.sql.Timestamp value) {
+    public GDemoUser firstName(java.lang.String value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -68,7 +85,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.sql.Timestamp aTimestamp() {
+    public java.lang.String firstName() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
@@ -76,7 +93,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable aTimestampWtz(java.lang.Object value) {
+    public GDemoUser lastName(java.lang.String value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -84,7 +101,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.lang.Object aTimestampWtz() {
+    public java.lang.String lastName() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
@@ -92,7 +109,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable bDate(java.sql.Date value) {
+    public GDemoUser day(java.sql.Timestamp value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
 
@@ -100,55 +117,7 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public java.sql.Date bDate() {
-        throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GDatesTable bTime(java.sql.Time value) {
-        throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public java.sql.Time bTime() {
-        throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GDatesTable bTimestamp(java.sql.Timestamp value) {
-        throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public java.sql.Timestamp bTimestamp() {
-        throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GDatesTable bTimestampWtz(java.lang.Object value) {
-        throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public java.lang.Object bTimestampWtz() {
+    public java.sql.Timestamp day() {
         throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
@@ -157,41 +126,52 @@ public class ExistingGDatesTable extends GDatesTable {
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable aTimestamp(java.util.String value) {
+    public GDemoUser worksAtDemoCompany(GDemoCompany value) {
         throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GDatesTable bTimestamp(java.util.String value) {
-        throw new UnsupportedOperationException("Cannot change values of entities declared as existing.");
+    public GDemoCompany worksAtDemoCompany() {
+        throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
     }
 
 
+    @Override
+    public java.math.BigDecimal worksAt() {
+        throw new UnsupportedOperationException("Cannot read values of entities declared as existing that are not part of the primary key.");
+    }
 
 
     @Override
     public String getSQLString() {
-        return "Your table has no primary key(s), referincing existing entities is not possible!";
+        return String.format("SELECT COUNT(*) FROM DEMO_USER WHERE " +
+                        "ID = %s",
+                this.redG.getSqlValuesFormatter().formatValue(super.id(),
+                        "DECIMAL", "DEMO_USER",
+                        "DEMO_USER", "ID")
+        );
     }
 
     @Override
     public String getPreparedStatementString() {
-        return "Your table has no primary key(s), referencing existing entities is not possible!";
+        return "SELECT COUNT(*) FROM DEMO_USER WHERE " +
+                "ID = ?";
     }
 
     @Override
     public Object[] getPreparedStatementValues() {
         return new Object[] {
+                super.id()
         };
     }
 
     @Override
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[] {
+                new AttributeMetaInfo("ID", "DEMO_USER", "TESTENABLEVISUALIZATION.PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true)
         };
     }
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.function.Supplier;
 
 /**
  * <p>This is the RedG main class. Use it to specify your test data and then insert them into the database.</p>
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
  * </ul>
  */
 public class RedG extends AbstractRedG {
+
+    private Object entitySelfReference;
 
     /**
      * Adds a new entity of the type {@link GDemoCompany} to the RedG entities and returns it for further modification.
@@ -81,6 +84,34 @@ public class RedG extends AbstractRedG {
         this.addEntity(obj);
         return obj;
     }
+
+    /**
+     * Adds a new entity of the type {@link GDemoUser} to the RedG entities and returns it for further modification.
+     *
+     * <table summary="The table model attributes and their values">
+     *     <tr>
+     *         <td><strong>Attribute</strong></td>
+     *         <td><strong>Value</strong></td>
+     *     </tr>
+     *     <tr>
+     *         <td>Table name</td>
+     *         <td>DEMO_USER</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Full table name</td>
+     *         <td>"RT-CG-MAIN".PUBLIC.DEMO_USER</td>
+     *     </tr>
+     * </table>
+     */
+    public GDemoUser addDemoUser(Supplier<GDemoCompany> worksAtDemoCompany) {
+        GDemoUser obj = new GDemoUser(true, this);
+        this.entitySelfReference = obj;
+        obj.worksAtDemoCompany(worksAtDemoCompany.get());
+        this.addEntity(obj);
+        this.entitySelfReference = null;
+        return obj;
+    }
+
 
     /**
      * Creates a new reference to an existing entity of the type {@link GDemoCompany} in the database and returns it. Do not try to modify it or read
@@ -176,6 +207,10 @@ public class RedG extends AbstractRedG {
         return this.getDummyFactory().getDummy(this, GDemoUser.class);
     }
 
+
+    public <T> Supplier<T> entitySelfReference() {
+        return () -> (T) this.entitySelfReference;
+    }
 
     public static java.util.List<com.btc.redg.models.TableModel> getAllTableModels() {
         return java.util.Arrays.asList(
