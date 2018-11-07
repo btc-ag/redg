@@ -80,7 +80,7 @@ public class ForeignKeyExtractor {
         }
         model.setJavaTypeName(this.classPrefix + this.nameProvider.getClassNameForTable(targetTable));
         model.setName(this.nameProvider.getMethodNameForReference(foreignKey));
-        model.setNotNull(!foreignKey.getColumnReferences().get(0).getForeignKeyColumn().isNullable()
+        model.setNotNull(foreignKey.getColumnReferences().stream().noneMatch(x -> x.getForeignKeyColumn().isNullable())
                 || explicitAttributeDecider.isExplicitForeignKey(foreignKey));
 
         for (final ColumnReference reference : foreignKey.getColumnReferences()) {

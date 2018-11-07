@@ -110,7 +110,7 @@ public class DataExtractor {
                         if (fkm.isNotNull()) {
                             entityModel.addNotNullRef(referencedEntity);
                         } else {
-                            if (referencedEntity.getValues().size() > 0) {
+                            if (referencedEntity.getValues().size() == fkm.getReferences().size()) {
                                 entityModel.addNullableRef(fkm.getName(), referencedEntity);
                             }
                         }
@@ -206,15 +206,16 @@ public class DataExtractor {
                     if (!ref.getTypeName().equals(e.getTableModel().getClassName())) {
                         return false;
                     }
-                    for (final ColumnModel cm : e.getTableModel().getPrimaryKeyColumns()) {
 
-                        final String entityVal = e.getValues().get(cm.getName()).getValue();
-                        final String refVal = ref.getValues().get(cm.getName()).getValue();
-                        if (!entityVal.equals(refVal)) {
+                    for (Map.Entry<String, EntityModel.ValueModel> refValue : ref.getValues().entrySet()) {
+                        String refValueColName = refValue.getKey();
+                        EntityModel.ValueModel refValueModel = refValue.getValue();
+
+                        if (!refValueModel.getValue().equals(e.getValues().get(refValueColName).getValue())) {
                             return false;
                         }
-
                     }
+
                     return true;
                 })
                 .findFirst().orElseGet(() -> {
