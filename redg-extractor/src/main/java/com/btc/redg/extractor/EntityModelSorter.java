@@ -56,7 +56,11 @@ public class EntityModelSorter {
             // otherwise, find max
             int maxDepth = 0;
             for (final EntityModel childEntity : entity.getAllRefs()) {
-                maxDepth = Math.max(maxDepth, this.calculateDepth(childEntity));
+                if (childEntity == entity) {
+                    maxDepth = Math.max(maxDepth, 0);
+                } else {
+                    maxDepth = Math.max(maxDepth, this.calculateDepth(childEntity));
+                }
             }
             // one higher than before
             maxDepth++;
