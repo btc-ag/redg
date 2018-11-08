@@ -125,11 +125,6 @@ public class RedGDatabaseUtil {
                 throw new InsertionFailedException("SQL execution failed", e);
             }
         }
-        try {
-            connection.commit();
-        } catch (SQLException e) {
-            throw new InsertionFailedException("Commit failed", e);
-        }
     }
 
     private static Function<RedGEntity, PreparedStatement> prepareStatement(final Connection connection) {
