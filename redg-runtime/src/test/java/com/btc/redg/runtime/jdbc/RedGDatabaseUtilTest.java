@@ -107,22 +107,6 @@ public class RedGDatabaseUtilTest {
         RedGDatabaseUtil.insertDataIntoDatabase(gObjects, mockConnection);
     }
 
-    @Test
-    public void testInsertDataIntoDatabase_FailOnCommit() throws Exception {
-        thrown.expect(InsertionFailedException.class);
-        thrown.expectMessage("Commit failed");
-
-        Connection mockConnection = mock(Connection.class);
-        PreparedStatement preparedStatement = mock(PreparedStatement.class);
-        when(mockConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        Mockito.doThrow(new SQLException("Mock reason")).when(mockConnection).commit();
-
-        List<RedGEntity> gObjects = IntStream.rangeClosed(1, 20).mapToObj(i -> new MockEntity1()).collect(Collectors.toList());
-        gObjects.add(new MockEntity2());
-
-        RedGDatabaseUtil.insertDataIntoDatabase(gObjects, mockConnection);
-    }
-
     private Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("org.h2.Driver");
         return DriverManager.getConnection("jdbc:h2:mem:test", "", "");
