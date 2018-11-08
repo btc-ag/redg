@@ -71,7 +71,7 @@
         <mavenPluginAnnotationsVersion>3.3</mavenPluginAnnotationsVersion>
         <schemacrawlerVersion>14.16.01</schemacrawlerVersion>
         <h2Version>1.4.194</h2Version>
-        <stringtemplateVersion>4.0.2</stringtemplateVersion>
+        <stringtemplateVersion>4.0.8</stringtemplateVersion>
         <junitVersion>4.12</junitVersion>
         <takariPluginTestingVersion>2.9.0</takariPluginTestingVersion>
         <mavenVersion>3.3.9</mavenVersion>
@@ -163,7 +163,7 @@
             </dependency>
             <dependency>
                 <groupId>org.antlr</groupId>
-                <artifactId>stringtemplate</artifactId>
+                <artifactId>ST4</artifactId>
                 <version>${stringtemplateVersion}</version>
             </dependency>
 
