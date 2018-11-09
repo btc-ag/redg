@@ -17,10 +17,7 @@
 package com.btc.redg.runtime.defaultvalues;
 
 import com.btc.redg.models.ColumnModel;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import java.awt.*;
@@ -37,13 +34,12 @@ import static org.junit.Assert.assertEquals;
 
 public class DefaultDefaultValueStrategyTest {
 
-    private final Map<Class<?>, Object> defaultMappings = new HashMap<>();
+    public static final Map<Class<?>, Object> defaultMappings = new HashMap<>();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Before
-    public void prepareMap() {
+    static {
         defaultMappings.put(String.class, "-");
         defaultMappings.put(Character.class, ' ');
         defaultMappings.put(Boolean.class, false);

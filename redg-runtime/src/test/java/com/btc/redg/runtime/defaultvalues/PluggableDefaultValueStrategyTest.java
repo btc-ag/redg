@@ -62,6 +62,7 @@ public class PluggableDefaultValueStrategyTest {
         strategy.addProvider(new StaticDateProvider(date));
 
         assertNull(strategy.getDefaultValue(TestUtils.getCM("", "", "", String.class, false), String.class));
+        assertNull(strategy.getDefaultValue(TestUtils.getCM("", "", "", String.class, true), String.class));
         assertEquals(date, strategy.getDefaultValue(TestUtils.getCM("", "", "", java.sql.Date.class, false), java.sql.Date.class));
         assertEquals(date, strategy.getDefaultValue(TestUtils.getCM("", "", "", Date.class, true), Date.class));
         assertEquals(new java.sql.Date(date.getTime()),
