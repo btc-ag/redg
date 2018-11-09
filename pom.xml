@@ -83,7 +83,7 @@
         <jacksonVersion>2.9.7</jacksonVersion>
         <jacocoVersion>0.8.2</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
-        <mockitoVersion>2.3.5</mockitoVersion>
+        <mockitoVersion>2.23.0</mockitoVersion>
         <springVersion>4.3.5.RELEASE</springVersion>
         <commonsCliVersion>1.4</commonsCliVersion>
 

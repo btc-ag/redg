@@ -41,12 +41,9 @@ public class RedGBuilder<T extends AbstractRedG> {
         try {
             Class<T> clazz = (Class<T>) Class.forName("com.btc.redg.generated.RedG");
             instance = clazz.newInstance();
-        } catch (ClassNotFoundException | ClassCastException e) {
+        } catch (ClassNotFoundException | ClassCastException | InstantiationException | IllegalAccessException e) {
             LOG.error("Could not load default RedG class", e);
             throw new RuntimeException("Could not load default RedG class", e);
-        } catch (InstantiationException | IllegalAccessException e) {
-            LOG.error("Could not instantiate RedG instance", e);
-            throw new RuntimeException("Could not instantiate RedG instance", e);
         }
     }
 

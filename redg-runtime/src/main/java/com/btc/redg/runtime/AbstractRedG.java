@@ -206,7 +206,7 @@ public abstract class AbstractRedG {
         try (Connection connection = dataSource.getConnection()) {
             RedGDatabaseUtil.insertDataIntoDatabase(getEntitiesSortedForInsert(), connection, preparedStatementParameterSetter);
         } catch (SQLException e) {
-            throw new InsertionFailedException("Cannot disable autocommit!", e);
+            throw new InsertionFailedException("Failed to acquire connection from data source!", e);
         }
     }
 

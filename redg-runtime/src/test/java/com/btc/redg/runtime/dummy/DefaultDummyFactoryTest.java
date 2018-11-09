@@ -17,17 +17,21 @@
 package com.btc.redg.runtime.dummy;
 
 import com.btc.redg.runtime.AbstractRedG;
+import com.btc.redg.runtime.RedGEntity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 
 public class DefaultDummyFactoryTest {
@@ -44,6 +48,7 @@ public class DefaultDummyFactoryTest {
 
         TestRedGEntity1 entity1 = factory.getDummy(redG, TestRedGEntity1.class);
         assertNotNull(entity1);
+        assertTrue(factory.isDummy(entity1));
 
         //assure it was properly added
         assertEquals(entity1, redG.findSingleEntity(TestRedGEntity1.class, e -> true));
@@ -91,4 +96,17 @@ public class DefaultDummyFactoryTest {
 
         factory.getDummy(redG, TestRedGEntity4.class);
     }
+
+    @Test
+    public void testGetDummy_InstantiationFails() throws Exception {
+        thrown.expect(DummyCreationException.class);
+        thrown.expectMessage("Instantiation of the dummy failed");
+        AbstractRedG redG = spy(AbstractRedG.class);
+
+        DefaultDummyFactory factory = new DefaultDummyFactory();
+        assertNotNull(factory);
+
+        factory.getDummy(redG, TestRedGEntity5.class);
+    }
+
 }
