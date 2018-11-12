@@ -64,7 +64,9 @@ public class Matchers {
      *
      * @param conditions The conditions to be checked
      * @return A condition that returns true if all passed conditions return true
+     * @deprecated Use {@link Predicate#and(Predicate)} instead
      */
+    @Deprecated
     public static Predicate<ColumnModel> allOf(final Predicate<ColumnModel>... conditions) {
         return (cM) -> Arrays.stream(conditions)
                 .allMatch(c -> c.test(cM));
@@ -75,7 +77,9 @@ public class Matchers {
      *
      * @param conditions The conditions to be checked
      * @return A condition that returns true if any of the passed conditions return true
+     * @deprecated Use {@link Predicate#or(Predicate)} instead
      */
+    @Deprecated
     public static Predicate<ColumnModel> anyOf(final Predicate<ColumnModel>... conditions) {
         return (cM) -> Arrays.stream(conditions)
                 .anyMatch(c -> c.test(cM));
@@ -90,5 +94,9 @@ public class Matchers {
     public static Predicate<ColumnModel> oneOf(final Predicate<ColumnModel>... conditions) {
         return (cM) -> Arrays.stream(conditions)
                 .map(c -> c.test(cM)).filter(b -> b).count() == 1;
+    }
+
+    private Matchers() {
+
     }
 }

@@ -16,6 +16,7 @@
 
 package com.btc.redg.runtime.transformer;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -40,9 +41,20 @@ public class DefaultPreparedStatementParameterSetterTest {
         parameterSetter.setParameter(preparedStatementMock, 1, "test", createMockAttributeMetaInfo(), null);
 
         Mockito.verify(preparedStatementMock).setObject(1, "test", Types.VARCHAR);
+
+        parameterSetter.setParameter(preparedStatementMock, 1, 'a', createMockAttributeMetaInfo(), null);
+
+        Mockito.verify(preparedStatementMock).setObject(1, "a", Types.VARCHAR);
+
+        parameterSetter.setParameter(preparedStatementMock, 1, 10, createMockAttributeMetaInfo2(), null);
+
+        Mockito.verify(preparedStatementMock).setObject(1, 10, Types.BIGINT);
     }
 
     private AttributeMetaInfo createMockAttributeMetaInfo() {
         return new AttributeMetaInfo("", "", "", "", Types.VARCHAR, String.class, false);
+    }
+    private AttributeMetaInfo createMockAttributeMetaInfo2() {
+        return new AttributeMetaInfo("", "", "", "", Types.BIGINT, String.class, false);
     }
 }

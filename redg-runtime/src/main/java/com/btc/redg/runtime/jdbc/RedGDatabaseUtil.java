@@ -41,6 +41,10 @@ public class RedGDatabaseUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedGDatabaseUtil.class);
 
+    private RedGDatabaseUtil() {
+
+    }
+
     /**
      * @param connection The JDBC connection
      * @param gObjects   The entities to insert

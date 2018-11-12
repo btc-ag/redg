@@ -17,10 +17,7 @@
 package com.btc.redg.runtime.defaultvalues;
 
 import com.btc.redg.models.ColumnModel;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import java.awt.*;
@@ -32,18 +29,17 @@ import java.time.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 
 public class DefaultDefaultValueStrategyTest {
 
-    private final Map<Class<?>, Object> defaultMappings = new HashMap<>();
+    public static final Map<Class<?>, Object> defaultMappings = new HashMap<>();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Before
-    public void prepareMap() {
+    static {
         defaultMappings.put(String.class, "-");
         defaultMappings.put(Character.class, ' ');
         defaultMappings.put(Boolean.class, false);
@@ -109,14 +105,10 @@ public class DefaultDefaultValueStrategyTest {
         cm.setNotNull(true);
         cm.setUnique(true);
         final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
-        for (int i = 0; i < 26; i++) {
-            assertEquals((char)(i + 'A') + "", strategy.getDefaultValue(cm, String.class));
+        for (int i = 0; i < 100; i++) {
+            assertEquals(Long.toString(i, 36), strategy.getDefaultValue(cm, String.class));
         }
-        for (int j = 0; j < 3; j++) {
-            for (int i = 0; i < 26; i++) {
-                assertEquals("" + (char)(j + 'A') + (char)(i + 'A'), strategy.getDefaultValue(cm, String.class));
-            }
-        }
+
     }
 
     @Test
@@ -131,6 +123,32 @@ public class DefaultDefaultValueStrategyTest {
     }
 
     @Test
+    public void testStrategy_UniqueChar() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(true);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+        for (int i = 0; i < Character.MAX_VALUE; i++) {
+            assertEquals((char) (i + 1), (char) strategy.getDefaultValue(cm, char.class));
+        }
+        thrown.expect(NoDefaultValueException.class);
+        strategy.getDefaultValue(cm, Character.class);
+    }
+
+    @Test
+    public void testStrategy_UniqueBoolean() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(true);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+        assertFalse(strategy.getDefaultValue(cm, boolean.class));
+        assertTrue(strategy.getDefaultValue(cm, Boolean.class));
+
+        thrown.expect(NoDefaultValueException.class);
+        strategy.getDefaultValue(cm, boolean.class);
+    }
+
+    @Test
     public void testStrategy_UniqueDate() {
         final ColumnModel cm = new ColumnModel();
         cm.setNotNull(true);
@@ -139,5 +157,81 @@ public class DefaultDefaultValueStrategyTest {
         for (int i = 0; i < 200; i++) {
             assertEquals(i, strategy.getDefaultValue(cm, Date.class).getTime());
         }
+    }
+
+    @Test
+    public void testStrategy_UniqueZonedDateTime() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(true);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+        for (int i = 0; i < 200; i++) {
+            assertEquals(ZonedDateTime.ofInstant(Instant.ofEpochMilli(i), ZoneId.systemDefault()), strategy.getDefaultValue(cm, ZonedDateTime.class));
+        }
+    }
+
+    @Test
+    public void testStrategy_UniqueEnum() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(true);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+        for (int i = 0; i < TestEnum.values().length; i++) {
+            assertEquals(TestEnum.values()[i], strategy.getDefaultValue(cm, TestEnum.class));
+        }
+
+        thrown.expect(NoDefaultValueException.class);
+        strategy.getDefaultValue(cm, TestEnum.class);
+    }
+
+    @Test
+    public void testStrategy_Enum() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(false);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+        for (int i = 0; i < 100; i++) {
+            assertEquals(TestEnum.A, strategy.getDefaultValue(cm, TestEnum.class));
+        }
+    }
+
+    @Test
+    public void testStrategy_NoUniquePossible() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(true);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+        thrown.expect(NoDefaultValueException.class);
+        strategy.getDefaultValue(cm, Object.class);
+    }
+
+    @Test
+    public void testStrategy_EmptyUniqueEnum() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(true);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+
+        thrown.expect(NoDefaultValueException.class);
+        strategy.getDefaultValue(cm, EmptyEnum.class);
+    }
+
+    @Test
+    public void testStrategy_EmptyEnum() {
+        final ColumnModel cm = new ColumnModel();
+        cm.setNotNull(true);
+        cm.setUnique(false);
+        final DefaultDefaultValueStrategy strategy = new DefaultDefaultValueStrategy();
+
+        thrown.expect(NoDefaultValueException.class);
+        strategy.getDefaultValue(cm, EmptyEnum.class);
+    }
+
+    public enum TestEnum {
+        A, B, C, D
+    }
+
+    public enum EmptyEnum {
+
     }
 }

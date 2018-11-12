@@ -16,33 +16,19 @@
 
 package com.btc.redg.runtime.defaultvalues;
 
+import com.btc.redg.runtime.defaultvalues.pluggable.*;
+import org.junit.Test;
+
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.junit.Test;
-
-import com.btc.redg.runtime.defaultvalues.pluggable.ConditionalProvider;
-import com.btc.redg.runtime.defaultvalues.pluggable.ConstantStringProvider;
-import com.btc.redg.runtime.defaultvalues.pluggable.CurrentDateProvider;
-import com.btc.redg.runtime.defaultvalues.pluggable.IncrementingNumberProvider;
-import com.btc.redg.runtime.defaultvalues.pluggable.PluggableDefaultValueStrategy;
-import com.btc.redg.runtime.defaultvalues.pluggable.StaticDateProvider;
-import com.btc.redg.runtime.defaultvalues.pluggable.StaticNumberProvider;
-
-import static com.btc.redg.runtime.defaultvalues.pluggable.buildermatchers.Conditions.*;
-import static com.btc.redg.runtime.defaultvalues.pluggable.buildermatchers.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 
@@ -52,6 +38,40 @@ public class PluggableDefaultValueStrategyTest {
     public void testStrategy_NoProvider() {
         PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy();
         assertNull(strategy.getDefaultValue(TestUtils.getCM("", "", "", Integer.class, true), Integer.class));
+        assertThat(strategy.getProviders()).isEmpty();
+    }
+
+    @Test
+    public void testProvider_ReplaceProviders() {
+        PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy();
+        strategy.addProvider(new StaticNumberProvider(42L));
+        assertThat(strategy.getDefaultValue(TestUtils.getCM("", "", "", Integer.class, true), Integer.class)).isEqualTo(42);
+        strategy.setProviders(Collections.singletonList(new StaticNumberProvider(21L)));
+        assertThat(strategy.getDefaultValue(TestUtils.getCM("", "", "", Integer.class, true), Integer.class)).isEqualTo(21);
+    }
+
+    @Test
+    public void testProvider_ConstantValueProvider() {
+        PluggableDefaultValueStrategy strategy = new PluggableDefaultValueStrategy();
+        strategy.addProvider(new ConstantValueProvider(42L));
+        assertThat(strategy.getDefaultValue(TestUtils.getCM("", "", "", Integer.class, true), Integer.class)).isNull();
+        assertThat(strategy.getDefaultValue(TestUtils.getCM("", "", "", Long.class, true), Long.class)).isEqualTo(42L);
+
+    }
+
+    @Test
+    public void testProvider_CustomConditionalProvider() {
+        PluggableDefaultValueProvider p = new CustomConditionalProvider(cm -> cm.getDbName().equals("REDG"), new StaticNumberProvider(1));
+        assertThat(p.getDefaultValue(TestUtils.getCM("", "", "", Integer.class, true), Integer.class)).isNull();
+        assertThat(p.getDefaultValue(TestUtils.getCM("", "", "REDG", Long.class, true), Long.class)).isEqualTo(1L);
+        assertThat(p.getDefaultValue(TestUtils.getCM("", "", "REDG", String.class, true), String.class)).isNull();
+        assertThat(p.getDefaultValue(TestUtils.getCM("", "", "", String.class, true), String.class)).isNull();
+
+        assertThat(p.willProvide(TestUtils.getCM("", "", "", Integer.class, true))).isFalse();
+        assertThat(p.willProvide(TestUtils.getCM("", "", "REDG", Long.class, true))).isTrue();
+        assertThat(p.willProvide(TestUtils.getCM("", "", "REDG", String.class, true))).isFalse();
+        assertThat(p.willProvide(TestUtils.getCM("", "", "", String.class, true))).isFalse();
+
     }
 
     @Test
@@ -62,6 +82,7 @@ public class PluggableDefaultValueStrategyTest {
         strategy.addProvider(new StaticDateProvider(date));
 
         assertNull(strategy.getDefaultValue(TestUtils.getCM("", "", "", String.class, false), String.class));
+        assertNull(strategy.getDefaultValue(TestUtils.getCM("", "", "", String.class, true), String.class));
         assertEquals(date, strategy.getDefaultValue(TestUtils.getCM("", "", "", java.sql.Date.class, false), java.sql.Date.class));
         assertEquals(date, strategy.getDefaultValue(TestUtils.getCM("", "", "", Date.class, true), Date.class));
         assertEquals(new java.sql.Date(date.getTime()),

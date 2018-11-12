@@ -163,3 +163,35 @@ class TestRedGEntity4 implements RedGEntity {
         return Collections.emptyList();
     }
 }
+
+class TestRedGEntity5 implements RedGEntity {
+
+    public TestRedGEntity5(AbstractRedG redG) throws IllegalAccessException {
+        throw new IllegalAccessException("Test");
+    }
+
+    @Override
+    public String getSQLString() {
+        return null;
+    }
+
+    @Override
+    public String getPreparedStatementString() {
+        return null;
+    }
+
+    @Override
+    public Object[] getPreparedStatementValues() {
+        return new Object[0];
+    }
+
+    @Override
+    public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
+        return new AttributeMetaInfo[0];
+    }
+
+    @Override
+    public List<RedGEntity> getDependencies() {
+        return Collections.emptyList();
+    }
+}
