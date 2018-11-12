@@ -67,11 +67,6 @@ public class RedGDatabaseUtil {
      */
     public static void insertDataIntoDatabase(List<? extends RedGEntity> gObjects, final Connection connection,
                                               PreparedStatementParameterSetter preparedStatementParameterSetter) {
-        try {
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            throw new InsertionFailedException("Cannot disable autocommit!", e);
-        }
         final Map<Class<? extends RedGEntity>, PreparedStatement> statementMap = gObjects.stream()
                 .filter(distinctByKey(RedGEntity::getClass))
                 .collect(HashMap::new, (m, obj) -> m.put(obj.getClass(), prepareStatement(connection).apply(obj)), HashMap::putAll);
