@@ -223,39 +223,6 @@ public class AbstractRedGTest {
         assertEquals(20, rs.getInt(1));
     }
 
-    @Test
-    public void testInsertDataSource() throws Exception {
-        Connection connection = getConnection("ds");
-        Statement stmt = connection.createStatement();
-        Connection connection2 = getConnection("ds");
-        Statement stmt2 = connection2.createStatement();
-        stmt.execute("CREATE TABLE TEST (CONTENT VARCHAR2(50 CHAR))");
-
-        List<MockEntity1> gObjects = IntStream.rangeClosed(1, 20).mapToObj(i -> new MockEntity1()).collect(Collectors.toList());
-
-        MockRedG mockRedG = new MockRedG();
-        gObjects.forEach(mockRedG::addEntity);
-
-        DataSource ds = mock(DataSource.class);
-        Mockito.when(ds.getConnection()).thenReturn(connection);
-        mockRedG.insertDataIntoDatabase(ds);
-
-
-        ResultSet rs = stmt2.executeQuery("SELECT COUNT(*) FROM TEST");
-        rs.next();
-        assertEquals(20, rs.getInt(1));
-    }
-
-    @Test
-    public void testInsertDataSource_Fail() throws Exception {
-        this.expectedException.expect(InsertionFailedException.class);
-        MockRedG mockRedG = new MockRedG();
-
-        DataSource ds = mock(DataSource.class);
-        Mockito.when(ds.getConnection()).thenThrow(new SQLException("Test"));
-        mockRedG.insertDataIntoDatabase(ds);
-    }
-
     private Connection getConnection(String suffix) throws ClassNotFoundException, SQLException {
         Class.forName("org.h2.Driver");
         return DriverManager.getConnection("jdbc:h2:mem:abstractredgtest-" + suffix, "", "");
