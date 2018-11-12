@@ -197,11 +197,18 @@ public abstract class AbstractRedG {
      * If a entity that is marked as "existing" (via redG.existingX()) is not found, an error will be logged and an {@link ExistingEntryMissingException} will
      * be thrown.
      *
+     * <p><b>
+     *     Only works if auto-commit is enabled for this data source. The connection will be destroyed immediately
+     *     after insertion and as of 2.0 RedG will no longer commit for you
+     * </b></p>
+     *
      * @param dataSource The DataSource to use.
      * @throws ExistingEntryMissingException When an entry defined as "existing" (via redG.existingX()) cannot be found in the database
      * @throws InsertionFailedException      When problems with the prepared statement occur. This is often the result of a faulty data type mapping or
      *                                       {@link PreparedStatementParameterSetter}
+     * @deprecated Will be removed in the future. If auto-commit is disabled, the data get inserted and not committed, so they are immediately lost
      */
+    @Deprecated
     public void insertDataIntoDatabase(final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             RedGDatabaseUtil.insertDataIntoDatabase(getEntitiesSortedForInsert(), connection, preparedStatementParameterSetter);
