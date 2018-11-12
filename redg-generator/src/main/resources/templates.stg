@@ -26,22 +26,30 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 <endif>
+import java.util.function.Supplier;
 
 /**
- * \<p\>This is the RedG main class. Use it to specify your test data and then insert them into the database.\</p\>
- * \<p\>Use this class to customize the RedG runtime options. Use can use the following methods:\</p\>
- * \<ul\>
- *   \<li\>{@link AbstractRedG#setDefaultValueStrategy(DefaultValueStrategy)} to set the default value strategy\<li\>
- *   \<li\>{@link AbstractRedG#setDummyFactory(DummyFactory)} to set the dummy factory\</li\>
- *   \<li\>{@link AbstractRedG#setPreparedStatementParameterSetter(PreparedStatementParameterSetter)} to set the prepared statement parameter setter\</li\>
- *   \<li\>{@link AbstractRedG#setInsertValuesFormatter(InsertValuesFormatter)} to set the insert values formatter\</li\>
- * \</ul\>
+ * \<p>This is the RedG main class. Use it to specify your test data and then insert them into the database.\</p>
+ * \<p>Use this class to customize the RedG runtime options. Use can use the following methods:\</p>
+ * \<ul>
+ *   \<li>{@link AbstractRedG#setDefaultValueStrategy(DefaultValueStrategy)} to set the default value strategy\<li>
+ *   \<li>{@link AbstractRedG#setDummyFactory(DummyFactory)} to set the dummy factory\</li>
+ *   \<li>{@link AbstractRedG#setPreparedStatementParameterSetter(PreparedStatementParameterSetter)} to set the prepared statement parameter setter\</li>
+ *   \<li>{@link AbstractRedG#setInsertValuesFormatter(InsertValuesFormatter)} to set the insert values formatter\</li>
+ * \</ul>
  */
 public class <prefix>RedG extends AbstractRedG {
 
+    private Object entitySelfReference;
+
     <tables:tableBuilder()>
+    <tables:tableBuilderSupplier()>
     <tables:tableBuilderExisting()>
     <tables:tableBuilderDummy()>
+
+    public \<T> Supplier\<T> entitySelfReference() {
+        return () -> (T) this.entitySelfReference;
+    }
 
     public static java.util.List\<com.btc.redg.models.TableModel> getAllTableModels() {
         return java.util.Arrays.asList(
@@ -62,25 +70,59 @@ public class <prefix>RedG extends AbstractRedG {
 }
 >>
 
+tableBuilderSupplier(table) ::= <<
+<if(table.explicitAttributes || table.notNullForeignKeys)>
+/**
+ * Adds a new entity of the type {@link <table.className>} to the RedG entities and returns it for further modification.
+ *
+ * \<table summary="The table model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><table.sqlName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><table.sqlFullName>\</td>
+ *     \</tr>
+ * \</table>
+ */
+public <table.className> add<table.name>(<\\>
+            <table.explicitAttributes:{it | Supplier\<<it.javaTypeName>\> <it.name>};separator=", "><\\>
+            <if(table.explicitAttributes && table.notNullForeignKeys)>, <endif><table.notNullForeignKeys:{it | Supplier\<<it.javaTypeName>\> <it.name>};separator=", ">) {
+    <table.className> obj = new <table.className>(true, this);
+    this.entitySelfReference = obj;
+    <table.explicitAttributes:{it | obj.<it.name>(<it.name>.get());};separator="\n">
+    <table.notNullForeignKeys:{it | obj.<it.name>(<it.name>.get());};separator="\n">
+    this.addEntity(obj);
+    this.entitySelfReference = null;
+    return obj;
+}<\n>
+<endif>
+>>
+
 tableBuilderExisting(table) ::= <<
 /**
  * Creates a new reference to an existing entity of the type {@link <table.className>} in the database and returns it. Do not try to modify it or read
  * values other than the primary key(s).
  *
- * \<table summary="The table model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><table.sqlName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><table.sqlFullName>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The table model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><table.sqlName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><table.sqlFullName>\</td>
+ *     \</tr>
+ * \</table>
  */
 <if(table.primaryKeyColumns)>
 public <table.className> existing<table.name>(<table.primaryKeyColumns:{it|<it.javaTypeName> <it.name>};separator=", ">) {
@@ -95,20 +137,20 @@ tableBuilder(table) ::= <<
 /**
  * Adds a new entity of the type {@link <table.className>} to the RedG entities and returns it for further modification.
  *
- * \<table summary="The table model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><table.sqlName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><table.sqlFullName>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The table model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><table.sqlName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><table.sqlFullName>\</td>
+ *     \</tr>
+ * \</table>
  */
 public <table.className> add<table.name>(<\\>
             <table.explicitAttributes:{it | <it.javaTypeName> <it.name>};separator=", "><\\>
@@ -126,20 +168,20 @@ tableBuilderDummy(table) ::= <<
  * Adds a new dummy entity of the type {@link <table.className>} to the RedG entities and returns it. Modifying it might have unexpected results depending
  * on your dummy factory.
  *
- * \<table summary="The table model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><table.sqlName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><table.sqlFullName>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The table model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><table.sqlName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><table.sqlFullName>\</td>
+ *     \</tr>
+ * \</table>
  */
 public <table.className> dummy<table.name>() {
     return this.getDummyFactory().getDummy(this, <table.className>.class);
@@ -170,20 +212,20 @@ import com.btc.redg.runtime.*;
 import com.btc.redg.models.*;
 
 /**
- * \<table summary="The table model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><table.sqlName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><table.sqlFullName>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The table model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><table.sqlName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><table.sqlFullName>\</td>
+ *     \</tr>
+ * \</table>
  */
 public class <table.className> implements RedGEntity {
 
@@ -216,10 +258,17 @@ public class <table.className> implements RedGEntity {
     }
     <endif>
 
-    <table.className>(int meaningOfLife, AbstractRedG redG) {
+    <table.className>(boolean generateDefaultValues, AbstractRedG redG) {
         // First parameter exists simply because this constructor needs a different signature from the constructor above if the tables have no NOT NULL FK
-        // Only for Existing<table.className> , otherwise NOT NULL constraints cannot be checked and no default values are generated.
+        // Only for Existing<table.className> and usage with Supplier-Functions , otherwise NOT NULL constraints cannot be checked and no default values are generated.
         this.redG = redG;
+        if (generateDefaultValues) {
+            try {
+                <table.nonExplicitNonFKAttributes:{it | this.<it.name> = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("<escape.(it.dbName)>"), <it.javaTypeName>.class);<\n>}>
+            } catch (Exception e) {
+                throw new RuntimeException("Could not get default value", e);
+            }
+        }
     }
 
     <table.nonForeignKeyColumns:tableClassAttribute(table.className)>
@@ -305,9 +354,9 @@ public class <table.className> implements RedGEntity {
     }
     <endif>
     <if(enableVisualizationSupport)>
-    private java.util.Set\<String\> modifiedFields = new java.util.HashSet\<\>();
+    private java.util.Set\<String> modifiedFields = new java.util.HashSet\<>();
 
-    public java.util.Set\<String\> getModifiedFields() {
+    public java.util.Set\<String> getModifiedFields() {
         return this.modifiedFields;
     }
     <endif>
@@ -354,40 +403,40 @@ private <column.javaTypeName> <column.name>;
 
 /**
 <if (column.dbName)>
- * \<table summary="The column model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><column.dbTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><column.dbFullTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Column name\</td\>
- *         \<td\><column.dbName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>SQL type\</td\>
- *         \<td\><column.sqlType>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Not nullable?\</td\>
- *         \<td\><column.notNull>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Part of Primary key?\</td\>
- *         \<td\><column.partOfPrimaryKey>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Unique?\</td\>
- *         \<td\><column.unique>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The column model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><column.dbTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><column.dbFullTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Column name\</td>
+ *         \<td><column.dbName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>SQL type\</td>
+ *         \<td><column.sqlType>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Not nullable?\</td>
+ *         \<td><column.notNull>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Part of Primary key?\</td>
+ *         \<td><column.partOfPrimaryKey>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Unique?\</td>
+ *         \<td><column.unique>\</td>
+ *     \</tr>
+ * \</table>
 <else>
  * This is a foreign key referencing {@link <column.javaTypeName>}
 <endif>
@@ -405,40 +454,40 @@ public <className> <column.name>(<column.javaTypeName> value) {
 
 /**
 <if (column.dbName)>
- * \<table summary="The column model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><column.dbTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><column.dbFullTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Column name\</td\>
- *         \<td\><column.dbName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>SQL type\</td\>
- *         \<td\><column.sqlType>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Not nullable?\</td\>
- *         \<td\><column.notNull>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Part of Primary key?\</td\>
- *         \<td\><column.partOfPrimaryKey>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Unique?\</td\>
- *         \<td\><column.unique>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The column model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><column.dbTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><column.dbFullTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Column name\</td>
+ *         \<td><column.dbName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>SQL type\</td>
+ *         \<td><column.sqlType>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Not nullable?\</td>
+ *         \<td><column.notNull>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Part of Primary key?\</td>
+ *         \<td><column.partOfPrimaryKey>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Unique?\</td>
+ *         \<td><column.unique>\</td>
+ *     \</tr>
+ * \</table>
 <else>
  * This is a foreign key referencing {@link <column.javaTypeName>}
 <endif>
@@ -456,40 +505,40 @@ convenienceSetters(column, className) ::= <<
 convenienceSetter(convenienceSetter, column, className) ::= <<
 /**
 <if (column.dbName)>
- * \<table summary="The column model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><column.dbTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><column.dbFullTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Column name\</td\>
- *         \<td\><column.dbName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>SQL type\</td\>
- *         \<td\><column.sqlType>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Not nullable?\</td\>
- *         \<td\><column.notNull>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Part of Primary key?\</td\>
- *         \<td\><column.partOfPrimaryKey>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Unique?\</td\>
- *         \<td\><column.unique>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The column model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><column.dbTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><column.dbFullTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Column name\</td>
+ *         \<td><column.dbName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>SQL type\</td>
+ *         \<td><column.sqlType>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Not nullable?\</td>
+ *         \<td><column.notNull>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Part of Primary key?\</td>
+ *         \<td><column.partOfPrimaryKey>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Unique?\</td>
+ *         \<td><column.unique>\</td>
+ *     \</tr>
+ * \</table>
 <else>
  * This is a foreign key referencing {@link <column.javaTypeName>}
 <endif>
@@ -508,7 +557,7 @@ public <className> <column.name>(<convenienceSetter.setterJavaTypeName> value) {
 >>
 
 foreignKeyInsertColumns(foreignKey) ::= <<
-<foreignKey.references.keys:{k|<k>};separator=", ">
+<foreignKey.references.keys:{k|<escape.(k)>};separator=", ">
 >>
 
 foreignKeyInsertPlaceholder(foreignKey) ::= <<
@@ -544,7 +593,7 @@ foreignKeyInsertValueMetaInfos(foreignKey, notNull) ::= <<
 >>
 
 columnInsertValueMetaInfo(column) ::= <<
-new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
+new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbFullTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
 >>
 
 columnInsertValues(column) ::= <<
@@ -571,28 +620,28 @@ public List\<RedGEntity> getDependencies() {
 
 rawForeignKeyGetter(ref, varName) ::= <<
 /**
- * \<table summary="The column model attributes and their values"\>
- *     \<tr\>
- *         \<td\>\<strong\>Attribute\</strong\>\</td\>
- *         \<td\>\<strong\>Value\</strong\>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Table name\</td\>
- *         \<td\><ref.dbTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Full table name\</td\>
- *         \<td\><ref.dbFullTableName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>Column name\</td\>
- *         \<td\><ref.dbName>\</td\>
- *     \</tr\>
- *     \<tr\>
- *         \<td\>SQL type\</td\>
- *         \<td\><ref.sqlType>\</td\>
- *     \</tr\>
- * \</table\>
+ * \<table summary="The column model attributes and their values">
+ *     \<tr>
+ *         \<td>\<strong>Attribute\</strong>\</td>
+ *         \<td>\<strong>Value\</strong>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Table name\</td>
+ *         \<td><ref.dbTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Full table name\</td>
+ *         \<td><ref.dbFullTableName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>Column name\</td>
+ *         \<td><ref.dbName>\</td>
+ *     \</tr>
+ *     \<tr>
+ *         \<td>SQL type\</td>
+ *         \<td><ref.sqlType>\</td>
+ *     \</tr>
+ * \</table>
  */
 public <ref.localType> <ref.localName>() {
     return this.<varName>.<ref.primaryKeyAttributeName>();
@@ -633,7 +682,7 @@ import com.btc.redg.runtime.*;
 public class Existing<table.className> extends <table.className> {
 
     Existing<table.className>(AbstractRedG redG<if(table.primaryKeyColumns)>, <endif><table.primaryKeyColumns:{it|<it.javaTypeName> <it.name>};separator=", ">) {
-        super(42, redG);
+        super(false, redG);
         <if (table.primaryKeyColumns)>
         <table.primaryKeyColumns:{it|<if(it.partOfForeignKey)>this.<it.name> = <it.name><else>super.<it.name>(<it.name>)<endif>};separator=";\n">;
         <else>

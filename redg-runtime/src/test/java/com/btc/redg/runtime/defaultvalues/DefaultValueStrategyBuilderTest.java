@@ -1,13 +1,11 @@
 package com.btc.redg.runtime.defaultvalues;
 
+import com.btc.redg.models.ColumnModel;
+import com.btc.redg.runtime.defaultvalues.pluggable.IncrementingNumberProvider;
+import com.btc.redg.runtime.defaultvalues.pluggable.StaticNumberProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.btc.redg.models.ColumnModel;
-import com.btc.redg.runtime.defaultvalues.pluggable.IncrementingNumberProvider;
-
-import static org.junit.Assert.*;
 
 public class DefaultValueStrategyBuilderTest {
     @Test
@@ -77,6 +75,21 @@ public class DefaultValueStrategyBuilderTest {
         Assert.assertEquals(1, strategy.getDefaultValue(columnModelMock, int.class).intValue());
         Assert.assertEquals(2, strategy.getDefaultValue(columnModelMock, int.class).intValue());
         Assert.assertEquals(3, strategy.getDefaultValue(columnModelMock, int.class).intValue());
+    }
+
+    @Test
+    public void testThenUseProvider2() throws Exception {
+        DefaultValueStrategyBuilder builder = new DefaultValueStrategyBuilder();
+
+        builder.when(columnModel -> columnModel.getDbName().startsWith("A")).thenUseProvider(new StaticNumberProvider(2));
+
+        DefaultValueStrategy strategy = builder.build();
+
+        ColumnModel columnModelMock = Mockito.mock(ColumnModel.class);
+        Mockito.when(columnModelMock.getJavaTypeAsClass()).thenAnswer(invocationOnMock -> String.class);
+        Assert.assertEquals(0, (int) strategy.getDefaultValue(TestUtils.getCM("", "", "A", String.class, true), int.class));
+        Assert.assertEquals("-", strategy.getDefaultValue(TestUtils.getCM("", "", "B", String.class, true), String.class));
+        Assert.assertEquals(2, (int) strategy.getDefaultValue(TestUtils.getCM("", "", "A", Integer.class, true), int.class));
     }
 
     @Test

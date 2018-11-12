@@ -20,7 +20,7 @@ import com.btc.redg.runtime.*;
 public class ExistingGDemoUser extends GDemoUser {
 
     ExistingGDemoUser(AbstractRedG redG, java.math.BigDecimal id) {
-        super(42, redG);
+        super(false, redG);
         super.id(id);
     }
 
@@ -167,7 +167,7 @@ public class ExistingGDemoUser extends GDemoUser {
     @Override
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[] {
-                new AttributeMetaInfo("ID", "DEMO_USER", "DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true)
+                new AttributeMetaInfo("ID", "DEMO_USER", "\"RT-CG-MPFK\".PUBLIC.DEMO_USER", "DECIMAL", 3, java.math.BigDecimal.class, true)
         };
     }
 }

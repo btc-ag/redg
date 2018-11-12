@@ -16,22 +16,28 @@
 
 package com.btc.redg.generator.extractor;
 
-import com.btc.redg.generator.Helpers;
-import com.btc.redg.generator.exceptions.RedGGenerationException;
-import com.btc.redg.models.TableModel;
+import java.io.File;
+import java.sql.Connection;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import com.btc.redg.generator.Helpers;
+import com.btc.redg.generator.exceptions.RedGGenerationException;
+import com.btc.redg.models.ForeignKeyModel;
+import com.btc.redg.models.TableModel;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import schemacrawler.schema.Catalog;
 import schemacrawler.schema.Schema;
 import schemacrawler.schema.Table;
 import schemacrawler.schemacrawler.IncludeAll;
 import schemacrawler.schemacrawler.RegularExpressionInclusionRule;
-
-import java.io.File;
-import java.sql.Connection;
-
-import static org.junit.Assert.*;
 
 
 public class TableExtractorTest {
@@ -65,6 +71,64 @@ public class TableExtractorTest {
         assertEquals(7, model.getColumns().size()); // Due to #12 the FK-column gets counted as well
         assertEquals(6, model.getNonForeignKeyColumns().size()); // Test for #12 without FK-column
         assertTrue(model.hasColumnsAndForeignKeys());
+    }
+
+    @Test
+    public void testExtractTableCompositeForeignKey() throws Exception {
+        Connection connection = DatabaseManager.connectToDatabase("org.h2.Driver", "jdbc:h2:mem:rt-te", "", "");
+        assertNotNull(connection);
+        File tempFile = Helpers.getResourceAsFile("codegenerator/test-exchange-rate.sql");
+        assertNotNull(tempFile);
+        DatabaseManager.executePreparationScripts(connection, new File[]{tempFile});
+        Catalog db = DatabaseManager.crawlDatabase(connection, new IncludeAll(), new IncludeAll());
+        assertNotNull(db);
+
+        Schema s = db.lookupSchema("\"RT-TE\".PUBLIC").orElse(null);
+        assertNotNull(s);
+        Table exchangeRateTable = db.lookupTable(s, "EXCHANGE_RATE").orElse(null);
+        assertNotNull(exchangeRateTable);
+        Table exchangeRefTable = db.lookupTable(s, "EXCHANGE_REF").orElse(null);
+        assertNotNull(exchangeRateTable);
+
+        TableExtractor extractor = new TableExtractor("My", "com.demo.pkg", null, null, null, null);
+        TableModel exchangeRateTableModel = extractor.extractTableModel(exchangeRateTable);
+        TableModel exchangeRefTableModel = extractor.extractTableModel(exchangeRefTable);
+
+        Assert.assertEquals(1, exchangeRefTableModel.getPrimaryKeyColumns().size());
+        Assert.assertEquals("ID", exchangeRefTableModel.getPrimaryKeyColumns().get(0).getDbName());
+        Assert.assertEquals("DECIMAL", exchangeRefTableModel.getPrimaryKeyColumns().get(0).getSqlType());
+        Assert.assertEquals("java.math.BigDecimal", exchangeRefTableModel.getPrimaryKeyColumns().get(0).getJavaTypeName());
+        Assert.assertTrue(exchangeRefTableModel.getForeignKeyColumns().isEmpty());
+
+        Assert.assertEquals(1, exchangeRefTableModel.getNonPrimaryKeyNonFKColumns().size());
+        Assert.assertEquals("NAME", exchangeRefTableModel.getNonPrimaryKeyNonFKColumns().get(0).getDbName());
+        Assert.assertEquals("VARCHAR", exchangeRefTableModel.getNonPrimaryKeyNonFKColumns().get(0).getSqlType());
+        Assert.assertEquals("java.lang.String", exchangeRefTableModel.getNonPrimaryKeyNonFKColumns().get(0).getJavaTypeName());
+
+        Assert.assertEquals(1, exchangeRateTableModel.getNonPrimaryKeyNonFKColumns().size());
+        Assert.assertEquals("FIRST_NAME", exchangeRateTableModel.getNonPrimaryKeyNonFKColumns().get(0).getDbName());
+        Assert.assertEquals("VARCHAR", exchangeRateTableModel.getNonPrimaryKeyNonFKColumns().get(0).getSqlType());
+        Assert.assertEquals("java.lang.String", exchangeRateTableModel.getNonPrimaryKeyNonFKColumns().get(0).getJavaTypeName());
+
+        Assert.assertEquals(2, exchangeRateTableModel.getForeignKeyColumns().size());
+        Assert.assertEquals(1, exchangeRateTableModel.getIncomingForeignKeys().size());
+        Assert.assertEquals("composite", exchangeRateTableModel.getIncomingForeignKeys().get(0).getReferencingAttributeName());
+
+        Assert.assertEquals("composite", exchangeRateTableModel.getIncomingForeignKeys().get(0).getReferencingAttributeName());
+
+        ForeignKeyModel compositeForeignKeyModel = exchangeRateTableModel.getForeignKeys().stream()
+                .filter(fk -> fk.getName().equals("composite"))
+                .findFirst().orElse(null);
+
+        Assert.assertNotNull(compositeForeignKeyModel);
+
+        Assert.assertEquals(compositeForeignKeyModel.getReferences().size(), 2);
+
+        Assertions
+                .assertThat(compositeForeignKeyModel.getReferences().keySet())
+                .containsExactlyInAnyOrder("REFERENCE_ID", "PREV_FIRST_NAME");
+
+        Assert.assertFalse(compositeForeignKeyModel.isNotNull());
     }
 
     @Test

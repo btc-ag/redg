@@ -47,6 +47,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -124,7 +127,11 @@ public class RedGGeneratorMojo extends AbstractMojo {
             throw new MojoFailureException("Could not execute SQL scripts: " + e.toString(), e);
         }
         // Clean-up old code files
-        cleanFolder(outputDirectory);
+        String[] packageParts = this.targetPackage.split("\\.");
+        Path packageFolder = Paths.get(this.outputDirectory.getAbsolutePath(), packageParts);
+        if (Files.exists(packageFolder)) {
+            cleanFolder(packageFolder.toFile());
+        }
 
         JpaMetamodelRedGProvider jpaProvider = null;
         if (jpaProviderConfig != null && jpaProviderConfig.getPersistenceUnitName() != null) {

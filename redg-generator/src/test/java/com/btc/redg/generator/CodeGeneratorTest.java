@@ -37,8 +37,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 
 public class CodeGeneratorTest {
@@ -87,6 +89,45 @@ public class CodeGeneratorTest {
 
         connection.close();
 
+    }
+
+    @Test
+    public void testGenerateCodeEscaping() throws Exception {
+        Connection connection = DatabaseManager.connectToDatabase("org.h2.Driver", "jdbc:h2:mem:rt-cg-te", "", "");
+        assertNotNull(connection);
+        File tempFile = Helpers.getResourceAsFile("codegenerator/test-escaping.sql");
+        assertNotNull(tempFile);
+        DatabaseManager.executePreparationScripts(connection, new File[]{tempFile});
+        Catalog db = DatabaseManager.crawlDatabase(connection, new IncludeAll(), new IncludeAll());
+        assertNotNull(db);
+        Schema s = db.getSchemas().stream().filter(schema -> schema.getName().equals("PUBLIC")).findFirst().orElse(null);
+        assertNotNull(s);
+        Table t1 = db.getTables(s).stream().filter(table -> table.getName().equals("\"TABLE\"")).findFirst().orElse(null);
+        assertNotNull(t1);
+        Table t2 = db.getTables(s).stream().filter(table -> table.getName().equals("\"GROUP\"")).findFirst().orElse(null);
+        assertNotNull(t2);
+
+        List<TableModel> models = MetadataExtractor.extract(db);
+        assertNotNull(models);
+        assertThat(models.size(), is(2));
+
+        TableModel modelTable = models.stream().filter(m -> Objects.equals("Table", m.getName())).findFirst().orElse(null);
+        assertNotNull(modelTable);
+        TableModel modelGroup = models.stream().filter(m -> Objects.equals("Group", m.getName())).findFirst().orElse(null);
+        assertNotNull(modelGroup);
+        CodeGenerator cg = new CodeGenerator();
+
+        String resultTable = cg.generateCodeForTable(modelTable, false);
+        String resultGroup = cg.generateCodeForTable(modelGroup, false);
+
+        assertNotNull(resultTable);
+        assertNotNull(resultGroup);
+        assertEquals(Helpers.getResourceAsString("codegenerator/table-escaping-Result-table.java"), resultTable);
+        assertEquals(Helpers.getResourceAsString("codegenerator/table-escaping-Result-group.java"), resultGroup);
+
+        //TODO: add test for existing class
+
+        connection.close();
     }
 
     @Test
@@ -252,7 +293,7 @@ public class CodeGeneratorTest {
 
         String existingClassResult = cg.generateExistingClassCodeForTable(model);
         assertNotNull(existingClassResult);
-        assertEquals(Helpers.getResourceAsString("codegenerator/tableResultExisting.java"), existingClassResult);
+        assertEquals(Helpers.getResourceAsString("codegenerator/tableResultExisting-wV.java"), existingClassResult);
 
         connection.close();
     }

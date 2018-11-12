@@ -27,14 +27,30 @@ import com.btc.redg.runtime.transformer.PreparedStatementParameterSetter;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.MethodRule;
+import org.junit.runner.RunWith;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import static org.junit.Assert.*;
 
+
 public class RedGBuilderTest {
+
+    private final String redGClassData = "yv66vgAAADQAFAoABAAQCAARBwASBwATAQAGPGluaXQ+AQADKClWAQAEQ29kZQEAD0xpbmVOdW1i" +
+            "ZXJUYWJsZQEAEkxvY2FsVmFyaWFibGVUYWJsZQEABHRoaXMBAB1MY29tL2J0Yy9yZWRnL2dlbmVy" +
+            "YXRlZC9SZWRHOwEAFGdldFZpc3VhbGl6YXRpb25Kc29uAQAUKClMamF2YS9sYW5nL1N0cmluZzsB" +
+            "AApTb3VyY2VGaWxlAQAJUmVkRy5qYXZhDAAFAAYBAARub3BlAQAbY29tL2J0Yy9yZWRnL2dlbmVy" +
+            "YXRlZC9SZWRHAQAhY29tL2J0Yy9yZWRnL3J1bnRpbWUvQWJzdHJhY3RSZWRHACEAAwAEAAAAAAAC" +
+            "AAEABQAGAAEABwAAAC8AAQABAAAABSq3AAGxAAAAAgAIAAAABgABAAAABQAJAAAADAABAAAABQAK" +
+            "AAsAAAABAAwADQABAAcAAAAtAAEAAQAAAAMSArAAAAACAAgAAAAGAAEAAAAIAAkAAAAMAAEAAAAD" +
+            "AAoACwAAAAEADgAAAAIADw==";
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -47,6 +63,35 @@ public class RedGBuilderTest {
         assertTrue(redG.getDummyFactory() instanceof DefaultDummyFactory);
         assertTrue(redG.getSqlValuesFormatter() instanceof DefaultSQLValuesFormatter);
         assertTrue(redG.getPreparedStatementParameterSetter() instanceof DefaultPreparedStatementParameterSetter);
+    }
+
+
+    @Test
+    public void testBuilder_ClassPrivate() {
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage("Could not instantiate RedG instance");
+        AbstractRedG redG = new RedGBuilder<>(PrivateRedG.class).build();
+    }
+
+    @Test
+    public void testBuilder_DefaultConstructor() throws Exception {
+        try {
+            AbstractRedG redG = new RedGBuilder<>().build();
+        } catch (RuntimeException e) {
+            assertEquals("Could not load default RedG class", e.getMessage());
+        }
+        final ClassLoader classLoader = this.getClass().getClassLoader();
+        final Method defineClassMethod = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
+        defineClassMethod.setAccessible(true);
+        // load class definition
+        byte[] classDef = java.util.Base64.getDecoder().decode(this.redGClassData);
+        defineClassMethod.invoke(classLoader, "com.btc.redg.generated.RedG", classDef, 0, classDef.length);
+
+        try {
+        AbstractRedG redG = new RedGBuilder<>().build();
+        } catch (RuntimeException e) {
+            assertEquals("Could not instantiate RedG instance", e.getMessage());
+        }
     }
 
     @Test
@@ -90,12 +135,55 @@ public class RedGBuilderTest {
     @Test
     public void testBuilder_ErrorOnReUse() throws Exception {
         expectedException.expect(RuntimeException.class);
-        RedGBuilder builder =  new RedGBuilder<>(MyRedG.class);
+        expectedException.expectMessage("Using the builder after build() was called is not allowed!");
+        RedGBuilder builder = new RedGBuilder<>(MyRedG.class);
         builder.build();
         builder.withSqlValuesFormatter(null);
     }
 
+    @Test
+    public void testBuilder_ErrorOnReUse2() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Using the builder after build() was called is not allowed!");
+
+        RedGBuilder builder = new RedGBuilder<>(MyRedG.class);
+        builder.build();
+        builder.withDefaultValueStrategy(null);
+    }
+
+    @Test
+    public void testBuilder_ErrorOnReUse3() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Using the builder after build() was called is not allowed!");
+
+        RedGBuilder builder = new RedGBuilder<>(MyRedG.class);
+        builder.build();
+        builder.withPreparedStatementParameterSetter(null);
+    }
+
+    @Test
+    public void testBuilder_ErrorOnReUse4() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Using the builder after build() was called is not allowed!");
+
+        RedGBuilder builder = new RedGBuilder<>(MyRedG.class);
+        builder.build();
+        builder.withDummyFactory(null);
+    }
+
     public static class MyRedG extends AbstractRedG {
+
+        @Override
+        public String getVisualizationJson() {
+            return "nope";
+        }
+    }
+
+    public static class PrivateRedG extends AbstractRedG {
+
+        private PrivateRedG() {
+
+        }
 
         @Override
         public String getVisualizationJson() {

@@ -80,7 +80,7 @@ public class ForeignKeyExtractor {
         }
         model.setJavaTypeName(this.classPrefix + this.nameProvider.getClassNameForTable(targetTable));
         model.setName(this.nameProvider.getMethodNameForReference(foreignKey));
-        model.setNotNull(!foreignKey.getColumnReferences().get(0).getForeignKeyColumn().isNullable()
+        model.setNotNull(foreignKey.getColumnReferences().stream().noneMatch(x -> x.getForeignKeyColumn().isNullable())
                 || explicitAttributeDecider.isExplicitForeignKey(foreignKey));
 
         for (final ColumnReference reference : foreignKey.getColumnReferences()) {
@@ -92,7 +92,7 @@ public class ForeignKeyExtractor {
             columnModel.setSqlType(reference.getForeignKeyColumn().getColumnDataType().getName());
             columnModel.setSqlTypeInt(reference.getForeignKeyColumn().getColumnDataType().getJavaSqlType().getVendorTypeNumber());
 
-            columnModel.setDbName(ModelUtil.removeQuotes(reference.getForeignKeyColumn().getName()));
+            columnModel.setDbName(reference.getForeignKeyColumn().getName());
             columnModel.setDbTableName(originTable.getName());
             columnModel.setDbFullTableName(originTable.getFullName());
             model.getReferences().put(reference.getForeignKeyColumn().getName(), columnModel);

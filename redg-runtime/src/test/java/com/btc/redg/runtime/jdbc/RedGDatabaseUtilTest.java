@@ -16,16 +16,23 @@
 
 package com.btc.redg.runtime.jdbc;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.btc.redg.runtime.ExistingEntryMissingException;
+import com.btc.redg.runtime.mocks.ExistingMockEntity1;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,6 +44,7 @@ import com.btc.redg.runtime.mocks.MockEntity1;
 import com.btc.redg.runtime.mocks.MockEntity2;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -50,7 +58,7 @@ public class RedGDatabaseUtilTest {
 
     @Test
     public void testInsertDataIntoDatabase() throws Exception {
-        Connection connection = getConnection();
+        Connection connection = getConnection("-idid");
         Statement stmt = connection.createStatement();
         stmt.execute("CREATE TABLE TEST (CONTENT VARCHAR2(50 CHAR))");
 
@@ -123,9 +131,38 @@ public class RedGDatabaseUtilTest {
         RedGDatabaseUtil.insertDataIntoDatabase(gObjects, mockConnection);
     }
 
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
+    private Connection getConnection(String suffix) throws ClassNotFoundException, SQLException {
         Class.forName("org.h2.Driver");
-        return DriverManager.getConnection("jdbc:h2:mem:test", "", "");
+        return DriverManager.getConnection("jdbc:h2:mem:test-" + suffix, "", "");
+    }
+
+    @Test
+    public void testInsertExistingDataIntoDatabase() throws Exception {
+        Connection connection = getConnection("-iedid");
+        Statement stmt = connection.createStatement();
+        stmt.execute("CREATE TABLE TEST (CONTENT VARCHAR2(50 CHAR))");
+
+        stmt.execute("INSERT INTO TEST VALUES ('obj1')");
+        RedGDatabaseUtil.insertDataIntoDatabase(Collections.singletonList(new ExistingMockEntity1()), connection);
+    }
+
+    @Test
+    public void testInsertExistingDataIntoDatabase_NotExisting() throws Exception {
+        this.thrown.expect(ExistingEntryMissingException.class);
+        Connection connection = getConnection("-iedidm");
+        Statement stmt = connection.createStatement();
+        stmt.execute("CREATE TABLE TEST (CONTENT VARCHAR2(50 CHAR))");
+
+        RedGDatabaseUtil.insertDataIntoDatabase(Collections.singletonList(new ExistingMockEntity1()), connection);
+    }
+
+    @Test
+    public void testConstructor() throws Exception {
+        Constructor constructor = RedGDatabaseUtil.class.getDeclaredConstructor();
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+
+        constructor.setAccessible(true);
+        constructor.newInstance();
     }
 
 }

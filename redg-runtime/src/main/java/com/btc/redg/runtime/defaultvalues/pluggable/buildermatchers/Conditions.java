@@ -38,4 +38,8 @@ public class Conditions {
     public static Predicate<String> matchesRegex(String regex) {
         return (d) -> d.matches(regex);
     }
+
+    private Conditions() {
+
+    }
 }

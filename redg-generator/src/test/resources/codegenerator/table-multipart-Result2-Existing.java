@@ -20,7 +20,7 @@ import com.btc.redg.runtime.*;
 public class ExistingGDemoCompany extends GDemoCompany {
 
     ExistingGDemoCompany(AbstractRedG redG, java.lang.String countryCode, java.lang.String name) {
-        super(42, redG);
+        super(false, redG);
         super.countryCode(countryCode);
         super.name(name);
     }
@@ -90,8 +90,8 @@ public class ExistingGDemoCompany extends GDemoCompany {
     @Override
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[] {
-                new AttributeMetaInfo("COUNTRY_CODE", "DEMO_COMPANY", "DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true),
-                new AttributeMetaInfo("NAME", "DEMO_COMPANY", "DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true)
+                new AttributeMetaInfo("COUNTRY_CODE", "DEMO_COMPANY", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true),
+                new AttributeMetaInfo("NAME", "DEMO_COMPANY", "\"RT-CG-MPFK\".PUBLIC.DEMO_COMPANY", "VARCHAR", 12, java.lang.String.class, true)
         };
     }
 }

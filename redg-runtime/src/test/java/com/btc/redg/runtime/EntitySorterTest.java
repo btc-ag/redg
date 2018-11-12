@@ -16,6 +16,7 @@
 
 package com.btc.redg.runtime;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +56,27 @@ public class EntitySorterTest {
                 superDependentNode
         ), sortedEntities);
     }
-    
+
+    @Test
+    public void entitiesSelfReferenceTest() throws Exception {
+        Entity root = new Entity("root");
+        root.addDependency(root);
+        Entity leaf = new Entity("leaf", root);
+        Entity leafWithSelf = new Entity("leafWithSelf", root, leaf);
+        leafWithSelf.addDependency(leafWithSelf);
+
+        List<RedGEntity> sorted = EntitySorter.sortEntities(Arrays.asList(
+                leaf,
+                leafWithSelf,
+                root));
+
+        Assert.assertEquals(Arrays.asList(
+                root,
+                leaf,
+                leafWithSelf
+        ), sorted);
+    }
+
     @Test
     public void existingEntitiesFirst() throws Exception {
         EntitySorter entitySorter = new EntitySorter();
@@ -64,6 +85,7 @@ public class EntitySorterTest {
         Entity leafEntity1 = new Entity("leafEntity1");
         Entity existingEntity2 = new ExistingEntity("existingEntity2");
         Entity leafEntity2 = new Entity("leafEntity2");
+        leafEntity2.setDependencies(null);
         Entity existingEntity3 = new ExistingEntity("existingEntity3");
         Entity nonLeaf1 = new Entity("nonLeaf1", leafEntity1, leafEntity2);
         Entity existingEntity4 = new ExistingEntity("existingEntity4");
@@ -127,6 +149,17 @@ public class EntitySorterTest {
         @Override
         public String toString() {
             return identifier;
+        }
+
+        public void addDependency(RedGEntity dep) {
+            if (!(this.dependencies instanceof ArrayList)) {
+                this.dependencies = new ArrayList<>(this.dependencies);
+            }
+            this.dependencies.add(dep);
+        }
+
+        public void setDependencies(List<RedGEntity> deps) {
+            this.dependencies = deps;
         }
     }
 

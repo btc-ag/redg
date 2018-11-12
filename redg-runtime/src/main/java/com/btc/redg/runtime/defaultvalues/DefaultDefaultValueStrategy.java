@@ -102,8 +102,11 @@ public class DefaultDefaultValueStrategy implements DefaultValueStrategy {
             long counter = this.uniqueCounter.compute(
                     columnModel.getDbFullTableName() + "." + columnModel.getDbName(),
                     (k, v) -> (v == null) ? 0L : v + 1);
-            if (type.isEnum() && type.getEnumConstants().length > 0) {
-                if (type.getEnumConstants().length < counter) {
+            if (type.isEnum()) {
+                if (type.getEnumConstants().length == 0) {
+                    throw new NoDefaultValueException("Cannot pick a value from an empty enum!");
+                }
+                if (type.getEnumConstants().length <= counter) {
                     throw new NoDefaultValueException("Cannot generate a unique enum value. No more different enums! If this enum is part of a bigger unique index, you cannot use the DefaultDefaultValueService anymore.");
                 }
                 return type.getEnumConstants()[(int) counter];
@@ -111,7 +114,10 @@ public class DefaultDefaultValueStrategy implements DefaultValueStrategy {
                 return getUniqueValue(counter, type);
             }
         } else {
-            if (type.isEnum() && type.getEnumConstants().length > 0) {
+            if (type.isEnum()) {
+                if (type.getEnumConstants().length == 0) {
+                    throw new NoDefaultValueException("Cannot pick a value from an empty enum!");
+                }
                 return type.getEnumConstants()[0];
             } else {
                 Object defaultValue = DefaultDefaultValueStrategy.defaultMappings.get(type);
@@ -143,25 +149,9 @@ public class DefaultDefaultValueStrategy implements DefaultValueStrategy {
             return (T) new Character((char) (counter + 1));
         }
         if (String.class.isAssignableFrom(type)) {
-            StringBuilder result = new StringBuilder();
-            long remainder = counter;
-            int maxExponent = -1;
-            for (int i = 1; i < 14; i++) {
-                if (Math.pow(26, i) > remainder) {
-                    maxExponent = i - 1;
-                    break;
-                }
-            }
-            for (int i = maxExponent; i >= 0; i--) {
-                long denominator = (long) Math.pow(26, i);
-                int num = (int) (remainder / denominator);
-                if (i != 0) num--;
-                remainder = remainder % denominator;
-                result.append((char) (num + 'A'));
-            }
-            return (T) result.toString();
+            return (T) Long.toString(counter, 36);
         }
-        return null;
+        throw new NoDefaultValueException("Could not generate a unique value for type " + type.toString());
     }
 
 
