@@ -18,6 +18,7 @@ package com.btc.redg.generator;
 
 import com.btc.redg.generator.exceptions.RedGGenerationException;
 import com.btc.redg.generator.utils.FileUtils;
+import com.btc.redg.generator.utils.JavaSqlStringEscapeMap;
 import com.btc.redg.generator.utils.JavaStringEscapeMap;
 import com.btc.redg.models.TableModel;
 import org.slf4j.Logger;
@@ -69,6 +70,7 @@ public class CodeGenerator {
             this.stGroup = new STGroupString(this.getStreamAsString(is));
             this.stGroup.registerRenderer(String.class, new StringRenderer());
             this.stGroup.defineDictionary("escape", new JavaStringEscapeMap());
+            this.stGroup.defineDictionary("escapeSql", new JavaSqlStringEscapeMap());
             LOG.info("Loading successful.");
         } catch (IOException e) {
             LOG.error("Loading failed.", e);

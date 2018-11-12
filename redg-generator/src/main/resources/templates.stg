@@ -283,12 +283,12 @@ public class <table.className> implements RedGEntity {
     <joinTableSimplifier(table.joinTableSimplifierData)>
 
     public String getSQLString() {
-        return String.format("INSERT INTO <escape.(table.sqlName)> (" +
+        return String.format("INSERT INTO <escapeSql.(table.sqlName)> (" +
                         "<table.notNullForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                         <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
                         "<table.nullableForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                         <if(colAndForeignKeys)>", " +<endif>
-                        "<table.nonForeignKeyColumns:{c|<escape.(c.dbName)>};separator=", ">" +
+                        "<table.nonForeignKeyColumns:{c|<escapeSql.(c.dbName)>};separator=", ">" +
                         ") VALUES (" +
                         "<table.notNullForeignKeys:foreignKeyInsertPlaceholder();separator=", ">" +
                         <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
@@ -302,12 +302,12 @@ public class <table.className> implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO <escape.(table.sqlName)> (" +
+        return "INSERT INTO <escapeSql.(table.sqlName)> (" +
                 "<table.notNullForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                 <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
                 "<table.nullableForeignKeys:foreignKeyInsertColumns();separator=", ">" +
                 <if(colAndForeignKeys)>", " +<endif>
-                "<table.nonForeignKeyColumns:{c|<escape.(c.dbName)>};separator=", ">" +
+                "<table.nonForeignKeyColumns:{c|<escapeSql.(c.dbName)>};separator=", ">" +
                 ") VALUES (" +
                 "<table.notNullForeignKeys:foreignKeyInsertStmtPlaceholder();separator=", ">" +
                 <if(table.notNullForeignKeys)><if(table.nullableForeignKeys)>", " +<endif><endif>
@@ -557,7 +557,7 @@ public <className> <column.name>(<convenienceSetter.setterJavaTypeName> value) {
 >>
 
 foreignKeyInsertColumns(foreignKey) ::= <<
-<foreignKey.references.keys:{k|<escape.(k)>};separator=", ">
+<foreignKey.references.keys:{k|<escapeSql.(k)>};separator=", ">
 >>
 
 foreignKeyInsertPlaceholder(foreignKey) ::= <<
@@ -699,8 +699,8 @@ public class Existing<table.className> extends <table.className> {
     @Override
     public String getSQLString() {
     <if (table.primaryKeyColumns)>
-        return String.format("SELECT COUNT(*) FROM <escape.(table.sqlName)> WHERE " +
-                        "<table.primaryKeyColumns:{it|<escape.(it.dbName)> = %s};separator=" AND ">",
+        return String.format("SELECT COUNT(*) FROM <escapeSql.(table.sqlName)> WHERE " +
+                        "<table.primaryKeyColumns:{it|<escapeSql.(it.dbName)> = %s};separator=" AND ">",
                 <table.primaryKeyColumns:overrideColumnInsertValues();separator=",\n">
         );
     <else>
@@ -711,8 +711,8 @@ public class Existing<table.className> extends <table.className> {
     @Override
     public String getPreparedStatementString() {
     <if (table.primaryKeyColumns)>
-        return "SELECT COUNT(*) FROM <escape.(table.sqlName)> WHERE " +
-                <table.primaryKeyColumns:{it|"<escape.(it.dbName)> = ?};separator=" AND \" +\n">";
+        return "SELECT COUNT(*) FROM <escapeSql.(table.sqlName)> WHERE " +
+                <table.primaryKeyColumns:{it|"<escapeSql.(it.dbName)> = ?};separator=" AND \" +\n">";
     <else>
         return "Your table has no primary key(s), referencing existing entities is not possible!";
     <endif>
