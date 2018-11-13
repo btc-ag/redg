@@ -424,10 +424,10 @@ public class GDemoUser implements RedGEntity {
     }
 
     public String getSQLString() {
-        return String.format("INSERT INTO DEMO_USER (" +
+        return String.format("INSERT INTO \"DEMO_USER\" (" +
                         "" +
                         "" +
-                        "ID, USERNAME, FIRST_NAME, LAST_NAME" +
+                        "\"ID\", \"USERNAME\", \"FIRST_NAME\", \"LAST_NAME\"" +
                         ") VALUES (" +
                         "" +
                         "" +
@@ -448,10 +448,10 @@ public class GDemoUser implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO DEMO_USER (" +
+        return "INSERT INTO \"DEMO_USER\" (" +
                 "" +
                 "" +
-                "ID, USERNAME, FIRST_NAME, LAST_NAME" +
+                "\"ID\", \"USERNAME\", \"FIRST_NAME\", \"LAST_NAME\"" +
                 ") VALUES (" +
                 "" +
                 "" +

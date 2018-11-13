@@ -16,15 +16,6 @@
 
 package com.btc.redg.generator.extractor;
 
-import com.btc.redg.generator.extractor.utils.NullPrintWriter;
-import com.btc.redg.generator.extractor.utils.ScriptRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import schemacrawler.schema.Catalog;
-import schemacrawler.schema.RoutineType;
-import schemacrawler.schemacrawler.*;
-import schemacrawler.utility.SchemaCrawlerUtility;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,6 +24,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.btc.redg.generator.extractor.utils.NullPrintWriter;
+import com.btc.redg.generator.extractor.utils.ScriptRunner;
+
+import schemacrawler.schema.Catalog;
+import schemacrawler.schema.RoutineType;
+import schemacrawler.schemacrawler.IncludeAll;
+import schemacrawler.schemacrawler.InclusionRule;
+import schemacrawler.schemacrawler.SchemaCrawlerException;
+import schemacrawler.schemacrawler.SchemaCrawlerOptions;
+import schemacrawler.schemacrawler.SchemaCrawlerOptionsBuilder;
+import schemacrawler.schemacrawler.SchemaInfoLevelBuilder;
+import schemacrawler.utility.SchemaCrawlerUtility;
 
 /**
  * <p>
@@ -137,13 +144,12 @@ public class DatabaseManager {
      * @throws SchemaCrawlerException Gets thrown when the database could not be crawled successfully
      */
     public static Catalog crawlDatabase(final Connection connection, final InclusionRule schemaRule, final InclusionRule tableRule) throws SchemaCrawlerException {
-        final SchemaCrawlerOptions options = new SchemaCrawlerOptions();
-        final SchemaInfoLevel level = SchemaInfoLevelBuilder.standard();
-        level.setRetrieveIndexes(false);
-        options.setSchemaInfoLevel(level);
-        options.setRoutineTypes(Arrays.asList(RoutineType.procedure, RoutineType.unknown)); // RoutineType.function not supported by h2
-        options.setSchemaInclusionRule(schemaRule == null ? new IncludeAll() : schemaRule);
-        options.setTableInclusionRule(tableRule == null ? new IncludeAll() : tableRule);
+        final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.builder()
+                .withSchemaInfoLevel(SchemaInfoLevelBuilder.standard().setRetrieveIndexes(false))
+                .routineTypes(Arrays.asList(RoutineType.procedure, RoutineType.unknown))
+                .includeSchemas(schemaRule == null ? new IncludeAll() : schemaRule)
+                .includeTables(tableRule == null ? new IncludeAll() : tableRule)
+                .toOptions();
 
         try {
             return SchemaCrawlerUtility.getCatalog(connection, options);

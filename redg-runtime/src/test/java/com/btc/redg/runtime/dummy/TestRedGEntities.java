@@ -17,6 +17,7 @@
 package com.btc.redg.runtime.dummy;
 
 import java.awt.Color;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
 
@@ -168,6 +169,70 @@ class TestRedGEntity5 implements RedGEntity {
 
     public TestRedGEntity5(AbstractRedG redG) throws IllegalAccessException {
         throw new IllegalAccessException("Test");
+    }
+
+    @Override
+    public String getSQLString() {
+        return null;
+    }
+
+    @Override
+    public String getPreparedStatementString() {
+        return null;
+    }
+
+    @Override
+    public Object[] getPreparedStatementValues() {
+        return new Object[0];
+    }
+
+    @Override
+    public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
+        return new AttributeMetaInfo[0];
+    }
+
+    @Override
+    public List<RedGEntity> getDependencies() {
+        return Collections.emptyList();
+    }
+}
+
+class TestRedGEntity6 implements RedGEntity {
+
+    public TestRedGEntity6(final SecureRandom definitelyWrongParameter) {
+
+    }
+
+    @Override
+    public String getSQLString() {
+        return null;
+    }
+
+    @Override
+    public String getPreparedStatementString() {
+        return null;
+    }
+
+    @Override
+    public Object[] getPreparedStatementValues() {
+        return new Object[0];
+    }
+
+    @Override
+    public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
+        return new AttributeMetaInfo[0];
+    }
+
+    @Override
+    public List<RedGEntity> getDependencies() {
+        return Collections.emptyList();
+    }
+}
+
+class TestRedGEntity7 implements RedGEntity {
+
+    public TestRedGEntity7(final AbstractRedG redg, final SecureRandom definitelyWrongParameter) {
+
     }
 
     @Override

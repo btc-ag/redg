@@ -98,6 +98,30 @@ public class DefaultDummyFactoryTest {
     }
 
     @Test
+    public void testGetDummy_NoFittingConstructor2() throws Exception {
+        thrown.expect(DummyCreationException.class);
+        thrown.expectMessage("Could not find a fitting constructor");
+        AbstractRedG redG = spy(AbstractRedG.class);
+
+        DefaultDummyFactory factory = new DefaultDummyFactory();
+        assertNotNull(factory);
+
+        factory.getDummy(redG, TestRedGEntity6.class);
+    }
+
+    @Test
+    public void testGetDummy_NoFittingConstructor3() throws Exception {
+        thrown.expect(DummyCreationException.class);
+        thrown.expectMessage("Could not find a fitting constructor");
+        AbstractRedG redG = spy(AbstractRedG.class);
+
+        DefaultDummyFactory factory = new DefaultDummyFactory();
+        assertNotNull(factory);
+
+        factory.getDummy(redG, TestRedGEntity7.class);
+    }
+
+    @Test
     public void testGetDummy_InstantiationFails() throws Exception {
         thrown.expect(DummyCreationException.class);
         thrown.expectMessage("Instantiation of the dummy failed");

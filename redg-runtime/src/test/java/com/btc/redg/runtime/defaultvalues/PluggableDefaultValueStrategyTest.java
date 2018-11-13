@@ -103,6 +103,9 @@ public class PluggableDefaultValueStrategyTest {
                 strategy.getDefaultValue(TestUtils.getCM("", "", "", OffsetDateTime.class, true), OffsetDateTime.class));
         assertEquals(OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toOffsetTime(),
                 strategy.getDefaultValue(TestUtils.getCM("", "", "", OffsetTime.class, true), OffsetTime.class));
+
+        StaticDateProvider p2 = new StaticDateProvider(date);
+        assertNull(p2.getDefaultValue(null, String.class));
     }
 
     @Test

@@ -143,8 +143,8 @@ public class ExistingGDemoUser extends GDemoUser {
 
     @Override
     public String getSQLString() {
-        return String.format("SELECT COUNT(*) FROM DEMO_USER WHERE " +
-                        "ID = %s",
+        return String.format("SELECT COUNT(*) FROM \"DEMO_USER\" WHERE " +
+                        "\"ID\" = %s",
                 this.redG.getSqlValuesFormatter().formatValue(super.id(),
                         "DECIMAL", "DEMO_USER",
                         "DEMO_USER", "ID")
@@ -153,8 +153,8 @@ public class ExistingGDemoUser extends GDemoUser {
 
     @Override
     public String getPreparedStatementString() {
-        return "SELECT COUNT(*) FROM DEMO_USER WHERE " +
-                "ID = ?";
+        return "SELECT COUNT(*) FROM \"DEMO_USER\" WHERE " +
+                "\"ID\" = ?";
     }
 
     @Override

@@ -90,7 +90,7 @@ public class ForeignKeyExtractor {
             columnModel.setLocalName(this.nameProvider.getMethodNameForForeignKeyColumn(foreignKey, reference.getPrimaryKeyColumn(), reference.getForeignKeyColumn()));
             columnModel.setLocalType(dataTypeProvider.getCanonicalDataTypeName(reference.getForeignKeyColumn()));
             columnModel.setSqlType(reference.getForeignKeyColumn().getColumnDataType().getName());
-            columnModel.setSqlTypeInt(reference.getForeignKeyColumn().getColumnDataType().getJavaSqlType().getJavaSqlType());
+            columnModel.setSqlTypeInt(reference.getForeignKeyColumn().getColumnDataType().getJavaSqlType().getVendorTypeNumber());
 
             columnModel.setDbName(reference.getForeignKeyColumn().getName());
             columnModel.setDbTableName(originTable.getName());

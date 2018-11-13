@@ -61,8 +61,8 @@ public class ExistingGDemoCompany extends GDemoCompany {
 
     @Override
     public String getSQLString() {
-        return String.format("SELECT COUNT(*) FROM DEMO_COMPANY WHERE " +
-                        "COUNTRY_CODE = %s AND NAME = %s",
+        return String.format("SELECT COUNT(*) FROM \"DEMO_COMPANY\" WHERE " +
+                        "\"COUNTRY_CODE\" = %s AND \"NAME\" = %s",
                 this.redG.getSqlValuesFormatter().formatValue(super.countryCode(),
                         "VARCHAR", "DEMO_COMPANY",
                         "DEMO_COMPANY", "COUNTRY_CODE"),
@@ -74,9 +74,9 @@ public class ExistingGDemoCompany extends GDemoCompany {
 
     @Override
     public String getPreparedStatementString() {
-        return "SELECT COUNT(*) FROM DEMO_COMPANY WHERE " +
-                "COUNTRY_CODE = ? AND " +
-                "NAME = ?";
+        return "SELECT COUNT(*) FROM \"DEMO_COMPANY\" WHERE " +
+                "\"COUNTRY_CODE\" = ? AND " +
+                "\"NAME\" = ?";
     }
 
     @Override

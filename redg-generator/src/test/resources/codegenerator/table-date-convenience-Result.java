@@ -45,11 +45,11 @@ public class GDatesTable implements RedGEntity {
             this.aDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_DATE"), java.sql.Date.class);
             this.aTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIME"), java.sql.Time.class);
             this.aTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP"), java.sql.Timestamp.class);
-            this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP_WTZ"), java.lang.Object.class);
+            this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP_WTZ"), java.time.OffsetDateTime.class);
             this.bDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_DATE"), java.sql.Date.class);
             this.bTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIME"), java.sql.Time.class);
             this.bTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP"), java.sql.Timestamp.class);
-            this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP_WTZ"), java.lang.Object.class);
+            this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP_WTZ"), java.time.OffsetDateTime.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not get default value", e);
@@ -65,11 +65,11 @@ public class GDatesTable implements RedGEntity {
                 this.aDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_DATE"), java.sql.Date.class);
                 this.aTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIME"), java.sql.Time.class);
                 this.aTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP"), java.sql.Timestamp.class);
-                this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP_WTZ"), java.lang.Object.class);
+                this.aTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("A_TIMESTAMP_WTZ"), java.time.OffsetDateTime.class);
                 this.bDate = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_DATE"), java.sql.Date.class);
                 this.bTime = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIME"), java.sql.Time.class);
                 this.bTimestamp = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP"), java.sql.Timestamp.class);
-                this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP_WTZ"), java.lang.Object.class);
+                this.bTimestampWtz = redG.getDefaultValueStrategy().getDefaultValue(getTableModel().getColumnBySQLName("B_TIMESTAMP_WTZ"), java.time.OffsetDateTime.class);
 
             } catch (Exception e) {
                 throw new RuntimeException("Could not get default value", e);
@@ -329,7 +329,7 @@ public class GDatesTable implements RedGEntity {
         return this.aTimestamp;
     }
 
-    private java.lang.Object aTimestampWtz;
+    private java.time.OffsetDateTime aTimestampWtz;
 
     /**
      * <table summary="The column model attributes and their values">
@@ -367,7 +367,7 @@ public class GDatesTable implements RedGEntity {
      *     </tr>
      * </table>
      */
-    public GDatesTable aTimestampWtz(java.lang.Object value) {
+    public GDatesTable aTimestampWtz(java.time.OffsetDateTime value) {
         this.aTimestampWtz = value;
         return this;
     }
@@ -408,7 +408,7 @@ public class GDatesTable implements RedGEntity {
      *     </tr>
      * </table>
      */
-    public java.lang.Object aTimestampWtz() {
+    public java.time.OffsetDateTime aTimestampWtz() {
         return this.aTimestampWtz;
     }
 
@@ -664,7 +664,7 @@ public class GDatesTable implements RedGEntity {
         return this.bTimestamp;
     }
 
-    private java.lang.Object bTimestampWtz;
+    private java.time.OffsetDateTime bTimestampWtz;
 
     /**
      * <table summary="The column model attributes and their values">
@@ -702,7 +702,7 @@ public class GDatesTable implements RedGEntity {
      *     </tr>
      * </table>
      */
-    public GDatesTable bTimestampWtz(java.lang.Object value) {
+    public GDatesTable bTimestampWtz(java.time.OffsetDateTime value) {
         this.bTimestampWtz = value;
         return this;
     }
@@ -743,7 +743,7 @@ public class GDatesTable implements RedGEntity {
      *     </tr>
      * </table>
      */
-    public java.lang.Object bTimestampWtz() {
+    public java.time.OffsetDateTime bTimestampWtz() {
         return this.bTimestampWtz;
     }
 
@@ -844,10 +844,10 @@ public class GDatesTable implements RedGEntity {
 
 
     public String getSQLString() {
-        return String.format("INSERT INTO DATES_TABLE (" +
+        return String.format("INSERT INTO \"DATES_TABLE\" (" +
                         "" +
                         "" +
-                        "A_DATE, A_TIME, A_TIMESTAMP, A_TIMESTAMP_WTZ, B_DATE, B_TIME, B_TIMESTAMP, B_TIMESTAMP_WTZ" +
+                        "\"A_DATE\", \"A_TIME\", \"A_TIMESTAMP\", \"A_TIMESTAMP_WTZ\", \"B_DATE\", \"B_TIME\", \"B_TIMESTAMP\", \"B_TIMESTAMP_WTZ\"" +
                         ") VALUES (" +
                         "" +
                         "" +
@@ -880,10 +880,10 @@ public class GDatesTable implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO DATES_TABLE (" +
+        return "INSERT INTO \"DATES_TABLE\" (" +
                 "" +
                 "" +
-                "A_DATE, A_TIME, A_TIMESTAMP, A_TIMESTAMP_WTZ, B_DATE, B_TIME, B_TIMESTAMP, B_TIMESTAMP_WTZ" +
+                "\"A_DATE\", \"A_TIME\", \"A_TIMESTAMP\", \"A_TIMESTAMP_WTZ\", \"B_DATE\", \"B_TIME\", \"B_TIMESTAMP\", \"B_TIMESTAMP_WTZ\"" +
                 ") VALUES (" +
                 "" +
                 "" +
@@ -908,15 +908,15 @@ public class GDatesTable implements RedGEntity {
                 new AttributeMetaInfo("A_DATE", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "DATE", 91, java.sql.Date.class, false),
                 new AttributeMetaInfo("A_TIME", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIME", 92, java.sql.Time.class, false),
                 new AttributeMetaInfo("A_TIMESTAMP", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP", 93, java.sql.Timestamp.class, true),
-                new AttributeMetaInfo("A_TIMESTAMP_WTZ", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.lang.Object.class, false),
+                new AttributeMetaInfo("A_TIMESTAMP_WTZ", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.time.OffsetDateTime.class, false),
                 new AttributeMetaInfo("B_DATE", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "DATE", 91, java.sql.Date.class, false),
                 new AttributeMetaInfo("B_TIME", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIME", 92, java.sql.Time.class, false),
                 new AttributeMetaInfo("B_TIMESTAMP", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP", 93, java.sql.Timestamp.class, true),
-                new AttributeMetaInfo("B_TIMESTAMP_WTZ", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.lang.Object.class, false)
+                new AttributeMetaInfo("B_TIMESTAMP_WTZ", "DATES_TABLE", "\"RT-CG-DCM\".PUBLIC.DATES_TABLE", "TIMESTAMP WITH TIME ZONE", 2014, java.time.OffsetDateTime.class, false)
         };
     }
 
-    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWx0b/Ys7hpPuAIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAB0AAtHRGF0ZXNUYWJsZXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAIdwQAAAAIc3IAH2NvbS5idGMucmVkZy5tb2RlbHMuQ29sdW1uTW9kZWxnpctHtwTU/AIADVoAEWV4cGxpY2l0QXR0cmlidXRlWgAHbm90TnVsbFoAEHBhcnRPZkZvcmVpZ25LZXlaABBwYXJ0T2ZQcmltYXJ5S2V5SQAKc3FsVHlwZUludFoABnVuaXF1ZUwAEmNvbnZlbmllbmNlU2V0dGVyc3EAfgACTAAPZGJGdWxsVGFibGVOYW1lcQB+AAFMAAZkYk5hbWVxAH4AAUwAC2RiVGFibGVOYW1lcQB+AAFMAAxqYXZhVHlwZU5hbWVxAH4AAUwABG5hbWVxAH4AAUwAB3NxbFR5cGVxAH4AAXhwAAAAAAAAAFsAc3IAH2phdmEudXRpbC5Db2xsZWN0aW9ucyRFbXB0eUxpc3R6uBe0PKee3gIAAHhwdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAGQV9EQVRFdAALREFURVNfVEFCTEV0AA1qYXZhLnNxbC5EYXRldAAFYURhdGV0AAREQVRFc3EAfgAIAAAAAAAAAFwAcQB+AAt0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEV0AAZBX1RJTUVxAH4ADnQADWphdmEuc3FsLlRpbWV0AAVhVGltZXQABFRJTUVzcQB+AAgAAQAAAAAAXQBzcgAjamF2YS51dGlsLkNvbGxlY3Rpb25zJFNpbmdsZXRvbkxpc3Qq7ykQPKeblwIAAUwAB2VsZW1lbnR0ABJMamF2YS9sYW5nL09iamVjdDt4cHNyACpjb20uYnRjLnJlZGcubW9kZWxzLkNvbnZlbmllbmNlU2V0dGVyTW9kZWxMlfxmFxggjQIAAkwAIWZ1bGx5UXVhbGlmaWVkQ29udmVydGVyTWV0aG9kTmFtZXEAfgABTAASc2V0dGVySmF2YVR5cGVOYW1lcQB+AAF4cHQAM2NvbS5idGMucmVkZy5ydW50aW1lLnV0aWwuRGF0ZUNvbnZlcnRlci5jb252ZXJ0RGF0ZXQAEGphdmEudXRpbC5TdHJpbmd0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEV0AAtBX1RJTUVTVEFNUHEAfgAOdAASamF2YS5zcWwuVGltZXN0YW1wdAAKYVRpbWVzdGFtcHQACVRJTUVTVEFNUHNxAH4ACAAAAAAAAAfeAHEAfgALdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAPQV9USU1FU1RBTVBfV1RacQB+AA50ABBqYXZhLmxhbmcuT2JqZWN0dAANYVRpbWVzdGFtcFd0enQAGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORXNxAH4ACAAAAAAAAABbAHEAfgALdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAGQl9EQVRFcQB+AA5xAH4AD3QABWJEYXRlcQB+ABFzcQB+AAgAAAAAAAAAXABxAH4AC3QAHiJSVC1DRy1EQ00iLlBVQkxJQy5EQVRFU19UQUJMRXQABkJfVElNRXEAfgAOcQB+ABV0AAViVGltZXEAfgAXc3EAfgAIAAEAAAAAAF0Ac3EAfgAZc3EAfgAccQB+AB5xAH4AH3QAHiJSVC1DRy1EQ00iLlBVQkxJQy5EQVRFU19UQUJMRXQAC0JfVElNRVNUQU1QcQB+AA5xAH4AInQACmJUaW1lc3RhbXBxAH4AJHNxAH4ACAAAAAAAAAfeAHEAfgALdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAPQl9USU1FU1RBTVBfV1RacQB+AA5xAH4AKHQADWJUaW1lc3RhbXBXdHpxAH4AKnhzcQB+AAYAAAAAdwQAAAAAeHNxAH4ABgAAAAB3BAAAAAB4c3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAAAHcIAAAAEAAAAAB4dAAKRGF0ZXNUYWJsZXQAFmNvbS5idGMucmVkZy5nZW5lcmF0ZWR0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEVxAH4ADg==";
+    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWx0b/Ys7hpPuAIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAB0AAtHRGF0ZXNUYWJsZXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAIdwQAAAAIc3IAH2NvbS5idGMucmVkZy5tb2RlbHMuQ29sdW1uTW9kZWxnpctHtwTU/AIADVoAEWV4cGxpY2l0QXR0cmlidXRlWgAHbm90TnVsbFoAEHBhcnRPZkZvcmVpZ25LZXlaABBwYXJ0T2ZQcmltYXJ5S2V5SQAKc3FsVHlwZUludFoABnVuaXF1ZUwAEmNvbnZlbmllbmNlU2V0dGVyc3EAfgACTAAPZGJGdWxsVGFibGVOYW1lcQB+AAFMAAZkYk5hbWVxAH4AAUwAC2RiVGFibGVOYW1lcQB+AAFMAAxqYXZhVHlwZU5hbWVxAH4AAUwABG5hbWVxAH4AAUwAB3NxbFR5cGVxAH4AAXhwAAAAAAAAAFsAc3IAH2phdmEudXRpbC5Db2xsZWN0aW9ucyRFbXB0eUxpc3R6uBe0PKee3gIAAHhwdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAGQV9EQVRFdAALREFURVNfVEFCTEV0AA1qYXZhLnNxbC5EYXRldAAFYURhdGV0AAREQVRFc3EAfgAIAAAAAAAAAFwAcQB+AAt0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEV0AAZBX1RJTUVxAH4ADnQADWphdmEuc3FsLlRpbWV0AAVhVGltZXQABFRJTUVzcQB+AAgAAQAAAAAAXQBzcgAjamF2YS51dGlsLkNvbGxlY3Rpb25zJFNpbmdsZXRvbkxpc3Qq7ykQPKeblwIAAUwAB2VsZW1lbnR0ABJMamF2YS9sYW5nL09iamVjdDt4cHNyACpjb20uYnRjLnJlZGcubW9kZWxzLkNvbnZlbmllbmNlU2V0dGVyTW9kZWxMlfxmFxggjQIAAkwAIWZ1bGx5UXVhbGlmaWVkQ29udmVydGVyTWV0aG9kTmFtZXEAfgABTAASc2V0dGVySmF2YVR5cGVOYW1lcQB+AAF4cHQAM2NvbS5idGMucmVkZy5ydW50aW1lLnV0aWwuRGF0ZUNvbnZlcnRlci5jb252ZXJ0RGF0ZXQAEGphdmEudXRpbC5TdHJpbmd0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEV0AAtBX1RJTUVTVEFNUHEAfgAOdAASamF2YS5zcWwuVGltZXN0YW1wdAAKYVRpbWVzdGFtcHQACVRJTUVTVEFNUHNxAH4ACAAAAAAAAAfeAHEAfgALdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAPQV9USU1FU1RBTVBfV1RacQB+AA50ABhqYXZhLnRpbWUuT2Zmc2V0RGF0ZVRpbWV0AA1hVGltZXN0YW1wV3R6dAAYVElNRVNUQU1QIFdJVEggVElNRSBaT05Fc3EAfgAIAAAAAAAAAFsAcQB+AAt0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEV0AAZCX0RBVEVxAH4ADnEAfgAPdAAFYkRhdGVxAH4AEXNxAH4ACAAAAAAAAABcAHEAfgALdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAAGQl9USU1FcQB+AA5xAH4AFXQABWJUaW1lcQB+ABdzcQB+AAgAAQAAAAAAXQBzcQB+ABlzcQB+ABxxAH4AHnEAfgAfdAAeIlJULUNHLURDTSIuUFVCTElDLkRBVEVTX1RBQkxFdAALQl9USU1FU1RBTVBxAH4ADnEAfgAidAAKYlRpbWVzdGFtcHEAfgAkc3EAfgAIAAAAAAAAB94AcQB+AAt0AB4iUlQtQ0ctRENNIi5QVUJMSUMuREFURVNfVEFCTEV0AA9CX1RJTUVTVEFNUF9XVFpxAH4ADnEAfgAodAANYlRpbWVzdGFtcFd0enEAfgAqeHNxAH4ABgAAAAB3BAAAAAB4c3EAfgAGAAAAAHcEAAAAAHhzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHh0AApEYXRlc1RhYmxldAAWY29tLmJ0Yy5yZWRnLmdlbmVyYXRlZHQAHiJSVC1DRy1EQ00iLlBVQkxJQy5EQVRFU19UQUJMRXEAfgAO";
     private static TableModel tableModel;
 
     public static String getSerializedTableModel() {
