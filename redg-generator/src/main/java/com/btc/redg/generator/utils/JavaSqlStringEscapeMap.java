@@ -27,10 +27,17 @@ import java.util.Set;
  */
 public class JavaSqlStringEscapeMap extends AbstractMap<String, Object> {
 
-    private final String escapeString;
+    private final String escapeStringBefore;
+    private final String escapeStringAfter;
+
+    public JavaSqlStringEscapeMap(String escapeStringBefore, String escapeStringAfter) {
+        this.escapeStringBefore = escapeStringBefore;
+        this.escapeStringAfter = escapeStringAfter;
+    }
 
     public JavaSqlStringEscapeMap(String escapeString) {
-        this.escapeString = escapeString;
+        this.escapeStringBefore = escapeString;
+        this.escapeStringAfter = escapeString;
     }
 
     public JavaSqlStringEscapeMap() {
@@ -41,7 +48,7 @@ public class JavaSqlStringEscapeMap extends AbstractMap<String, Object> {
     public Object get(Object key) {
         if (key instanceof String) {
             String str = (String) key;
-            return escapeString + str.replace("\"", "") + escapeString;
+            return this.escapeStringBefore + str.replace("\"", "") + this.escapeStringAfter;
         }
 
         return super.get(key);
