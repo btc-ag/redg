@@ -256,10 +256,10 @@ public class GDemoCompany implements RedGEntity {
 
 
     public String getSQLString() {
-        return String.format("INSERT INTO DEMO_COMPANY (" +
+        return String.format("INSERT INTO \"DEMO_COMPANY\" (" +
                         "" +
                         "" +
-                        "COUNTRY_CODE, NAME" +
+                        "\"COUNTRY_CODE\", \"NAME\"" +
                         ") VALUES (" +
                         "" +
                         "" +
@@ -274,10 +274,10 @@ public class GDemoCompany implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO DEMO_COMPANY (" +
+        return "INSERT INTO \"DEMO_COMPANY\" (" +
                 "" +
                 "" +
-                "COUNTRY_CODE, NAME" +
+                "\"COUNTRY_CODE\", \"NAME\"" +
                 ") VALUES (" +
                 "" +
                 "" +

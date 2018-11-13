@@ -27,11 +27,21 @@ import java.util.Set;
  */
 public class JavaSqlStringEscapeMap extends AbstractMap<String, Object> {
 
+    private final String escapeString;
+
+    public JavaSqlStringEscapeMap(String escapeString) {
+        this.escapeString = escapeString;
+    }
+
+    public JavaSqlStringEscapeMap() {
+        this("\\\"");
+    }
+
     @Override
     public Object get(Object key) {
         if (key instanceof String) {
             String str = (String) key;
-            return "\\\"" + str.replace("\"", "") + "\\\"";
+            return escapeString + str.replace("\"", "") + escapeString;
         }
 
         return super.get(key);

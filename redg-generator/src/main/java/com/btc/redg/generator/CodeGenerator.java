@@ -46,10 +46,42 @@ public class CodeGenerator {
     private STGroup stGroup;
 
     /**
-     * Creates a new code generator using the default 'templates.stg' template file
+     * Creates a new code generator using the default 'templates.stg' template file and escaping of identifiers
+     * conforming to the SQL standard.
      */
     public CodeGenerator() {
-        this("templates.stg");
+        this("templates.stg", null);
+    }
+
+    /**
+     * Creates a new code generator using the passed template resource.
+     * The template group file <b>must</b> include templates
+     * <ul>
+     * <li>mainClass(package, prefix, tables)</li>
+     * <li>tableClass(package, className, columns, foreignKeys)</li>
+     * </ul>
+     * There is no check build in, code generation will fail if these templates do not exist.
+     *
+     * @param templateResource the resource to use. Has to be a .stg template group file
+     * @param sqlEscapeString  the string to escape SQL identifiers. Has to be Java-Escaped. Defaults to "\\\""
+     */
+    public CodeGenerator(final String templateResource, final String sqlEscapeString) {
+        try {
+            LOG.info("Loading code templates...");
+            final InputStream is = getClass().getClassLoader().getResourceAsStream(templateResource);
+            this.stGroup = new STGroupString(this.getStreamAsString(is));
+            this.stGroup.registerRenderer(String.class, new StringRenderer());
+            this.stGroup.defineDictionary("escape", new JavaStringEscapeMap());
+            if (sqlEscapeString != null) {
+                this.stGroup.defineDictionary("escapeSql", new JavaSqlStringEscapeMap(sqlEscapeString));
+            } else {
+                this.stGroup.defineDictionary("escapeSql", new JavaSqlStringEscapeMap());
+            }
+            LOG.info("Loading successful.");
+        } catch (IOException e) {
+            LOG.error("Loading failed.", e);
+            throw new RedGGenerationException("Loading of template file failed", e);
+        }
     }
 
     /**
@@ -64,18 +96,7 @@ public class CodeGenerator {
      * @param templateResource the resource to use. Has to be a .stg template group file
      */
     public CodeGenerator(final String templateResource) {
-        try {
-            LOG.info("Loading code templates...");
-            final InputStream is = getClass().getClassLoader().getResourceAsStream(templateResource);
-            this.stGroup = new STGroupString(this.getStreamAsString(is));
-            this.stGroup.registerRenderer(String.class, new StringRenderer());
-            this.stGroup.defineDictionary("escape", new JavaStringEscapeMap());
-            this.stGroup.defineDictionary("escapeSql", new JavaSqlStringEscapeMap());
-            LOG.info("Loading successful.");
-        } catch (IOException e) {
-            LOG.error("Loading failed.", e);
-            throw new RedGGenerationException("Loading of template file failed", e);
-        }
+        this(templateResource, null);
     }
 
     /**
