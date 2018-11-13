@@ -190,27 +190,6 @@ public abstract class AbstractRedG {
     }
 
     /**
-     * Inserts all data previously prepared by RedG into the database using the specified dataSource.
-     * Entities are going to be inserted in the order they were added. <br>
-     * This method uses prepared statements to efficiently insert even great amount of data.<br>
-     * If a Insertion/Update updates more than 1 entry, a warning will be logged to the console.
-     * If a entity that is marked as "existing" (via redG.existingX()) is not found, an error will be logged and an {@link ExistingEntryMissingException} will
-     * be thrown.
-     *
-     * @param dataSource The DataSource to use.
-     * @throws ExistingEntryMissingException When an entry defined as "existing" (via redG.existingX()) cannot be found in the database
-     * @throws InsertionFailedException      When problems with the prepared statement occur. This is often the result of a faulty data type mapping or
-     *                                       {@link PreparedStatementParameterSetter}
-     */
-    public void insertDataIntoDatabase(final DataSource dataSource) {
-        try (Connection connection = dataSource.getConnection()) {
-            RedGDatabaseUtil.insertDataIntoDatabase(getEntitiesSortedForInsert(), connection, preparedStatementParameterSetter);
-        } catch (SQLException e) {
-            throw new InsertionFailedException("Failed to acquire connection from data source!", e);
-        }
-    }
-
-    /**
      * Finds a single entity in the list of entities to insert into the database. If multiple entities match the {@link Predicate}, the entity that was added
      * first will be returned.
      *
