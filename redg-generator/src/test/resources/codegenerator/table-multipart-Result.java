@@ -530,12 +530,12 @@ public class GDemoUser implements RedGEntity {
 
 
     public String getSQLString() {
-        return String.format("INSERT INTO DEMO_USER (" +
-                        "ACC_BIC, ACC_IBAN" +
+        return String.format("INSERT INTO \"DEMO_USER\" (" +
+                        "\"ACC_BIC\", \"ACC_IBAN\"" +
                         ", " +
-                        "WORKS_AT_NAME, WORKS_AT_CC" +
+                        "\"WORKS_AT_NAME\", \"WORKS_AT_CC\"" +
                         ", " +
-                        "ID, USERNAME, FIRST_NAME, LAST_NAME" +
+                        "\"ID\", \"USERNAME\", \"FIRST_NAME\", \"LAST_NAME\"" +
                         ") VALUES (" +
                         "%s, %s" +
                         ", " +
@@ -570,12 +570,12 @@ public class GDemoUser implements RedGEntity {
     }
 
     public String getPreparedStatementString() {
-        return "INSERT INTO DEMO_USER (" +
-                "ACC_BIC, ACC_IBAN" +
+        return "INSERT INTO \"DEMO_USER\" (" +
+                "\"ACC_BIC\", \"ACC_IBAN\"" +
                 ", " +
-                "WORKS_AT_NAME, WORKS_AT_CC" +
+                "\"WORKS_AT_NAME\", \"WORKS_AT_CC\"" +
                 ", " +
-                "ID, USERNAME, FIRST_NAME, LAST_NAME" +
+                "\"ID\", \"USERNAME\", \"FIRST_NAME\", \"LAST_NAME\"" +
                 ") VALUES (" +
                 "?, ?" +
                 ", " +

@@ -89,13 +89,13 @@ public class ColumnExtractorTest {
 
     @Test
     public void testExtractColumnModelForKeywordColumn() throws Exception {
-        Column column = extractColumnFromDemoDb("DEMO_USER", "\"DAY\"");
+        Column column = extractColumnFromDemoDb("DEMO_USER", "DAY");
 
         ColumnExtractor extractor = new ColumnExtractor(new DefaultDataTypeProvider(), new DefaultNameProvider(),
                 new DefaultExplicitAttributeDecider(), new DefaultConvenienceSetterProvider());
         ColumnModel model = extractor.extractColumnModel(column);
 
-        assertEquals("\"DAY\"", model.getDbName());
+        assertEquals("DAY", model.getDbName());
     }
 
     private Column extractColumnFromDemoDb(String tableName, String columnName) throws Exception {

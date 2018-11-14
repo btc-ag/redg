@@ -66,7 +66,7 @@ public class ColumnExtractor {
         model.setDbFullTableName(column.getParent().getFullName());
 
         model.setSqlType(column.getColumnDataType().getName());
-        model.setSqlTypeInt(column.getColumnDataType().getJavaSqlType().getJavaSqlType());
+        model.setSqlTypeInt(column.getColumnDataType().getJavaSqlType().getVendorTypeNumber());
         String javaDataTypeName = dataTypeProvider.getCanonicalDataTypeName(column);
         model.setJavaTypeName(javaDataTypeName);
         model.setNotNull(!column.isNullable());

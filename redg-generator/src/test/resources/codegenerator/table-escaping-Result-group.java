@@ -26,7 +26,7 @@ import com.btc.redg.models.*;
  *     </tr>
  *     <tr>
  *         <td>Table name</td>
- *         <td>"GROUP"</td>
+ *         <td>GROUP</td>
  *     </tr>
  *     <tr>
  *         <td>Full table name</td>
@@ -79,7 +79,7 @@ public class GGroup implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Table name</td>
-     *         <td>"GROUP"</td>
+     *         <td>GROUP</td>
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
@@ -123,7 +123,7 @@ public class GGroup implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Table name</td>
-     *         <td>"GROUP"</td>
+     *         <td>GROUP</td>
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
@@ -185,7 +185,7 @@ public class GGroup implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Table name</td>
-     *         <td>"GROUP"</td>
+     *         <td>GROUP</td>
      *     </tr>
      *     <tr>
      *         <td>Full table name</td>
@@ -193,7 +193,7 @@ public class GGroup implements RedGEntity {
      *     </tr>
      *     <tr>
      *         <td>Column name</td>
-     *         <td>"TABLE"</td>
+     *         <td>TABLE</td>
      *     </tr>
      *     <tr>
      *         <td>SQL type</td>
@@ -217,7 +217,7 @@ public class GGroup implements RedGEntity {
                         "\"TABLE\"" +
                         "" +
                         ", " +
-                        "ID" +
+                        "\"ID\"" +
                         ") VALUES (" +
                         "%s" +
                         "" +
@@ -225,10 +225,10 @@ public class GGroup implements RedGEntity {
                         "%s)",
                 this.redG.getSqlValuesFormatter().formatValue(this.tableTable.id(),
                         "DECIMAL", "\"RT-CG-TE\".PUBLIC.\"GROUP\"",
-                        "\"GROUP\"", "\"TABLE\""),
+                        "GROUP", "TABLE"),
                 this.redG.getSqlValuesFormatter().formatValue(this.id(),
                         "DECIMAL", "\"RT-CG-TE\".PUBLIC.\"GROUP\"",
-                        "\"GROUP\"", "ID")
+                        "GROUP", "ID")
         );
     }
 
@@ -237,7 +237,7 @@ public class GGroup implements RedGEntity {
                 "\"TABLE\"" +
                 "" +
                 ", " +
-                "ID" +
+                "\"ID\"" +
                 ") VALUES (" +
                 "?" +
                 "" +
@@ -254,12 +254,12 @@ public class GGroup implements RedGEntity {
 
     public AttributeMetaInfo[] getPreparedStatementValuesMetaInfos() {
         return new AttributeMetaInfo[]{
-                new AttributeMetaInfo("\"TABLE\"", "\"GROUP\"", "\"RT-CG-TE\".PUBLIC.\"GROUP\"", "DECIMAL", 3, java.math.BigDecimal.class, true),
-                new AttributeMetaInfo("ID", "\"GROUP\"", "\"RT-CG-TE\".PUBLIC.\"GROUP\"", "DECIMAL", 3, java.math.BigDecimal.class, true)
+                new AttributeMetaInfo("TABLE", "GROUP", "\"RT-CG-TE\".PUBLIC.\"GROUP\"", "DECIMAL", 3, java.math.BigDecimal.class, true),
+                new AttributeMetaInfo("ID", "GROUP", "\"RT-CG-TE\".PUBLIC.\"GROUP\"", "DECIMAL", 3, java.math.BigDecimal.class, true)
         };
     }
 
-    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWx0b/Ys7hpPuAIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAF0AAZHR3JvdXBzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAAncEAAAAAnNyAB9jb20uYnRjLnJlZGcubW9kZWxzLkNvbHVtbk1vZGVsZ6XLR7cE1PwCAA1aABFleHBsaWNpdEF0dHJpYnV0ZVoAB25vdE51bGxaABBwYXJ0T2ZGb3JlaWduS2V5WgAQcGFydE9mUHJpbWFyeUtleUkACnNxbFR5cGVJbnRaAAZ1bmlxdWVMABJjb252ZW5pZW5jZVNldHRlcnNxAH4AAkwAD2RiRnVsbFRhYmxlTmFtZXEAfgABTAAGZGJOYW1lcQB+AAFMAAtkYlRhYmxlTmFtZXEAfgABTAAMamF2YVR5cGVOYW1lcQB+AAFMAARuYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAABAAEAAAADAXNyAB9qYXZhLnV0aWwuQ29sbGVjdGlvbnMkRW1wdHlMaXN0ergXtDynnt4CAAB4cHQAGSJSVC1DRy1URSIuUFVCTElDLiJHUk9VUCJ0AAJJRHQAByJHUk9VUCJ0ABRqYXZhLm1hdGguQmlnRGVjaW1hbHQAAmlkdAAHREVDSU1BTHNxAH4ACAABAQAAAAADAHEAfgALdAAZIlJULUNHLVRFIi5QVUJMSUMuIkdST1VQInQAByJUQUJMRSJxAH4ADnEAfgAPdAAFdGFibGVxAH4AEXhzcQB+AAYAAAABdwQAAAABc3IAI2NvbS5idGMucmVkZy5tb2RlbHMuRm9yZWlnbktleU1vZGVssCKOpfjX2JACAARaAAdub3ROdWxsTAAMamF2YVR5cGVOYW1lcQB+AAFMAARuYW1lcQB+AAFMAApyZWZlcmVuY2VzcQB+AAN4cAF0AAZHVGFibGV0AAp0YWJsZVRhYmxlc3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAADHcIAAAAEAAAAAFxAH4AFHNyACljb20uYnRjLnJlZGcubW9kZWxzLkZvcmVpZ25LZXlDb2x1bW5Nb2RlbEp74Kp2qOp+AgAISQAKc3FsVHlwZUludEwAD2RiRnVsbFRhYmxlTmFtZXEAfgABTAAGZGJOYW1lcQB+AAFMAAtkYlRhYmxlTmFtZXEAfgABTAAJbG9jYWxOYW1lcQB+AAFMAAlsb2NhbFR5cGVxAH4AAUwAF3ByaW1hcnlLZXlBdHRyaWJ1dGVOYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAAAAAN0ABkiUlQtQ0ctVEUiLlBVQkxJQy4iR1JPVVAicQB+ABRxAH4ADnQABXRhYmxlcQB+AA90AAJpZHEAfgAReHhzcQB+AAYAAAAAdwQAAAAAeHNxAH4AGz9AAAAAAAAAdwgAAAAQAAAAAHh0AAVHcm91cHQAFmNvbS5idGMucmVkZy5nZW5lcmF0ZWR0ABkiUlQtQ0ctVEUiLlBVQkxJQy4iR1JPVVAicQB+AA4=";
+    private static String serializedTableModel = "rO0ABXNyAB5jb20uYnRjLnJlZGcubW9kZWxzLlRhYmxlTW9kZWx0b/Ys7hpPuAIACloAGGhhc0NvbHVtbnNBbmRGb3JlaWduS2V5c0wACWNsYXNzTmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wAB2NvbHVtbnN0ABBMamF2YS91dGlsL0xpc3Q7TAALZm9yZWlnbktleXNxAH4AAkwAE2luY29taW5nRm9yZWlnbktleXNxAH4AAkwAF2pvaW5UYWJsZVNpbXBsaWZpZXJEYXRhdAAPTGphdmEvdXRpbC9NYXA7TAAEbmFtZXEAfgABTAALcGFja2FnZU5hbWVxAH4AAUwAC3NxbEZ1bGxOYW1lcQB+AAFMAAdzcWxOYW1lcQB+AAF4cAF0AAZHR3JvdXBzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAAncEAAAAAnNyAB9jb20uYnRjLnJlZGcubW9kZWxzLkNvbHVtbk1vZGVsZ6XLR7cE1PwCAA1aABFleHBsaWNpdEF0dHJpYnV0ZVoAB25vdE51bGxaABBwYXJ0T2ZGb3JlaWduS2V5WgAQcGFydE9mUHJpbWFyeUtleUkACnNxbFR5cGVJbnRaAAZ1bmlxdWVMABJjb252ZW5pZW5jZVNldHRlcnNxAH4AAkwAD2RiRnVsbFRhYmxlTmFtZXEAfgABTAAGZGJOYW1lcQB+AAFMAAtkYlRhYmxlTmFtZXEAfgABTAAMamF2YVR5cGVOYW1lcQB+AAFMAARuYW1lcQB+AAFMAAdzcWxUeXBlcQB+AAF4cAABAAEAAAADAXNyAB9qYXZhLnV0aWwuQ29sbGVjdGlvbnMkRW1wdHlMaXN0ergXtDynnt4CAAB4cHQAGSJSVC1DRy1URSIuUFVCTElDLiJHUk9VUCJ0AAJJRHQABUdST1VQdAAUamF2YS5tYXRoLkJpZ0RlY2ltYWx0AAJpZHQAB0RFQ0lNQUxzcQB+AAgAAQEAAAAAAwBxAH4AC3QAGSJSVC1DRy1URSIuUFVCTElDLiJHUk9VUCJ0AAVUQUJMRXEAfgAOcQB+AA90AAV0YWJsZXEAfgAReHNxAH4ABgAAAAF3BAAAAAFzcgAjY29tLmJ0Yy5yZWRnLm1vZGVscy5Gb3JlaWduS2V5TW9kZWywIo6l+NfYkAIABFoAB25vdE51bGxMAAxqYXZhVHlwZU5hbWVxAH4AAUwABG5hbWVxAH4AAUwACnJlZmVyZW5jZXNxAH4AA3hwAXQABkdUYWJsZXQACnRhYmxlVGFibGVzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAMdwgAAAAQAAAAAXEAfgAUc3IAKWNvbS5idGMucmVkZy5tb2RlbHMuRm9yZWlnbktleUNvbHVtbk1vZGVsSnvgqnao6n4CAAhJAApzcWxUeXBlSW50TAAPZGJGdWxsVGFibGVOYW1lcQB+AAFMAAZkYk5hbWVxAH4AAUwAC2RiVGFibGVOYW1lcQB+AAFMAAlsb2NhbE5hbWVxAH4AAUwACWxvY2FsVHlwZXEAfgABTAAXcHJpbWFyeUtleUF0dHJpYnV0ZU5hbWVxAH4AAUwAB3NxbFR5cGVxAH4AAXhwAAAAA3QAGSJSVC1DRy1URSIuUFVCTElDLiJHUk9VUCJxAH4AFHEAfgAOdAAFdGFibGVxAH4AD3QAAmlkcQB+ABF4eHNxAH4ABgAAAAB3BAAAAAB4c3EAfgAbP0AAAAAAAAB3CAAAABAAAAAAeHQABUdyb3VwdAAWY29tLmJ0Yy5yZWRnLmdlbmVyYXRlZHQAGSJSVC1DRy1URSIuUFVCTElDLiJHUk9VUCJxAH4ADg==";
     private static TableModel tableModel;
 
     public static String getSerializedTableModel() {

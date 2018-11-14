@@ -35,6 +35,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
@@ -44,9 +46,12 @@ public class DataExtractor {
     private static final Logger LOG = LoggerFactory.getLogger(DataExtractor.class);
 
     private static final String SELECT_FORMAT_STRING = "SELECT * FROM %s";
+    private static final Pattern TABLE_NAME_EXTRACTOR_PATTERN = Pattern.compile(".+\\.(.+)");
 
     private JavaCodeRepresentationProvider jcrProvider = new DefaultJavaCodeRepresentationProvider();
     private Function<EntityModel, EntityInclusionMode> entityModeDecider = (em) -> EntityInclusionMode.ADD_NEW;
+
+    private String sqlSchemaName = null;
 
     public JavaCodeRepresentationProvider getJcrProvider() {
         return jcrProvider;
@@ -64,6 +69,10 @@ public class DataExtractor {
         this.entityModeDecider = entityModeDecider;
     }
 
+    public void setSqlSchemaName(String sqlSchemaName) {
+        this.sqlSchemaName = sqlSchemaName;
+    }
+
     public List<EntityModel> extractAllData(final DataSource dataSource, final List<TableModel> tableModels) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             return extractAllData(connection, tableModels);
@@ -74,6 +83,27 @@ public class DataExtractor {
         final List<EntityModel> entities = extractEntityModels(connection, tableModels);
         resolveReferences(entities);
         return sortEntities(entities);
+    }
+
+    private String getFullTableName(final TableModel tm) {
+        if (this.sqlSchemaName != null) {
+            // goal: keep escaping of table name if it is escaped in #getSqlFullName()
+            // thus we split it with a regex at the last point
+            final Matcher tableNameMatcher = TABLE_NAME_EXTRACTOR_PATTERN.matcher(tm.getSqlFullName());
+            String escapedTableName;
+            if (tableNameMatcher.matches()) {
+                escapedTableName = tableNameMatcher.group(1);
+            } else {
+                // this can only happen if the "full" name did not include a single dot(".")
+                // thus, use whole value
+                escapedTableName = tm.getSqlFullName();
+            }
+            if (this.sqlSchemaName.isEmpty()) {
+                return escapedTableName;
+            }
+            return this.sqlSchemaName + (this.sqlSchemaName.endsWith(".") ? "" : ".") + escapedTableName;
+        }
+        return tm.getSqlFullName();
     }
 
     private List<EntityModel> extractEntityModels(Connection connection, List<TableModel> tableModels) throws SQLException {
@@ -87,8 +117,8 @@ public class DataExtractor {
             st.setFetchSize(50);
 
             for (final TableModel tableModel : tableModels) {
-                LOG.debug("Fetching data from table {}...", tableModel.getSqlFullName());
-                final ResultSet rs = st.executeQuery(String.format(SELECT_FORMAT_STRING, tableModel.getSqlFullName()));
+                LOG.debug("Fetching data from table {}...", getFullTableName(tableModel));
+                final ResultSet rs = st.executeQuery(String.format(SELECT_FORMAT_STRING, getFullTableName(tableModel)));
                 long counter = 0;
                 while (rs.next()) {
                     ++counter;
@@ -136,7 +166,7 @@ public class DataExtractor {
                     entities.add(entityModel);
 
                 }
-                LOG.debug("Extracted {} entities from table {}", counter, tableModel.getSqlFullName());
+                LOG.debug("Extracted {} entities from table {}", counter, getFullTableName(tableModel));
             }
         }
         return entities;

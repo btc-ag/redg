@@ -31,6 +31,11 @@
             <version>${redg.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.btc-ag.redg</groupId>
+            <artifactId>redg-extractor</artifactId>
+            <version>${redg.version}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
@@ -41,6 +46,11 @@
             <artifactId>h2</artifactId>
             <version>1.4.197</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.6.1</version>
         </dependency>
 
     </dependencies>
@@ -105,6 +115,25 @@
                                 <param>src/test/resources/recurse-schema.sql</param>
                             </sqlScripts>
                             <targetPackage>com.btc.redg.generated.recurse</targetPackage>
+                            <schemaRegex>.*</schemaRegex>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>redg-generate-extractor</id>
+                        <phase>generate-test-sources</phase> <!-- This plugin generates sources for the test code -->
+                        <goals>
+                            <goal>redg</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Provide database connection information. We'll just use a H2 in-memory database here -->
+                            <jdbcDriver>org.h2.Driver</jdbcDriver>
+                            <connectionString>jdbc:h2:mem:redg-extractor</connectionString>
+                            <username>sa</username>
+                            <password>sa</password>
+                            <sqlScripts> <!-- the SQL scripts to run before schema analysis -->
+                                <param>src/test/resources/extractor-schema.sql</param>
+                            </sqlScripts>
+                            <targetPackage>com.btc.redg.generated.extractor</targetPackage>
                             <schemaRegex>.*</schemaRegex>
                         </configuration>
                     </execution>

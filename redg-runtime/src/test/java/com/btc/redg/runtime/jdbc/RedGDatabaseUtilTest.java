@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.btc.redg.runtime.ExistingEntryMissingException;
-import com.btc.redg.runtime.mocks.ExistingMockEntity1;
+import com.btc.redg.runtime.mocks.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -40,8 +40,6 @@ import org.mockito.Mockito;
 
 import com.btc.redg.runtime.InsertionFailedException;
 import com.btc.redg.runtime.RedGEntity;
-import com.btc.redg.runtime.mocks.MockEntity1;
-import com.btc.redg.runtime.mocks.MockEntity2;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -69,6 +67,38 @@ public class RedGDatabaseUtilTest {
         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TEST");
         rs.next();
         assertEquals(20, rs.getInt(1));
+
+    }
+
+    @Test
+    public void testInsertDataIntoDatabase2() throws Exception {
+        Connection connection = getConnection("-idid2");
+        Statement stmt = connection.createStatement();
+        stmt.execute("CREATE TABLE TEST (CONTENT VARCHAR2(50 CHAR))");
+
+        List<MockEntity3> gObjects = IntStream.rangeClosed(1, 20).mapToObj(i -> new MockEntity3()).collect(Collectors.toList());
+
+        RedGDatabaseUtil.insertDataIntoDatabase(gObjects, connection);
+
+        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TEST");
+        rs.next();
+        assertEquals(20, rs.getInt(1));
+
+    }
+
+    @Test
+    public void testInsertDataIntoDatabase3() throws Exception {
+        Connection connection = getConnection("-idid3");
+        Statement stmt = connection.createStatement();
+        stmt.execute("CREATE TABLE TEST (CONTENT VARCHAR2(50 CHAR))");
+
+        List<MockEntity4> gObjects = IntStream.rangeClosed(1, 20).mapToObj(i -> new MockEntity4()).collect(Collectors.toList());
+
+        RedGDatabaseUtil.insertDataIntoDatabase(gObjects, connection);
+
+        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TEST");
+        rs.next();
+        assertEquals(40, rs.getInt(1));
 
     }
 
@@ -115,23 +145,7 @@ public class RedGDatabaseUtilTest {
         RedGDatabaseUtil.insertDataIntoDatabase(gObjects, mockConnection);
     }
 
-    @Test
-    public void testInsertDataIntoDatabase_FailOnCommit() throws Exception {
-        thrown.expect(InsertionFailedException.class);
-        thrown.expectMessage("Commit failed");
-
-        Connection mockConnection = mock(Connection.class);
-        PreparedStatement preparedStatement = mock(PreparedStatement.class);
-        when(mockConnection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        Mockito.doThrow(new SQLException("Mock reason")).when(mockConnection).commit();
-
-        List<RedGEntity> gObjects = IntStream.rangeClosed(1, 20).mapToObj(i -> new MockEntity1()).collect(Collectors.toList());
-        gObjects.add(new MockEntity2());
-
-        RedGDatabaseUtil.insertDataIntoDatabase(gObjects, mockConnection);
-    }
-
-    private Connection getConnection(String suffix) throws ClassNotFoundException, SQLException {
+    private Connection getConnection(final String suffix) throws ClassNotFoundException, SQLException {
         Class.forName("org.h2.Driver");
         return DriverManager.getConnection("jdbc:h2:mem:test-" + suffix, "", "");
     }

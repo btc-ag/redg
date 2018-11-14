@@ -21,7 +21,7 @@
     <groupId>com.btc-ag.redg</groupId>
     <artifactId>redg</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.6</version>
+    <version>2.0</version>
     <modules>
         <module>redg-generator</module>
         <module>redg-jpa-providers</module>
@@ -69,7 +69,7 @@
     <properties>
         <mavenPluginApiVersion>3.0.5</mavenPluginApiVersion>
         <mavenPluginAnnotationsVersion>3.3</mavenPluginAnnotationsVersion>
-        <schemacrawlerVersion>14.16.01</schemacrawlerVersion>
+        <schemacrawlerVersion>15.01.06</schemacrawlerVersion>
         <h2Version>1.4.194</h2Version>
         <stringtemplateVersion>4.0.8</stringtemplateVersion>
         <junitVersion>4.12</junitVersion>
@@ -335,7 +335,7 @@
         <url>https://github.com/btc-ag/redg/</url>
         <connection>scm:git:https://github.com/btc-ag/redg.git</connection>
         <developerConnection>scm:git:https://github.com/btc-ag/redg.git</developerConnection>
-        <tag>redg-1.1.6</tag>
+        <tag>redg-2.0</tag>
     </scm>
 
     <profiles>

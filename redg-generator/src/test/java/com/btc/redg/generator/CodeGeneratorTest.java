@@ -102,9 +102,9 @@ public class CodeGeneratorTest {
         assertNotNull(db);
         Schema s = db.getSchemas().stream().filter(schema -> schema.getName().equals("PUBLIC")).findFirst().orElse(null);
         assertNotNull(s);
-        Table t1 = db.getTables(s).stream().filter(table -> table.getName().equals("\"TABLE\"")).findFirst().orElse(null);
+        Table t1 = db.getTables(s).stream().filter(table -> table.getName().equals("TABLE")).findFirst().orElse(null);
         assertNotNull(t1);
-        Table t2 = db.getTables(s).stream().filter(table -> table.getName().equals("\"GROUP\"")).findFirst().orElse(null);
+        Table t2 = db.getTables(s).stream().filter(table -> table.getName().equals("GROUP")).findFirst().orElse(null);
         assertNotNull(t2);
 
         List<TableModel> models = MetadataExtractor.extract(db);

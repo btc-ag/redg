@@ -1,6 +1,9 @@
 package com.btc.redg.tests;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.stream.Collectors;
@@ -15,6 +18,13 @@ public class Helpers {
         } catch (IOException e) {
             return "ERROR";
         }
+    }
+
+    public static Path getStringAsTempFile(final String data, final String fileName) throws Exception {
+        Path tempDir = Files.createTempDirectory("redg");
+        Path tempFile = tempDir.resolve(fileName);
+        Files.write(tempFile, data.getBytes(StandardCharsets.UTF_8));
+        return tempFile;
     }
 
     /**
