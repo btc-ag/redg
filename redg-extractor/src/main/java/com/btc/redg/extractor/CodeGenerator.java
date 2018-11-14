@@ -38,10 +38,10 @@ public class CodeGenerator {
     private STGroup stGroup;
 
     /**
-     * Creates a new code generator using the default 'templates.stg' template file
+     * Creates a new code generator using the default 'extractor-templates.stg' template file
      */
     public CodeGenerator() {
-        this("templates.stg");
+        this("extractor-templates.stg");
     }
 
     /**
