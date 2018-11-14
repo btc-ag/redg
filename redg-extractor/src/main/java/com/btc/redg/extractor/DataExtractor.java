@@ -118,7 +118,15 @@ public class DataExtractor {
                     }
 
                     for (final ColumnModel cm : tableModel.getColumns()) {
-                        final Object value = rs.getObject(cm.getDbName());
+                        Object value;
+                        try {
+                            value = rs.getObject(cm.getDbName());
+                        } catch (SQLException e) {
+                            // probably name is quoted identifier, remove quotes
+                            LOG.warn("Got SQL exception fetching value for column {}", cm.getDbName());
+                            LOG.warn("Will try to remove quotes and try again. Consider upgrading to RedG >=2.0 to avoid these issues");
+                            value = rs.getObject(cm.getDbName().replace("\"", ""));
+                        }
                         if (value != null) {
                             entityModel.addValues(cm.getName(), new EntityModel.ValueModel(
                                     jcrProvider.getCodeForColumnValue(value, cm.getSqlType(), cm.getSqlTypeInt(), cm.getJavaTypeName()),
