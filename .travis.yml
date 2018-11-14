@@ -1,3 +1,6 @@
 language: java
+script:
+- mvn test -Dmaven.javadoc.skip=true -B
+- cd redg-tests && mvn clean test -Dmaven.javadoc.skip=true -B
 after_success:
 - bash <(curl -s https://codecov.io/bash)

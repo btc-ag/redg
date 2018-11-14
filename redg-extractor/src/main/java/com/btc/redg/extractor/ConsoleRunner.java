@@ -82,7 +82,11 @@ public class ConsoleRunner {
             final Connection connection = DriverManager.getConnection(cmd.getOptionValue("connection"), cmd.getOptionValue("username"), password);
 
             LOG.debug("Connection established. Starting extraction...");
-            final List<EntityModel> entityModels = new DataExtractor().extractAllData(connection, tableModels);
+            final DataExtractor dataExtractor = new DataExtractor();
+            if (cmd.hasOption("schemaName")) {
+                dataExtractor.setSqlSchemaName(cmd.getOptionValue("schemaName"));
+            }
+            final List<EntityModel> entityModels = dataExtractor.extractAllData(connection, tableModels);
             LOG.debug("Extraction finished.");
             LOG.debug("Generating code...");
 
@@ -157,6 +161,9 @@ public class ConsoleRunner {
 
         final Option jdbcDriver = new Option("jdbcDriver", true, "The JDBC driver class. Has to be in the CLASSPATH.");
         options.addOption(jdbcDriver);
+
+        final Option schemaName = new Option("schemaName", true, "The name of the SQL schema if different from the one in the table models.");
+        options.addOption(schemaName);
 
         final Option connectionString = new Option("c", "connection", true, "The JDBC connection string");
         connectionString.setRequired(true);
