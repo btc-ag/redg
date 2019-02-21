@@ -81,7 +81,8 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	}
 
 	public JpaMetamodelRedGProvider(Metamodel metaModel) {
-		managedTypesByClass = metaModel.getManagedTypes().stream().collect(Collectors.toMap(Type::getJavaType, managedType -> managedType));
+		managedTypesByClass = metaModel.getManagedTypes().stream()
+				.collect(Collectors.groupingBy(Type::getJavaType, Collectors.collectingAndThen(Collectors.toList(), values -> values.get(0))));
 
 		for (ManagedType<?> managedType : metaModel.getManagedTypes()) {
 			Class<?> javaType = managedType.getJavaType();
