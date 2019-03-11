@@ -17,6 +17,7 @@
 package com.btc.redg.jpa;
 
 import java.lang.reflect.AnnotatedElement;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,7 @@ import javax.persistence.metamodel.MappedSuperclassType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
+import javax.xml.bind.annotation.XmlSchema;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,10 +76,42 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName) {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+		setupBindInfoPackage();
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(perstistenceUnitName, properties);
 
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		return new JpaMetamodelRedGProvider(entityManager.getMetamodel());
+	}
+
+	/**
+	 * workaround for hibernate bug from a comment of https://hibernate.atlassian.net/browse/HHH-12893
+	 * (JAXB exception using SchemaExport with Envers and Java 9+)
+	 */
+	private static void setupBindInfoPackage() {
+		String nsuri = "http://www.hibernate.org/xsd/orm/hbm";
+		String packageInfoClassName = "org.hibernate.boot.jaxb.hbm.spi.package-info";
+		try {
+			final Class<?> packageInfoClass = Class
+					.forName(packageInfoClassName);
+			final XmlSchema xmlSchema = packageInfoClass
+					.getAnnotation(XmlSchema.class);
+			if (xmlSchema == null) {
+				LOG.warn(MessageFormat.format(
+						"Class [{0}] is missing the [{1}] annotation. Processing bindings will probably fail.",
+						packageInfoClassName, XmlSchema.class.getName()));
+			} else {
+				final String namespace = xmlSchema.namespace();
+				if (nsuri.equals(namespace)) {
+					LOG.warn(MessageFormat.format(
+							"Namespace of the [{0}] annotation does not match [{1}]. Processing bindings will probably fail.",
+							XmlSchema.class.getName(), nsuri));
+				}
+			}
+		} catch (ClassNotFoundException cnfex) {
+			LOG.warn(MessageFormat.format(
+					"Class [{0}] could not be found. Processing bindings will probably fail.",
+					packageInfoClassName), cnfex);
+		}
 	}
 
 	public JpaMetamodelRedGProvider(Metamodel metaModel) {
