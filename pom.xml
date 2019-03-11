@@ -21,7 +21,7 @@
     <groupId>com.btc-ag.redg</groupId>
     <artifactId>redg</artifactId>
     <packaging>pom</packaging>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2</version>
     <modules>
         <module>redg-generator</module>
         <module>redg-jpa-providers</module>
@@ -335,7 +335,7 @@
         <url>https://github.com/btc-ag/redg/</url>
         <connection>scm:git:https://github.com/btc-ag/redg.git</connection>
         <developerConnection>scm:git:https://github.com/btc-ag/redg.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>redg-2.2</tag>
     </scm>
 
     <profiles>
