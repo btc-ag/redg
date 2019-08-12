@@ -33,6 +33,7 @@ import com.btc.redg.generator.extractor.explicitattributedecider.ExplicitAttribu
 import com.btc.redg.generator.extractor.explicitattributedecider.JsonFileExplicitAttributeDecider;
 import com.btc.redg.generator.extractor.nameprovider.MultiProviderNameProvider;
 import com.btc.redg.jpa.JpaMetamodelRedGProvider;
+import com.btc.redg.plugin.liquibase.OptionalLiquibaseRunner;
 import com.btc.redg.generator.extractor.nameprovider.json.JsonFileNameProvider;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -113,6 +114,9 @@ public class RedGGeneratorMojo extends AbstractMojo {
     @Parameter
     private String classPrefix = TableExtractor.DEFAULT_CLASS_PREFIX;
 
+    @Parameter
+    private String liquibaseChangeLogFile;
+    
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         Connection connection;
@@ -121,6 +125,10 @@ public class RedGGeneratorMojo extends AbstractMojo {
         } catch (SQLException | ClassNotFoundException e) {
             throw new MojoFailureException("Could not connect to extractor: " + e.toString(), e);
         }
+
+        // execute Liquibase update if Liquibase is on classpath and changelog file is provided 
+        new OptionalLiquibaseRunner(liquibaseChangeLogFile).execute(getLog(),connection);
+        
         try {
             DatabaseManager.executePreparationScripts(connection, sqlScripts);
         } catch (IOException | SQLException e) {

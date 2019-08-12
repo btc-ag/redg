@@ -21,7 +21,7 @@
     <groupId>com.btc-ag.redg</groupId>
     <artifactId>redg</artifactId>
     <packaging>pom</packaging>
-    <version>2.2</version>
+    <version>2.3</version>
     <modules>
         <module>redg-generator</module>
         <module>redg-jpa-providers</module>
@@ -80,7 +80,8 @@
         <mavenProjectVersion>2.2.1</mavenProjectVersion>
         <logbackVersion>1.1.7</logbackVersion>
         <slf4jVersion>1.7.21</slf4jVersion>
-        <jacksonVersion>2.9.7</jacksonVersion>
+        <jacksonVersion>2.9.9</jacksonVersion>
+        <jacksonDatabindVersion>2.9.9.3</jacksonDatabindVersion>
         <jacocoVersion>0.8.2</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
         <mockitoVersion>2.23.0</mockitoVersion>
@@ -122,12 +123,12 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${jacksonVersion}</version>
+                <version>${jacksonDatabindVersion}</version>
             </dependency>
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
-                <version>1.4.3</version>
+                <version>1.4.11.1</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -335,7 +336,7 @@
         <url>https://github.com/btc-ag/redg/</url>
         <connection>scm:git:https://github.com/btc-ag/redg.git</connection>
         <developerConnection>scm:git:https://github.com/btc-ag/redg.git</developerConnection>
-        <tag>redg-2.2</tag>
+        <tag>redg-2.3</tag>
     </scm>
 
     <profiles>

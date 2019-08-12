@@ -21,6 +21,8 @@ import io.takari.maven.testing.TestMavenRuntime;
 import io.takari.maven.testing.TestResources;
 import org.junit.Rule;
 import org.junit.Test;
+import org.postgresql.Driver;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.File;
 
@@ -37,6 +39,23 @@ public class RedGGeneratorMojoTest {
     public void test() throws Exception {
         File baseDir = resources.getBasedir("full-project-test");
         maven.executeMojo(baseDir, "redg", TestHelpers.getArrayParameters("sqlScripts", "test.sql"));
+        // TODO: actually test something
+    }
+
+    @Test
+    public void testLiquibase() throws Exception {
+        PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>();
+        postgres.start();
+        final String url = postgres.getJdbcUrl();
+        final String user = postgres.getUsername();
+        final String pass = postgres.getPassword();
+        File baseDir = resources.getBasedir("liquibase-project-test");
+        maven.executeMojo(baseDir, "redg",
+            TestHelpers.getParameters("liquibaseChangeLogFile", "src/test/projects/liquibase-project-test/src/main/resources/changelog.xml"),
+            TestHelpers.getParameters("username", user),
+            TestHelpers.getParameters("password", pass),
+            TestHelpers.getParameters("connectionString", url),
+            TestHelpers.getParameters("jdbcDriver", Driver.class.getCanonicalName()));
         // TODO: actually test something
     }
 }
