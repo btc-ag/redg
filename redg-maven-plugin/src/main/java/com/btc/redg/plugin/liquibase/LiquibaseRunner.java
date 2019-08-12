@@ -10,7 +10,6 @@ import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
 
@@ -30,15 +29,13 @@ public class LiquibaseRunner {
 		log.info("Running Liquibase");
 
 		try {
-			// TODO just prototype code
 			Database database = DatabaseFactory.getInstance()
 					.findCorrectDatabaseImplementation(new JdbcConnection(connection));
-			
 			Liquibase liquibase = new Liquibase(changeLogFile, new FileSystemResourceAccessor(), database);
 			liquibase.update("");
 			
 		} catch (LiquibaseException e) {
-			throw new MojoExecutionException("Problem during Liquibase Execution",e);
+			throw new MojoExecutionException("Problem during Liquibase execution",e);
 		}
 		
 

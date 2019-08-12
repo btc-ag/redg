@@ -30,4 +30,10 @@ public class TestHelpers {
         }
         return dom;
     }
+
+    public static Xpp3Dom getParameters(String name, String value) {
+        Xpp3Dom dom = new Xpp3Dom(name);
+        dom.setValue(value);
+        return dom;
+    }
 }
