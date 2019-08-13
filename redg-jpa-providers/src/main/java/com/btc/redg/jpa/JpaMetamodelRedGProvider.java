@@ -270,7 +270,7 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 			if (foreignKeyColumnReferenceOptional.isPresent()) {
 				ForeignKeyColumnReference ref = foreignKeyColumnReferenceOptional.get();
 				SingularAttribute targetSingularAttribute =
-						singularAttributesByColumnName.get(new QualifiedColumnName(ref.getPrimaryKeyColumn().getParent().getName(), ref.getPrimaryKeyColumn().getName()));
+						singularAttributesByColumnName.get(new QualifiedColumnName(ref.getPrimaryKeyColumn().getParent().getName().toUpperCase(), ref.getPrimaryKeyColumn().getName().toUpperCase()));
 				if (targetSingularAttribute != null) {
 					return targetSingularAttribute.getJavaType().getCanonicalName();
 				} else {
@@ -282,7 +282,7 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 			}
 		} else {
 			singularAttribute =
-					singularAttributesByColumnName.get(new QualifiedColumnName(column.getParent().getName(), column.getName()));
+					singularAttributesByColumnName.get(new QualifiedColumnName(column.getParent().getName().toUpperCase(), column.getName().toUpperCase()));
 			if (singularAttribute != null) {
 				return singularAttribute.getJavaType().getCanonicalName();
 			} else {
