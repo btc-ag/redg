@@ -238,10 +238,10 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	}
 
 	private ForeignKeyRelation toForeignKeyRelation(ForeignKey foreignKey) {
-		String referencingTableName = foreignKey.getColumnReferences().get(0).getForeignKeyColumn().getParent().getName();
-		String referencedTableName = foreignKey.getColumnReferences().get(0).getPrimaryKeyColumn().getParent().getName();
+		String referencingTableName = foreignKey.getColumnReferences().get(0).getForeignKeyColumn().getParent().getName().toUpperCase();
+		String referencedTableName = foreignKey.getColumnReferences().get(0).getPrimaryKeyColumn().getParent().getName().toUpperCase();
 		Map<String, String> referenceColumnNamesMap = foreignKey.getColumnReferences().stream()
-				.collect(Collectors.toMap(columnReference -> columnReference.getForeignKeyColumn().getName(), columnReference -> columnReference.getPrimaryKeyColumn().getName()));
+				.collect(Collectors.toMap(columnReference -> columnReference.getForeignKeyColumn().getName().toUpperCase(), columnReference -> columnReference.getPrimaryKeyColumn().getName().toUpperCase()));
 		return new ForeignKeyRelation(referencingTableName, referencedTableName, referenceColumnNamesMap);
 	}
 
