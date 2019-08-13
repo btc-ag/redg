@@ -202,8 +202,8 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 
 	@Override
 	public String getMethodNameForColumn(schemacrawler.schema.Column column) {
-		String tableName = column.getParent().getName();
-		SingularAttribute singularAttribute = singularAttributesByColumnName.get(new QualifiedColumnName(tableName, column.getName()));
+		String tableName = column.getParent().getName().toUpperCase();
+		SingularAttribute singularAttribute = singularAttributesByColumnName.get(new QualifiedColumnName(tableName, column.getName().toUpperCase()));
 		return singularAttribute != null ? singularAttribute.getName() : fallbackNameProvider.getMethodNameForColumn(column);
 	}
 
