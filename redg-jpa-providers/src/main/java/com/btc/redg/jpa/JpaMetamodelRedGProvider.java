@@ -73,14 +73,20 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	private NameProvider fallbackNameProvider = new DefaultNameProvider();
 	private DataTypeProvider fallbackDataTypeProvider = new DefaultDataTypeProvider();
 
-	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName) {
+	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName, String hibernateDialect) {
 		Properties properties = new Properties();
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+		if (hibernateDialect != null) {
+			properties.setProperty("hibernate.dialect", hibernateDialect);
+		}
 		setupBindInfoPackage();
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(perstistenceUnitName, properties);
 
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		return new JpaMetamodelRedGProvider(entityManager.getMetamodel());
+	}
+
+	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName) {
+		return fromPersistenceUnit(perstistenceUnitName, null);
 	}
 
 	/**
@@ -190,7 +196,7 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 
 	@Override
 	public String getClassNameForTable(Table table) {
-		ManagedType managedType = managedTypesByTableName.get(table.getName());
+		ManagedType managedType = managedTypesByTableName.get(table.getName().toUpperCase());
 		return managedType != null ? managedType.getJavaType().getSimpleName() : fallbackNameProvider.getClassNameForTable(table);
 	}
 
