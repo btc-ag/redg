@@ -82,7 +82,7 @@
         <slf4jVersion>1.7.21</slf4jVersion>
         <jacksonVersion>2.9.9</jacksonVersion>
         <jacksonDatabindVersion>2.9.9.3</jacksonDatabindVersion>
-        <jacocoVersion>0.8.2</jacocoVersion>
+        <jacocoVersion>0.8.5</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
         <mockitoVersion>2.23.0</mockitoVersion>
         <springVersion>4.3.5.RELEASE</springVersion>
