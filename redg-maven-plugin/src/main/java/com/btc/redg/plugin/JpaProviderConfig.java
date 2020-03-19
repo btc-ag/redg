@@ -21,6 +21,7 @@ public class JpaProviderConfig {
     private String persistenceUnitName;
     private boolean useAsNameProvider;
     private boolean useAsDataTypeProvider;
+    private String hibernateDialect;
 
     public String getPersistenceUnitName() {
         return persistenceUnitName;
@@ -44,5 +45,13 @@ public class JpaProviderConfig {
 
     public void setUseAsDataTypeProvider(boolean useAsDataTypeProvider) {
         this.useAsDataTypeProvider = useAsDataTypeProvider;
+    }
+
+    public String getHibernateDialect() {
+        return hibernateDialect;
+    }
+
+    public void setHibernateDialect(String hibernateDialect) {
+        this.hibernateDialect = hibernateDialect;
     }
 }

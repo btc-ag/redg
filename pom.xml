@@ -21,7 +21,7 @@
     <groupId>com.btc-ag.redg</groupId>
     <artifactId>redg</artifactId>
     <packaging>pom</packaging>
-    <version>2.3</version>
+    <version>2.4.1</version>
     <modules>
         <module>redg-generator</module>
         <module>redg-jpa-providers</module>
@@ -82,7 +82,7 @@
         <slf4jVersion>1.7.21</slf4jVersion>
         <jacksonVersion>2.9.9</jacksonVersion>
         <jacksonDatabindVersion>2.9.9.3</jacksonDatabindVersion>
-        <jacocoVersion>0.8.2</jacocoVersion>
+        <jacocoVersion>0.8.5</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
         <mockitoVersion>2.23.0</mockitoVersion>
         <springVersion>4.3.5.RELEASE</springVersion>
@@ -336,7 +336,7 @@
         <url>https://github.com/btc-ag/redg/</url>
         <connection>scm:git:https://github.com/btc-ag/redg.git</connection>
         <developerConnection>scm:git:https://github.com/btc-ag/redg.git</developerConnection>
-        <tag>redg-2.3</tag>
+        <tag>redg-2.4.1</tag>
     </scm>
 
     <profiles>
@@ -410,6 +410,31 @@
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>aggregate</id>
+                                <goals>
+                                    <goal>aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <source>8</source>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>attatch-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <source>8</source>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

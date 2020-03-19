@@ -589,16 +589,16 @@ foreignKeyInsertStmtValuesNullable(foreignKey) ::= <<
 >>
 
 foreignKeyInsertValueMetaInfos(foreignKey, notNull) ::= <<
-<foreignKey.references.keys:{k|new AttributeMetaInfo("<escape.(foreignKey.references.(k).dbName)>", "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbFullTableName)>", "<foreignKey.references.(k).sqlType>", <foreignKey.references.(k).sqlTypeInt>, <foreignKey.references.(k).localType>.class, <notNull>)};separator=",\n">
+<foreignKey.references.keys:{k|new AttributeMetaInfo("<escape.(foreignKey.references.(k).dbName)>", "<escape.(foreignKey.references.(k).dbTableName)>", "<escape.(foreignKey.references.(k).dbFullTableName)>", "<escape.(foreignKey.references.(k).sqlType)>", <foreignKey.references.(k).sqlTypeInt>, <foreignKey.references.(k).localType>.class, <notNull>)};separator=",\n">
 >>
 
 columnInsertValueMetaInfo(column) ::= <<
-new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbFullTableName)>", "<column.sqlType>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
+new AttributeMetaInfo("<escape.(column.dbName)>", "<escape.(column.dbTableName)>", "<escape.(column.dbFullTableName)>", "<escape.(column.sqlType)>", <column.sqlTypeInt>, <column.javaTypeName>.class, <column.notNull>)
 >>
 
 columnInsertValues(column) ::= <<
 this.redG.getSqlValuesFormatter().formatValue(this.<column.name>(),
-        "<column.sqlType>", "<escape.(column.dbFullTableName)>",
+        "<escape.(column.sqlType)>", "<escape.(column.dbFullTableName)>",
         "<escape.(column.dbTableName)>", "<escape.(column.dbName)>")
 >>
 

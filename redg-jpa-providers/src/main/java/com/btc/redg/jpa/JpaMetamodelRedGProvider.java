@@ -73,14 +73,20 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	private NameProvider fallbackNameProvider = new DefaultNameProvider();
 	private DataTypeProvider fallbackDataTypeProvider = new DefaultDataTypeProvider();
 
-	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName) {
+	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName, String hibernateDialect) {
 		Properties properties = new Properties();
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+		if (hibernateDialect != null) {
+			properties.setProperty("hibernate.dialect", hibernateDialect);
+		}
 		setupBindInfoPackage();
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(perstistenceUnitName, properties);
 
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		return new JpaMetamodelRedGProvider(entityManager.getMetamodel());
+	}
+
+	public static JpaMetamodelRedGProvider fromPersistenceUnit(String perstistenceUnitName) {
+		return fromPersistenceUnit(perstistenceUnitName, null);
 	}
 
 	/**
@@ -190,14 +196,14 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 
 	@Override
 	public String getClassNameForTable(Table table) {
-		ManagedType managedType = managedTypesByTableName.get(table.getName());
+		ManagedType managedType = managedTypesByTableName.get(table.getName().toUpperCase());
 		return managedType != null ? managedType.getJavaType().getSimpleName() : fallbackNameProvider.getClassNameForTable(table);
 	}
 
 	@Override
 	public String getMethodNameForColumn(schemacrawler.schema.Column column) {
-		String tableName = column.getParent().getName();
-		SingularAttribute singularAttribute = singularAttributesByColumnName.get(new QualifiedColumnName(tableName, column.getName()));
+		String tableName = column.getParent().getName().toUpperCase();
+		SingularAttribute singularAttribute = singularAttributesByColumnName.get(new QualifiedColumnName(tableName, column.getName().toUpperCase()));
 		return singularAttribute != null ? singularAttribute.getName() : fallbackNameProvider.getMethodNameForColumn(column);
 	}
 
@@ -232,10 +238,10 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 	}
 
 	private ForeignKeyRelation toForeignKeyRelation(ForeignKey foreignKey) {
-		String referencingTableName = foreignKey.getColumnReferences().get(0).getForeignKeyColumn().getParent().getName();
-		String referencedTableName = foreignKey.getColumnReferences().get(0).getPrimaryKeyColumn().getParent().getName();
+		String referencingTableName = foreignKey.getColumnReferences().get(0).getForeignKeyColumn().getParent().getName().toUpperCase();
+		String referencedTableName = foreignKey.getColumnReferences().get(0).getPrimaryKeyColumn().getParent().getName().toUpperCase();
 		Map<String, String> referenceColumnNamesMap = foreignKey.getColumnReferences().stream()
-				.collect(Collectors.toMap(columnReference -> columnReference.getForeignKeyColumn().getName(), columnReference -> columnReference.getPrimaryKeyColumn().getName()));
+				.collect(Collectors.toMap(columnReference -> columnReference.getForeignKeyColumn().getName().toUpperCase(), columnReference -> columnReference.getPrimaryKeyColumn().getName().toUpperCase()));
 		return new ForeignKeyRelation(referencingTableName, referencedTableName, referenceColumnNamesMap);
 	}
 
@@ -264,7 +270,7 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 			if (foreignKeyColumnReferenceOptional.isPresent()) {
 				ForeignKeyColumnReference ref = foreignKeyColumnReferenceOptional.get();
 				SingularAttribute targetSingularAttribute =
-						singularAttributesByColumnName.get(new QualifiedColumnName(ref.getPrimaryKeyColumn().getParent().getName(), ref.getPrimaryKeyColumn().getName()));
+						singularAttributesByColumnName.get(new QualifiedColumnName(ref.getPrimaryKeyColumn().getParent().getName().toUpperCase(), ref.getPrimaryKeyColumn().getName().toUpperCase()));
 				if (targetSingularAttribute != null) {
 					return targetSingularAttribute.getJavaType().getCanonicalName();
 				} else {
@@ -276,7 +282,7 @@ public class JpaMetamodelRedGProvider implements NameProvider, DataTypeProvider 
 			}
 		} else {
 			singularAttribute =
-					singularAttributesByColumnName.get(new QualifiedColumnName(column.getParent().getName(), column.getName()));
+					singularAttributesByColumnName.get(new QualifiedColumnName(column.getParent().getName().toUpperCase(), column.getName().toUpperCase()));
 			if (singularAttribute != null) {
 				return singularAttribute.getJavaType().getCanonicalName();
 			} else {

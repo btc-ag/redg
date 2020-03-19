@@ -143,7 +143,7 @@ public class RedGGeneratorMojo extends AbstractMojo {
 
         JpaMetamodelRedGProvider jpaProvider = null;
         if (jpaProviderConfig != null && jpaProviderConfig.getPersistenceUnitName() != null) {
-            jpaProvider = JpaMetamodelRedGProvider.fromPersistenceUnit(jpaProviderConfig.getPersistenceUnitName());
+            jpaProvider = JpaMetamodelRedGProvider.fromPersistenceUnit(jpaProviderConfig.getPersistenceUnitName(), jpaProviderConfig.getHibernateDialect());
         }
 
         DataTypeProvider dataTypeProvider = new DefaultDataTypeProvider();
