@@ -1,6 +1,6 @@
 # RedG test data generation library
 
-[![Build Status](https://travis-ci.org/btc-ag/redg.svg?branch=develop)](https://travis-ci.org/btc-ag/redg)
+[![Build Status](https://travis-ci.com/btc-ag/redg.svg?branch=develop)](https://travis-ci.com/btc-ag/redg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.btc-ag.redg/redg/badge.svg)](https://search.maven.org/search?q=g:com.btc-ag.redg)
 [![codecov](https://codecov.io/gh/btc-ag/redg/branch/develop/graph/badge.svg)](https://codecov.io/gh/btc-ag/redg)
 
