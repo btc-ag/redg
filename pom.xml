@@ -72,7 +72,7 @@
         <schemacrawlerVersion>15.01.06</schemacrawlerVersion>
         <h2Version>1.4.194</h2Version>
         <stringtemplateVersion>4.0.8</stringtemplateVersion>
-        <junitVersion>4.12</junitVersion>
+        <junitVersion>4.13.2</junitVersion>
         <takariPluginTestingVersion>2.9.0</takariPluginTestingVersion>
         <mavenVersion>3.3.9</mavenVersion>
         <takariLifecycleVersion>1.11.12</takariLifecycleVersion>
@@ -80,8 +80,8 @@
         <mavenProjectVersion>2.2.1</mavenProjectVersion>
         <logbackVersion>1.1.7</logbackVersion>
         <slf4jVersion>1.7.21</slf4jVersion>
-        <jacksonVersion>2.9.9</jacksonVersion>
-        <jacksonDatabindVersion>2.9.9.3</jacksonDatabindVersion>
+        <jacksonVersion>2.12.3</jacksonVersion>
+        <jacksonDatabindVersion>2.12.3</jacksonDatabindVersion>
         <jacocoVersion>0.8.5</jacocoVersion>
         <assertjVersion>3.6.1</assertjVersion>
         <mockitoVersion>2.23.0</mockitoVersion>
@@ -128,7 +128,7 @@
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
-                <version>1.4.11.1</version>
+                <version>1.4.17</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
