@@ -70,7 +70,7 @@
         <mavenPluginApiVersion>3.0.5</mavenPluginApiVersion>
         <mavenPluginAnnotationsVersion>3.3</mavenPluginAnnotationsVersion>
         <schemacrawlerVersion>15.01.06</schemacrawlerVersion>
-        <h2Version>1.4.194</h2Version>
+        <h2Version>2.1.210</h2Version>
         <stringtemplateVersion>4.0.8</stringtemplateVersion>
         <junitVersion>4.13.2</junitVersion>
         <takariPluginTestingVersion>2.9.0</takariPluginTestingVersion>
