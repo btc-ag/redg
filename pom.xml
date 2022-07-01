@@ -76,7 +76,7 @@
         <takariPluginTestingVersion>2.9.0</takariPluginTestingVersion>
         <mavenVersion>3.3.9</mavenVersion>
         <takariLifecycleVersion>1.11.12</takariLifecycleVersion>
-        <plexusUtilsVersion>3.0.15</plexusUtilsVersion>
+        <plexusUtilsVersion>3.0.16</plexusUtilsVersion>
         <mavenProjectVersion>2.2.1</mavenProjectVersion>
         <logbackVersion>1.2.0</logbackVersion>
         <slf4jVersion>1.7.21</slf4jVersion>
